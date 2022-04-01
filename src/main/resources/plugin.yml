@@ -1,0 +1,7 @@
+name: Magikus
+version: '0.0.0'
+main: me.magikus.Magikus
+api-version: 1.18
+authors: [ PartlySunny, 65_7a ]
+depend: [ NBTAPI ]
+description: Magical fantasy plugin for 1.18.2
