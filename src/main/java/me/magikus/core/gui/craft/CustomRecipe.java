@@ -1,4 +1,4 @@
-package me.magikus.recipeManager;
+package me.magikus.core.gui.craft;
 
 import me.magikus.Magikus;
 import org.bukkit.NamespacedKey;
@@ -48,7 +48,7 @@ public class CustomRecipe {
         for (char c : ingredients.keySet()) {
             ItemStack item = ingredients.get(c);
             if (item != null) {
-                r.setIngredient(c, item);
+                r.setIngredient(c, item.getType());
             }
         }
     }

@@ -1,7 +1,7 @@
 package me.magikus.enchants;
 
 import me.magikus.Magikus;
-import me.magikus.recipeManager.CustomRecipe;
+import me.magikus.core.gui.craft.CustomRecipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;

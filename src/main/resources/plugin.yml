@@ -5,3 +5,39 @@ api-version: 1.18
 authors: [ PartlySunny, 65_7a ]
 depend: [ NBTAPI ]
 description: Magical fantasy plugin for 1.18.2
+commands:
+  mgive:
+    description: Gives an magikus item
+    usage: /mgive <item-id>
+    permission: magikus.op
+  msummon:
+    description: Summons a magikus entity
+    usage: /msummon <entity-id>
+    permission: magikus.op
+  madd:
+    description: Adds an addition to your held item
+    usage: /madd <addition-id>
+    permission: magikus.op
+  mreforge:
+    description: Adds a reforge to your held item
+    usage: /mreforge <reforge-id>
+    permission: magikus.op
+  smstar:
+    description: Adds a amount of stars to your held item (default 5)
+    usage: /mstar [optional-amount]
+    permission: magikus.op
+  mfrag:
+    description: Sets your held item to fragged / unfragged (default true)
+    usage: /mfrag [optional-boolean]
+    permission: magikus.op
+  menchant:
+    description: Adds and enchant to your held item (default 1)
+    usage: /menchant <enchant-id> [level]
+    permission: magikus.op
+permissions:
+  magikus.op:
+    description: Gives you access to commands like mgive and msummon
+    default: op
+  magikus.user:
+    description: default user
+    default: true
