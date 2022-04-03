@@ -10,10 +10,10 @@ import me.magikus.core.items.additions.Addition;
 import me.magikus.core.items.additions.AdditionInfo;
 import me.magikus.core.items.additions.AdditionList;
 import me.magikus.core.items.additions.IStatAddition;
-import me.magikus.core.items.additions.enchants.Enchant;
-import me.magikus.core.items.additions.enchants.EnchantList;
 import me.magikus.core.items.additions.ascensions.Ascension;
 import me.magikus.core.items.additions.ascensions.AscensionManager;
+import me.magikus.core.items.additions.enchants.Enchant;
+import me.magikus.core.items.additions.enchants.EnchantList;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
@@ -179,11 +179,11 @@ public class LoreBuilder {
         for (Stat s : listed) {
             StatType type = s.type();
             if (
-                    type == StatType.SPEED_CAP ||
-                            type == StatType.HEALTH ||
-                            type == StatType.MANA ||
-                            type == StatType.DAMAGE_REDUCTION ||
-                            type == StatType.DAMAGE_MULTIPLIER
+                type == StatType.SPEED_CAP ||
+                    type == StatType.HEALTH ||
+                    type == StatType.MANA ||
+                    type == StatType.DAMAGE_REDUCTION ||
+                    type == StatType.DAMAGE_MULTIPLIER
             ) {
                 continue;
             }

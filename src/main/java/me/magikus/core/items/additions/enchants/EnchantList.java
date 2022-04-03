@@ -48,7 +48,7 @@ public class EnchantList {
                 value.setLevel(level);
                 enchantList.put(enchantId, value);
             } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                     IllegalAccessException e) {
+                IllegalAccessException e) {
                 e.printStackTrace();
             }
             if (parent != null) {

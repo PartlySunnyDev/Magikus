@@ -17,17 +17,12 @@ public class UltraChestplate extends MagikusItem {
     }
 
     public UltraChestplate() {
-        super("ultrachestplate", true, ItemType.CHESTPLATE, null, new String[]{"ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots"});
+        super("ultrachestplate", true, ItemType.CHESTPLATE, null, new String[]{ "ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots" });
     }
 
     @Override
-    public boolean fraggable() {
-        return true;
-    }
-
-    @Override
-    public boolean enhanceable() {
-        return true;
+    public Color getColor() {
+        return Color.fromRGB(10, 10, 10);
     }
 
     @Override
@@ -43,11 +38,6 @@ public class UltraChestplate extends MagikusItem {
     @Override
     public AbilityList getAbilities() {
         return new AbilityList();
-    }
-
-    @Override
-    public Color getColor() {
-        return Color.fromRGB(10, 10, 10);
     }
 
     @Override
@@ -80,5 +70,15 @@ public class UltraChestplate extends MagikusItem {
     @Override
     public Rarity getRarity() {
         return Rarity.LEGENDARY;
+    }
+
+    @Override
+    public boolean fraggable() {
+        return true;
+    }
+
+    @Override
+    public boolean enhanceable() {
+        return true;
     }
 }

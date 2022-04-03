@@ -8,14 +8,13 @@ import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.enums.Rarity;
 import me.magikus.core.items.abilities.AbilityList;
 import me.magikus.core.items.additions.*;
+import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.items.additions.enchants.Enchant;
 import me.magikus.core.items.additions.enchants.EnchantList;
-import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.items.lore.LoreBuilder;
 import me.magikus.core.items.name.NameBuilder;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.util.DataUtils;
-import me.magikus.core.util.classes.Pair;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -44,6 +43,8 @@ public abstract class MagikusItem implements Listener {
     private final AdditionList rarityAdditions = new AdditionList(ModifierType.RARITY, this);
     private final AdditionList abilityAdditions = new AdditionList(ModifierType.ABILITY, this);
     private final EnchantList enchants = new EnchantList(this);
+    @NotNull
+    private final DamageType damageType = DamageType.PHYSICAL;
     private int enhancements = 0;
     private String ascension = null;
     private int stackCount = 1;
@@ -55,8 +56,6 @@ public abstract class MagikusItem implements Listener {
     private ItemStack asMagikusItem;
     private Player owner;
     private String[] fullSet;
-    @NotNull
-    private DamageType damageType = DamageType.PHYSICAL;
 
     protected MagikusItem(String id, boolean unique, ItemType type, @Nullable Player owner) {
         this.id = id;
@@ -400,14 +399,14 @@ public abstract class MagikusItem implements Listener {
         }
         m.setDisplayName(new NameBuilder().setName(getDisplayName()).setRarity(getFinalRarity()).setEnhancements(enhancements).setAscension(ascension).build());
         m.setLore(new LoreBuilder()
-                .setEnchants(enchants)
-                .setAscension(type.reforgable() ? ascension : null)
-                .setDescription(getDescription() != null ? getDescription() : "")
-                .setRarity(getFinalRarity())
-                .setStats(getCombinedStats(owner, null), statAdditions(), getFinalRarity(), owner)
-                .addAbilities(getCombinedAbilities())
-                .setType(type)
-                .build()
+            .setEnchants(enchants)
+            .setAscension(type.reforgable() ? ascension : null)
+            .setDescription(getDescription() != null ? getDescription() : "")
+            .setRarity(getFinalRarity())
+            .setStats(getCombinedStats(owner, null), statAdditions(), getFinalRarity(), owner)
+            .addAbilities(getCombinedAbilities())
+            .setType(type)
+            .build()
         );
         m.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_PLACED_ON);
         m.setUnbreakable(true);
