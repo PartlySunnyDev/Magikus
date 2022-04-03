@@ -52,7 +52,7 @@ public class AdditionList {
                 e.printStackTrace();
             }
             if (parent != null) {
-                parent.updateSkyblockItem();
+                parent.updateMagikusItem();
             }
             return;
         }
@@ -64,7 +64,7 @@ public class AdditionList {
             additionList.remove(addition);
         }
         if (parent != null) {
-            parent.updateSkyblockItem();
+            parent.updateMagikusItem();
         }
     }
 
@@ -100,7 +100,7 @@ public class AdditionList {
         if (target == null) {
             additionList.put(addition.type, addition);
             if (parent != null) {
-                parent.updateSkyblockItem();
+                parent.updateMagikusItem();
             }
             return;
         }
@@ -112,7 +112,7 @@ public class AdditionList {
             additionList.remove(addition.type);
         }
         if (parent != null) {
-            parent.updateSkyblockItem();
+            parent.updateMagikusItem();
         }
     }
 
@@ -129,7 +129,7 @@ public class AdditionList {
             additionList.remove(addition);
         }
         if (parent != null) {
-            parent.updateSkyblockItem();
+            parent.updateMagikusItem();
         }
     }
 
@@ -143,7 +143,7 @@ public class AdditionList {
         }
         additionList.remove(addition);
         if (parent != null) {
-            parent.updateSkyblockItem();
+            parent.updateMagikusItem();
         }
     }
 

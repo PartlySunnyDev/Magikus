@@ -84,7 +84,7 @@ public final class Magikus extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        ConsoleLogger.console("Shutting down Skyblock plugin...");
+        ConsoleLogger.console("Shutting down Magikus plugin...");
     }
 
 }

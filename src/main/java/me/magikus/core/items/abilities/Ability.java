@@ -121,7 +121,7 @@ public abstract class Ability implements Listener {
     }
 
     public boolean fullSet(ItemStack stack, Player player) {
-        MagikusItem i = DataUtils.getSkyblockItem(stack, player);
+        MagikusItem i = DataUtils.getMagikusItem(stack, player);
         if (i != null && AbilityUtils.hasAbility(stack, id)) {
             return i.hasFullSet();
         }
@@ -129,7 +129,7 @@ public abstract class Ability implements Listener {
     }
 
     public boolean pieceBonus(ItemStack stack, Player player) {
-        MagikusItem i = DataUtils.getSkyblockItem(stack, player);
+        MagikusItem i = DataUtils.getMagikusItem(stack, player);
         if (i != null && AbilityUtils.hasAbility(stack, id)) {
             return i.pieceBonusActive();
         }

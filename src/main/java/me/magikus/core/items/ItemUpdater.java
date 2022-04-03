@@ -59,16 +59,16 @@ public class ItemUpdater implements Listener {
                 ConsoleLogger.console("Null vanilla item obtained?");
                 return s;
             }
-            i.updateSkyblockItem();
-            return i.getSkyblockItem();
+            i.updateMagikusItem();
+            return i.getMagikusItem();
         }
         if (!nbtItem.hasKey("mg_id")) {
             NBTItem nbti = new NBTItem(s);
             nbti.setBoolean("vanilla", true);
-            MagikusItem transformed = DataUtils.createSkyblockItemFromVanilla(nbti.getItem(), player);
+            MagikusItem transformed = DataUtils.createMagikusItemFromVanilla(nbti.getItem(), player);
             if (transformed != null) {
-                transformed.updateSkyblockItem();
-                return transformed.getSkyblockItem();
+                transformed.updateMagikusItem();
+                return transformed.getMagikusItem();
             }
         }
         return s;
@@ -99,11 +99,11 @@ public class ItemUpdater implements Listener {
             if (!nbti.getBoolean("vanilla")) {
                 MagikusItem i = MagikusItem.getItemFrom(s, player);
                 if (i == null) {
-                    ConsoleLogger.console("Null skyblock item obtained?");
+                    ConsoleLogger.console("Null magikus item obtained?");
                     return s;
                 }
-                i.updateSkyblockItem();
-                return i.getSkyblockItem();
+                i.updateMagikusItem();
+                return i.getMagikusItem();
             }
         } else {
             ItemStack withid = addId(s);
@@ -144,16 +144,16 @@ public class ItemUpdater implements Listener {
         if (items.containsKey(nbti.getUUID("mg_unique_id")) && !nbti.getBoolean("vanilla")) {
             MagikusItem mgi = items.get(nbti.getUUID("mg_unique_id"));
             mgi.setOwner(entity);
-            mgi.updateSkyblockItem();
-            ItemStack skyblockItem = mgi.getSkyblockItem();
-            if (skyblockItem != null && skyblockItem.getItemMeta() != null && i.getItemMeta() != null) {
+            mgi.updateMagikusItem();
+            ItemStack magikusItem = mgi.getMagikusItem();
+            if (magikusItem != null && magikusItem.getItemMeta() != null && i.getItemMeta() != null) {
                 if (
-                        !new NBTItem(skyblockItem).equals(nbti)
-                                || skyblockItem.getType() != i.getType()
-                                || !Objects.equals(skyblockItem.getItemMeta().getLore(), i.getItemMeta().getLore())
-                                || !skyblockItem.getItemMeta().getDisplayName().equals(i.getItemMeta().getDisplayName())
+                        !new NBTItem(magikusItem).equals(nbti)
+                                || magikusItem.getType() != i.getType()
+                                || !Objects.equals(magikusItem.getItemMeta().getLore(), i.getItemMeta().getLore())
+                                || !magikusItem.getItemMeta().getDisplayName().equals(i.getItemMeta().getDisplayName())
                 ) {
-                    return skyblockItem;
+                    return magikusItem;
                 }
             }
         }

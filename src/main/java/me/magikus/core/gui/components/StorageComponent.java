@@ -1,6 +1,6 @@
 package me.magikus.core.gui.components;
 
-import me.magikus.core.gui.SkyblockGui;
+import me.magikus.core.gui.MagikusGui;
 import me.magikus.core.util.ItemUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -14,7 +14,7 @@ public class StorageComponent extends GuiComponent {
 
     private final UUID uniqueId = UUID.randomUUID();
 
-    public StorageComponent(SkyblockGui parent) {
+    public StorageComponent(MagikusGui parent) {
         super("storage", null, parent);
     }
 

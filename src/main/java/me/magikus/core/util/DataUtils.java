@@ -62,7 +62,7 @@ public class DataUtils {
         return type;
     }
 
-    public static MagikusItem getSkyblockItem(ItemStack stack, Player p) {
+    public static MagikusItem getMagikusItem(ItemStack stack, Player p) {
         if (stack == null || stack.getType() == Material.AIR) {
             return null;
         }
@@ -74,17 +74,17 @@ public class DataUtils {
             return ItemUpdater.items.get(i.getUUID("mg_unique_id"));
         } else {
             if (i.getBoolean("vanilla")) {
-                return createSkyblockItemFromVanilla(stack, p);
+                return createMagikusItemFromVanilla(stack, p);
             }
         }
         return null;
     }
 
-    public static MagikusItem getSkyblockItem(ItemStack stack) {
-        return getSkyblockItem(stack, null);
+    public static MagikusItem getMagikusItem(ItemStack stack) {
+        return getMagikusItem(stack, null);
     }
 
-    public static MagikusItem createSkyblockItemFromVanilla(ItemStack s, @Nullable Player player) {
+    public static MagikusItem createMagikusItemFromVanilla(ItemStack s, @Nullable Player player) {
         NBTItem nbti = new NBTItem(s);
         if (nbti.getBoolean("vanilla")) {
             MagikusItem magikusItem = new MagikusItem(s.getType().toString().toLowerCase(), false, getTypeOfItem(s.getType()), player, true) {
@@ -120,7 +120,7 @@ public class DataUtils {
 
                 @Override
                 public Rarity getRarity() {
-                    return Rarity.COMMON;
+                    return Rarity.NORMAL;
                 }
             };
             magikusItem.setStackCount(s.getAmount());
@@ -158,7 +158,7 @@ public class DataUtils {
         return stl;
     }
 
-    public static MagikusItem createSkyblockItemFromVanilla(Material s, @Nullable Player player) {
+    public static MagikusItem createMagikusItemFromVanilla(Material s, @Nullable Player player) {
         return new MagikusItem(s.toString().toLowerCase(), false, getTypeOfItem(s), player, true) {
             @Override
             public Material getDefaultItem() {
@@ -192,7 +192,7 @@ public class DataUtils {
 
             @Override
             public Rarity getRarity() {
-                return Rarity.COMMON;
+                return Rarity.NORMAL;
             }
         };
     }
@@ -207,7 +207,7 @@ public class DataUtils {
         if (r.statBonuses().containsKey(ra)) {
             addition = r.statBonuses().get(ra);
         } else {
-            Rarity bestRarity = Rarity.COMMON;
+            Rarity bestRarity = Rarity.NORMAL;
             for (Rarity rarity : r.statBonuses().keySet()) {
                 if (rarity.level() > bestRarity.level() && rarity.level() <= ra.level()) {
                     bestRarity = rarity;

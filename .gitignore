@@ -1,1 +1,5 @@
 .paper-nms
+*.jar
+*.iml
+/.idea
+/target

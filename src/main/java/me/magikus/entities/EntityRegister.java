@@ -30,7 +30,7 @@ public class EntityRegister {
                 new EntityStat(EntityStatType.MAX_HEALTH, 10000000),
                 new EntityStat(EntityStatType.DEFENSE, 300),
                 new EntityStat(EntityStatType.SPEED, 200),
-                new EntityStat(EntityStatType.DAMAGE, 800)), SuperZombie.class, new ItemStack[]{
+                new EntityStat(EntityStatType.DAMAGE, 800)), UltraZombie.class, new ItemStack[]{
                 ItemUtils.getLeatherArmorItem(Color.fromRGB(100, 20, 20), Material.LEATHER_BOOTS),
                 ItemUtils.getLeatherArmorItem(Color.fromRGB(100, 20, 20), Material.LEATHER_LEGGINGS),
                 ItemUtils.getLeatherArmorItem(Color.fromRGB(100, 20, 20), Material.LEATHER_CHESTPLATE),

@@ -37,7 +37,7 @@ public class MagikusEnchant implements CommandExecutor {
         if (new NBTItem(stack).getBoolean("vanilla")) {
             mgi = MagikusItem.getItemFrom(stack, p);
         } else {
-            mgi = DataUtils.getSkyblockItem(stack, p);
+            mgi = DataUtils.getMagikusItem(stack, p);
         }
         if (mgi == null) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + stack.getType());
@@ -54,7 +54,7 @@ public class MagikusEnchant implements CommandExecutor {
         }
          */
         mgi.enchants().addEnchant(info.id(), level);
-        p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+        p.getInventory().setItemInMainHand(mgi.getMagikusItem());
         p.sendMessage(ChatColor.GREEN + "Successfully applied the enchant " + info.id() + " of level " + level + " to your held item");
         return true;
     }

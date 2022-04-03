@@ -1,6 +1,6 @@
 package me.magikus.core.gui.components;
 
-import me.magikus.core.gui.SkyblockGui;
+import me.magikus.core.gui.MagikusGui;
 import me.magikus.core.util.ItemUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -15,7 +15,7 @@ public class ButtonComponent extends GuiComponent {
     private final Consumer<InventoryClickEvent> action;
     private final UUID uniqueID = UUID.randomUUID();
 
-    public ButtonComponent(ItemStack i, Consumer<InventoryClickEvent> action, SkyblockGui parent) {
+    public ButtonComponent(ItemStack i, Consumer<InventoryClickEvent> action, MagikusGui parent) {
         super("button_gui", i, parent);
         ItemUtils.setId(i, id());
         this.action = action;

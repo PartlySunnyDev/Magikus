@@ -40,11 +40,11 @@ public class PlayerUpdater implements Listener {
         StatList oldStats = PlayerStatManager.playerStats.get(id);
         StatList newStats = BaseStatManager.getStatListOf(id);
         PlayerInventory inventory = player.getInventory();
-        MagikusItem helmet = DataUtils.getSkyblockItem(inventory.getHelmet(), player);
-        MagikusItem chestplate = DataUtils.getSkyblockItem(inventory.getChestplate(), player);
-        MagikusItem leggings = DataUtils.getSkyblockItem(inventory.getLeggings(), player);
-        MagikusItem boots = DataUtils.getSkyblockItem(inventory.getBoots(), player);
-        MagikusItem hand = DataUtils.getSkyblockItem(inventory.getItemInMainHand(), player);
+        MagikusItem helmet = DataUtils.getMagikusItem(inventory.getHelmet(), player);
+        MagikusItem chestplate = DataUtils.getMagikusItem(inventory.getChestplate(), player);
+        MagikusItem leggings = DataUtils.getMagikusItem(inventory.getLeggings(), player);
+        MagikusItem boots = DataUtils.getMagikusItem(inventory.getBoots(), player);
+        MagikusItem hand = DataUtils.getMagikusItem(inventory.getItemInMainHand(), player);
         if (ignoreHand) {
             hand = null;
         }

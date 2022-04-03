@@ -35,14 +35,14 @@ public class MagikusEnhance implements CommandExecutor {
         if (new NBTItem(stack).getBoolean("vanilla")) {
             mgi = MagikusItem.getItemFrom(stack, p);
         } else {
-            mgi = DataUtils.getSkyblockItem(stack, p);
+            mgi = DataUtils.getMagikusItem(stack, p);
         }
         if (mgi == null) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + stack.getType());
             return true;
         }
         mgi.setEnhancements(enhancements);
-        p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+        p.getInventory().setItemInMainHand(mgi.getMagikusItem());
         p.sendMessage(ChatColor.GREEN + "Successfully added " + enhancements + " enhancements to your item.");
         return true;
     }

@@ -5,16 +5,16 @@ import org.bukkit.ChatColor;
 
 public enum Rarity {
 
-    COMMON(ChatColor.WHITE, 1),
+    NORMAL(ChatColor.WHITE, 1),
     UNCOMMON(ChatColor.GREEN, 2),
-    RARE(ChatColor.BLUE, 3),
+    RARE(ChatColor.DARK_AQUA, 3),
     EPIC(ChatColor.DARK_PURPLE, 4),
     LEGENDARY(ChatColor.GOLD, 5),
-    MYTHIC(ChatColor.LIGHT_PURPLE, 6),
-    DIVINE(ChatColor.AQUA, 7),
-    SUPREME(ChatColor.DARK_RED, 99),
-    SPECIAL(ChatColor.RED, 100),
-    VERY_SPECIAL(ChatColor.RED, 101);
+    RENOWNED(ChatColor.DARK_PURPLE, 6),
+    HOLY(ChatColor.YELLOW, 7),
+    ULTRA(ChatColor.DARK_RED, 99),
+    UNIQUE(ChatColor.RED, 100),
+    VERY_UNIQUE(ChatColor.RED, 101);
 
     private final ChatColor color;
     //Lower means worse
@@ -29,14 +29,14 @@ public enum Rarity {
         if (levels == 0) {
             return start;
         }
-        if (start == SUPREME || start == SPECIAL || start == VERY_SPECIAL) {
-            if (start == SUPREME) {
-                return SUPREME;
+        if (start == ULTRA || start == UNIQUE || start == VERY_UNIQUE) {
+            if (start == ULTRA) {
+                return ULTRA;
             }
             if (levels > 0) {
-                return VERY_SPECIAL;
+                return VERY_UNIQUE;
             }
-            return SPECIAL;
+            return UNIQUE;
         }
         int newLevel = start.level() + levels;
         newLevel = NumberUtils.clamp(newLevel, 1, 7);
@@ -45,7 +45,7 @@ public enum Rarity {
                 return r;
             }
         }
-        return Rarity.COMMON;
+        return Rarity.NORMAL;
     }
 
     public int level() {

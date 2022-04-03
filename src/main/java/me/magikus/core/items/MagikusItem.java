@@ -52,7 +52,7 @@ public abstract class MagikusItem implements Listener {
     private boolean unique;
     private boolean vanilla = false;
     private UUID uniqueId;
-    private ItemStack asSkyblockItem;
+    private ItemStack asMagikusItem;
     private Player owner;
     private String[] fullSet;
     @NotNull
@@ -66,7 +66,7 @@ public abstract class MagikusItem implements Listener {
         Magikus plugin = JavaPlugin.getPlugin(Magikus.class);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         ItemManager.addItem(new ItemInfo(id, getClass(), type));
-        updateSkyblockItem();
+        updateMagikusItem();
     }
 
     protected MagikusItem(String id, boolean unique, ItemType type, @Nullable Player owner, String[] fullSet) {
@@ -78,7 +78,7 @@ public abstract class MagikusItem implements Listener {
         Magikus plugin = JavaPlugin.getPlugin(Magikus.class);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         ItemManager.addItem(new ItemInfo(id, getClass(), type));
-        updateSkyblockItem();
+        updateMagikusItem();
     }
 
     protected MagikusItem(String id, boolean unique, ItemType type, @Nullable Player owner, boolean vanilla) {
@@ -100,7 +100,7 @@ public abstract class MagikusItem implements Listener {
         }
         MagikusItem item;
         if (nbti.getBoolean("vanilla")) {
-            item = DataUtils.createSkyblockItemFromVanilla(s, player);
+            item = DataUtils.createMagikusItemFromVanilla(s, player);
         } else {
             item = ItemManager.getInstance(type);
         }
@@ -182,7 +182,7 @@ public abstract class MagikusItem implements Listener {
                 item.enchants.addEnchant(key, amount);
             }
         }
-        item.updateSkyblockItem();
+        item.updateMagikusItem();
         return item;
     }
 
@@ -361,8 +361,8 @@ public abstract class MagikusItem implements Listener {
         return base;
     }
 
-    public ItemStack getSkyblockItem() {
-        return asSkyblockItem;
+    public ItemStack getMagikusItem() {
+        return asMagikusItem;
     }
 
     public boolean unique() {
@@ -381,7 +381,7 @@ public abstract class MagikusItem implements Listener {
         this.uniqueId = uniqueId;
     }
 
-    public void updateSkyblockItem() {
+    public void updateMagikusItem() {
         ItemStack i = new ItemStack(baseMaterial);
         if (stackCount > 0) {
             i.setAmount(stackCount);
@@ -457,7 +457,7 @@ public abstract class MagikusItem implements Listener {
             }
         }
         i = nbti.getItem();
-        asSkyblockItem = i;
+        asMagikusItem = i;
     }
 
     public AdditionList statAdditions() {

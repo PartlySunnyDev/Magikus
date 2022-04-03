@@ -1,6 +1,6 @@
 package me.magikus.core.gui.components;
 
-import me.magikus.core.gui.SkyblockGui;
+import me.magikus.core.gui.MagikusGui;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
@@ -8,12 +8,12 @@ import javax.annotation.Nullable;
 
 public abstract class GuiComponent implements Listener {
 
-    protected final SkyblockGui parent;
+    protected final MagikusGui parent;
     private final String id;
     @Nullable
     private ItemStack shownItem;
 
-    public GuiComponent(String id, ItemStack shownItem, SkyblockGui parent) {
+    public GuiComponent(String id, ItemStack shownItem, MagikusGui parent) {
         this.id = id;
         this.shownItem = shownItem;
         this.parent = parent;

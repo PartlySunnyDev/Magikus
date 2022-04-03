@@ -8,14 +8,14 @@ import java.util.UUID;
 
 public class GuiManager {
 
-    private static final Map<UUID, SkyblockGui> activeGuis = new HashMap<>();
+    private static final Map<UUID, MagikusGui> activeGuis = new HashMap<>();
 
-    public static void setInventory(Player p, SkyblockGui inventory) {
+    public static void setInventory(Player p, MagikusGui inventory) {
         activeGuis.put(p.getUniqueId(), inventory);
         inventory.openFor(p);
     }
 
-    public static SkyblockGui getActiveInventory(UUID id) {
+    public static MagikusGui getActiveInventory(UUID id) {
         return activeGuis.get(id);
     }
 

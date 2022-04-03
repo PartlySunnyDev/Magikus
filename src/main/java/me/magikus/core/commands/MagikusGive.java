@@ -25,7 +25,7 @@ public class MagikusGive implements CommandExecutor {
         }
         MagikusItem instance = ItemManager.getInstance(infoFromId, p);
         if (instance != null) {
-            instance.updateSkyblockItem();
+            instance.updateMagikusItem();
             if (strings.length > 1) {
                 try {
                     instance.setStackCount(Integer.parseInt(strings[1]));
@@ -33,7 +33,7 @@ public class MagikusGive implements CommandExecutor {
                     p.sendMessage(ChatColor.RED + "Invalid number provided. Giving one item instead.");
                 }
             }
-            ItemUtils.addItem(p, instance.getSkyblockItem());
+            ItemUtils.addItem(p, instance.getMagikusItem());
             p.sendMessage(ChatColor.GREEN + "Gave you " + instance.stackCount() + " " + instance.getDisplayName());
         } else {
             p.sendMessage(ChatColor.RED + "Invalid item type: " + strings[0]);

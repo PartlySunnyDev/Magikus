@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class SkyblockGui {
+public abstract class MagikusGui {
 
     protected final String id;
     protected final int slots;
@@ -19,7 +19,7 @@ public abstract class SkyblockGui {
     private final Inventory inventory;
     private final UUID uniqueId = UUID.randomUUID();
 
-    protected SkyblockGui(String id, int slots, String guiName) {
+    protected MagikusGui(String id, int slots, String guiName) {
         this.id = id;
         this.slots = slots;
         this.guiName = guiName;

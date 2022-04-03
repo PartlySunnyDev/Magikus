@@ -46,15 +46,15 @@ public class MagikusAddAddition implements CommandExecutor {
                 mgi.rarityAdditions().addAddition(instance);
                 a = true;
             }
-            p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+            p.getInventory().setItemInMainHand(mgi.getMagikusItem());
             if (a) {
                 p.sendMessage(ChatColor.GREEN + "Successfully applied the addition " + info.id() + " to your held item");
             } else {
                 p.sendMessage(ChatColor.RED + "Ummm if your seeing thins it means something went wrong probably. ADDITION_ID: " + info.id());
             }
-            p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+            p.getInventory().setItemInMainHand(mgi.getMagikusItem());
         } else {
-            MagikusItem mgi = DataUtils.getSkyblockItem(stack, p);
+            MagikusItem mgi = DataUtils.getMagikusItem(stack, p);
             if (mgi == null) {
                 p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + additionId);
                 return true;
@@ -71,7 +71,7 @@ public class MagikusAddAddition implements CommandExecutor {
                 mgi.rarityAdditions().addAddition(instance);
                 a = true;
             }
-            p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+            p.getInventory().setItemInMainHand(mgi.getMagikusItem());
             if (a) {
                 p.sendMessage(ChatColor.GREEN + "Successfully applied the addition " + info.id() + " to your held item");
             } else {

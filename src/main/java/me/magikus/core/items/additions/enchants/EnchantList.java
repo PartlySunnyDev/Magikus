@@ -52,7 +52,7 @@ public class EnchantList {
                 e.printStackTrace();
             }
             if (parent != null) {
-                parent.updateSkyblockItem();
+                parent.updateMagikusItem();
             }
             return;
         }
@@ -64,7 +64,7 @@ public class EnchantList {
             enchantList.remove(enchantId);
         }
         if (parent != null) {
-            parent.updateSkyblockItem();
+            parent.updateMagikusItem();
         }
     }
 
@@ -103,7 +103,7 @@ public class EnchantList {
         if (target == null) {
             enchantList.put(enchant.id(), enchant);
             if (parent != null) {
-                parent.updateSkyblockItem();
+                parent.updateMagikusItem();
             }
             return;
         }
@@ -115,14 +115,14 @@ public class EnchantList {
             enchantList.remove(enchant.id());
         }
         if (parent != null) {
-            parent.updateSkyblockItem();
+            parent.updateMagikusItem();
         }
     }
 
     public void completelyRemove(String enchantId) {
         enchantList.remove(enchantId);
         if (parent != null) {
-            parent.updateSkyblockItem();
+            parent.updateMagikusItem();
         }
     }
 

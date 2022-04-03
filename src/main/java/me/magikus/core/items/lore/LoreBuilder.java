@@ -36,7 +36,7 @@ public class LoreBuilder {
     private final List<String> enchantLore = new ArrayList<>();
     private String description = "";
     private Ascension ascension;
-    private Rarity r = Rarity.COMMON;
+    private Rarity r = Rarity.NORMAL;
     private ItemType type = ItemType.ITEM;
 
     public LoreBuilder setAscension(String r) {

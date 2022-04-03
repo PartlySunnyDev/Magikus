@@ -30,7 +30,7 @@ public class MagikusAscend implements CommandExecutor {
         if (new NBTItem(stack).getBoolean("vanilla")) {
             mgi = MagikusItem.getItemFrom(stack, p);
         } else {
-            mgi = DataUtils.getSkyblockItem(stack, p);
+            mgi = DataUtils.getMagikusItem(stack, p);
         }
         if (mgi == null) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + stack.getType());
@@ -45,7 +45,7 @@ public class MagikusAscend implements CommandExecutor {
             return true;
         }
         mgi.setAscension(info.id());
-        p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+        p.getInventory().setItemInMainHand(mgi.getMagikusItem());
         p.sendMessage(ChatColor.GREEN + "Successfully applied the ascension " + info.id() + " to your held item");
         return true;
     }

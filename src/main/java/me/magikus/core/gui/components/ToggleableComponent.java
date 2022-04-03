@@ -1,6 +1,6 @@
 package me.magikus.core.gui.components;
 
-import me.magikus.core.gui.SkyblockGui;
+import me.magikus.core.gui.MagikusGui;
 import me.magikus.core.util.ItemUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,7 +16,7 @@ public class ToggleableComponent extends GuiComponent {
     private final UUID uniqueID = UUID.randomUUID();
     private boolean toggleOn = false;
 
-    public ToggleableComponent(ItemStack off, ItemStack on, SkyblockGui parent) {
+    public ToggleableComponent(ItemStack off, ItemStack on, MagikusGui parent) {
         super("toggleable_gui", off, parent);
         ItemUtils.setUniqueId(off, uniqueID);
         ItemUtils.setUniqueId(on, uniqueID);
