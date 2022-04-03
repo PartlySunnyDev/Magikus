@@ -23,9 +23,9 @@ public abstract class Enchant implements Listener {
     private final String displayName;
     private final ItemType[] canApply;
     private final boolean isUltra;
+    private final ChatColor enchantColor;
     private int level;
     private MagikusItem parent;
-    private ChatColor enchantColor;
 
     public Enchant(String id, String displayName, int maxLevel, int level, Class<? extends Enchant> cl, boolean isUltra, ItemType... canApply) {
         this(id, displayName, maxLevel, level, cl, null, isUltra, canApply);

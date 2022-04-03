@@ -18,7 +18,12 @@ public class UltraLeggings extends MagikusItem {
     }
 
     public UltraLeggings() {
-        super("ultraleggings", true, ItemType.LEGGINGS, null, new String[]{"ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots"});
+        super("ultraleggings", true, ItemType.LEGGINGS, null, new String[]{ "ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots" });
+    }
+
+    @Override
+    public Color getColor() {
+        return Color.fromRGB(20, 20, 20);
     }
 
     @Override
@@ -32,23 +37,8 @@ public class UltraLeggings extends MagikusItem {
     }
 
     @Override
-    public Color getColor() {
-        return Color.fromRGB(20, 20, 20);
-    }
-
-    @Override
     public AbilityList getAbilities() {
         return new AbilityList();
-    }
-
-    @Override
-    public boolean fraggable() {
-        return true;
-    }
-
-    @Override
-    public boolean enhanceable() {
-        return true;
     }
 
     @Override
@@ -59,14 +49,14 @@ public class UltraLeggings extends MagikusItem {
     @Override
     public StatList getStats() {
         return new StatList(
-                new Stat(StatType.CRIT_CHANCE, 30),
-                new Stat(StatType.CRIT_DAMAGE, 240),
-                new Stat(StatType.ATTACK_SPEED, 15),
-                new Stat(StatType.INTELLIGENCE, 350),
-                new Stat(StatType.SPEED, 120),
-                new Stat(StatType.STRENGTH, 20),
-                new Stat(StatType.DEFENSE, 500),
-                new Stat(StatType.MAX_HEALTH, 530)
+            new Stat(StatType.CRIT_CHANCE, 30),
+            new Stat(StatType.CRIT_DAMAGE, 240),
+            new Stat(StatType.ATTACK_SPEED, 15),
+            new Stat(StatType.INTELLIGENCE, 350),
+            new Stat(StatType.SPEED, 120),
+            new Stat(StatType.STRENGTH, 20),
+            new Stat(StatType.DEFENSE, 500),
+            new Stat(StatType.MAX_HEALTH, 530)
         );
     }
 
@@ -78,5 +68,15 @@ public class UltraLeggings extends MagikusItem {
     @Override
     public Rarity getRarity() {
         return Rarity.LEGENDARY;
+    }
+
+    @Override
+    public boolean fraggable() {
+        return true;
+    }
+
+    @Override
+    public boolean enhanceable() {
+        return true;
     }
 }

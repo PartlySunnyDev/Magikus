@@ -148,10 +148,10 @@ public class ItemUpdater implements Listener {
             ItemStack magikusItem = mgi.getMagikusItem();
             if (magikusItem != null && magikusItem.getItemMeta() != null && i.getItemMeta() != null) {
                 if (
-                        !new NBTItem(magikusItem).equals(nbti)
-                                || magikusItem.getType() != i.getType()
-                                || !Objects.equals(magikusItem.getItemMeta().getLore(), i.getItemMeta().getLore())
-                                || !magikusItem.getItemMeta().getDisplayName().equals(i.getItemMeta().getDisplayName())
+                    !new NBTItem(magikusItem).equals(nbti)
+                        || magikusItem.getType() != i.getType()
+                        || !Objects.equals(magikusItem.getItemMeta().getLore(), i.getItemMeta().getLore())
+                        || !magikusItem.getItemMeta().getDisplayName().equals(i.getItemMeta().getDisplayName())
                 ) {
                     return magikusItem;
                 }

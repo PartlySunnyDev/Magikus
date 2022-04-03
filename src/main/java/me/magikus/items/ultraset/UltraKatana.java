@@ -8,8 +8,6 @@ import me.magikus.core.items.abilities.AbilityList;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import me.magikus.core.util.classes.Pair;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -38,16 +36,6 @@ public class UltraKatana extends MagikusItem {
     }
 
     @Override
-    public boolean fraggable() {
-        return true;
-    }
-
-    @Override
-    public boolean enhanceable() {
-        return true;
-    }
-
-    @Override
     public boolean isEnchanted() {
         return true;
     }
@@ -55,15 +43,15 @@ public class UltraKatana extends MagikusItem {
     @Override
     public StatList getStats() {
         return new StatList(
-                new Stat(StatType.CRIT_CHANCE, 20),
-                new Stat(StatType.CRIT_DAMAGE, 250),
-                new Stat(StatType.WATER_DAMAGE, 370),
-                new Stat(StatType.EARTH_DAMAGE, 370),
-                new Stat(StatType.WIND_DAMAGE, 370),
-                new Stat(StatType.LOOT_BONUS, 10),
-                new Stat(StatType.INTELLIGENCE, 100),
-                new Stat(StatType.STRENGTH, 320),
-                new Stat(StatType.ATTACK_EFFICIENCY, 500)
+            new Stat(StatType.CRIT_CHANCE, 20),
+            new Stat(StatType.CRIT_DAMAGE, 250),
+            new Stat(StatType.WATER_DAMAGE, 370),
+            new Stat(StatType.EARTH_DAMAGE, 370),
+            new Stat(StatType.WIND_DAMAGE, 370),
+            new Stat(StatType.LOOT_BONUS, 10),
+            new Stat(StatType.INTELLIGENCE, 100),
+            new Stat(StatType.STRENGTH, 320),
+            new Stat(StatType.ATTACK_EFFICIENCY, 500)
         );
     }
 
@@ -75,5 +63,15 @@ public class UltraKatana extends MagikusItem {
     @Override
     public Rarity getRarity() {
         return Rarity.LEGENDARY;
+    }
+
+    @Override
+    public boolean fraggable() {
+        return true;
+    }
+
+    @Override
+    public boolean enhanceable() {
+        return true;
     }
 }

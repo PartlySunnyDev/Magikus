@@ -48,7 +48,7 @@ public class AdditionList {
                 value.setAmount(count);
                 additionList.put(addition, value);
             } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                     IllegalAccessException e) {
+                IllegalAccessException e) {
                 e.printStackTrace();
             }
             if (parent != null) {

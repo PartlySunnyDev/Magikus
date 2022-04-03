@@ -34,17 +34,13 @@ public class MagikusAddAddition implements CommandExecutor {
                 p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + additionId);
                 return true;
             }
-            boolean a = false;
+            boolean a = true;
             Addition instance = info.getNewInstance(mgi);
-            if (info.type() == ModifierType.ABILITY) {
-                mgi.abilityAdditions().addAddition(instance);
-                a = true;
-            } else if (info.type() == ModifierType.STAT) {
-                mgi.statAdditions().addAddition(instance);
-                a = true;
-            } else if (info.type() == ModifierType.RARITY) {
-                mgi.rarityAdditions().addAddition(instance);
-                a = true;
+            switch (info.type()) {
+                case ABILITY -> mgi.abilityAdditions().addAddition(instance);
+                case STAT -> mgi.statAdditions().addAddition(instance);
+                case RARITY -> mgi.rarityAdditions().addAddition(instance);
+                default -> a = false;
             }
             p.getInventory().setItemInMainHand(mgi.getMagikusItem());
             if (a) {

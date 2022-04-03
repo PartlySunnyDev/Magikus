@@ -16,7 +16,7 @@ public record EntityInfo(String id, String displayName, String color, int level,
         try {
             return (Entity) info.entityClass.getDeclaredConstructor(Level.class).newInstance(world);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException ignored) {
+            NoSuchMethodException ignored) {
         }
         return null;
     }

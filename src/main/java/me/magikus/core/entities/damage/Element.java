@@ -31,6 +31,15 @@ public enum Element {
         this.icon = icon;
     }
 
+    public static Element getElement(String id) {
+        for (Element e : values()) {
+            if (e.id().equals(id)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     public String weakness() {
         return weakness;
     }
@@ -65,14 +74,5 @@ public enum Element {
 
     public String id() {
         return id;
-    }
-
-    public static Element getElement(String id) {
-        for (Element e : values()) {
-            if (e.id().equals(id)) {
-                return e;
-            }
-        }
-        return null;
     }
 }

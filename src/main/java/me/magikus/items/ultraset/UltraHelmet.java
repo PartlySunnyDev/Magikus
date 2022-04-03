@@ -7,7 +7,6 @@ import me.magikus.core.items.abilities.AbilityList;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -19,7 +18,7 @@ public class UltraHelmet extends MagikusItem {
     }
 
     public UltraHelmet() {
-        super("ultrahelmet", true, ItemType.HELMET, null, new String[]{"ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots"});
+        super("ultrahelmet", true, ItemType.HELMET, null, new String[]{ "ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots" });
     }
 
     @Override
@@ -30,16 +29,6 @@ public class UltraHelmet extends MagikusItem {
     @Override
     public String skullValue() {
         return "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWY1MjQxNjZmN2NlODhhNTM3MTU4NzY2YTFjNTExZTMyMmE5M2E1ZTExZGJmMzBmYTZlODVlNzhkYTg2MWQ4In19fQ==";
-    }
-
-    @Override
-    public boolean fraggable() {
-        return true;
-    }
-
-    @Override
-    public boolean enhanceable() {
-        return true;
     }
 
     @Override
@@ -65,17 +54,17 @@ public class UltraHelmet extends MagikusItem {
     @Override
     public StatList getStats() {
         return new StatList(
-                new Stat(StatType.CRIT_CHANCE, 20),
-                new Stat(StatType.CRIT_DAMAGE, 250),
-                new Stat(StatType.ATTACK_SPEED, 20),
-                new Stat(StatType.LOOT_BONUS, 10),
-                new Stat(StatType.INTELLIGENCE, 100),
-                new Stat(StatType.STRENGTH, 320),
-                new Stat(StatType.SPEED, 120),
-                new Stat(StatType.WATER_DEFENSE, 250),
-                new Stat(StatType.FIRE_DEFENSE, 250),
-                new Stat(StatType.EARTH_DEFENSE, 250),
-                new Stat(StatType.MAX_HEALTH, 830)
+            new Stat(StatType.CRIT_CHANCE, 20),
+            new Stat(StatType.CRIT_DAMAGE, 250),
+            new Stat(StatType.ATTACK_SPEED, 20),
+            new Stat(StatType.LOOT_BONUS, 10),
+            new Stat(StatType.INTELLIGENCE, 100),
+            new Stat(StatType.STRENGTH, 320),
+            new Stat(StatType.SPEED, 120),
+            new Stat(StatType.WATER_DEFENSE, 250),
+            new Stat(StatType.FIRE_DEFENSE, 250),
+            new Stat(StatType.EARTH_DEFENSE, 250),
+            new Stat(StatType.MAX_HEALTH, 830)
         );
     }
 
@@ -87,5 +76,15 @@ public class UltraHelmet extends MagikusItem {
     @Override
     public Rarity getRarity() {
         return Rarity.LEGENDARY;
+    }
+
+    @Override
+    public boolean fraggable() {
+        return true;
+    }
+
+    @Override
+    public boolean enhanceable() {
+        return true;
     }
 }

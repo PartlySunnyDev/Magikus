@@ -17,17 +17,7 @@ public class UltraBoots extends MagikusItem {
     }
 
     public UltraBoots() {
-        super("ultraboots", true, ItemType.BOOTS, null, new String[]{"ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots"});
-    }
-
-    @Override
-    public boolean fraggable() {
-        return true;
-    }
-
-    @Override
-    public boolean enhanceable() {
-        return true;
+        super("ultraboots", true, ItemType.BOOTS, null, new String[]{ "ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots" });
     }
 
     @Override
@@ -58,15 +48,15 @@ public class UltraBoots extends MagikusItem {
     @Override
     public StatList getStats() {
         return new StatList(
-                new Stat(StatType.CRIT_CHANCE, 40),
-                new Stat(StatType.CRIT_DAMAGE, 590),
-                new Stat(StatType.ATTACK_SPEED, 20),
-                new Stat(StatType.LOOT_BONUS, 10),
-                new Stat(StatType.INTELLIGENCE, 100),
-                new Stat(StatType.SPEED, 120),
-                new Stat(StatType.STRENGTH, 320),
-                new Stat(StatType.DEFENSE, 350),
-                new Stat(StatType.MAX_HEALTH, 830)
+            new Stat(StatType.CRIT_CHANCE, 40),
+            new Stat(StatType.CRIT_DAMAGE, 590),
+            new Stat(StatType.ATTACK_SPEED, 20),
+            new Stat(StatType.LOOT_BONUS, 10),
+            new Stat(StatType.INTELLIGENCE, 100),
+            new Stat(StatType.SPEED, 120),
+            new Stat(StatType.STRENGTH, 320),
+            new Stat(StatType.DEFENSE, 350),
+            new Stat(StatType.MAX_HEALTH, 830)
         );
     }
 
@@ -78,5 +68,15 @@ public class UltraBoots extends MagikusItem {
     @Override
     public Rarity getRarity() {
         return Rarity.LEGENDARY;
+    }
+
+    @Override
+    public boolean fraggable() {
+        return true;
+    }
+
+    @Override
+    public boolean enhanceable() {
+        return true;
     }
 }

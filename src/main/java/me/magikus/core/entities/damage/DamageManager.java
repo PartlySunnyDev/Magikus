@@ -115,10 +115,10 @@ public class DamageManager implements Listener {
         StringBuilder temp = new StringBuilder();
         temp.append(ChatColor.WHITE).append("✧");
         ChatColor[] cycle = new ChatColor[]{
-                ChatColor.WHITE,
-                ChatColor.YELLOW,
-                ChatColor.GOLD,
-                ChatColor.RED,
+            ChatColor.WHITE,
+            ChatColor.YELLOW,
+            ChatColor.GOLD,
+            ChatColor.RED,
         };
         int count = 0;
         for (char c : before.toCharArray()) {
@@ -231,20 +231,13 @@ public class DamageManager implements Listener {
         } else {
             for (Player a : p.getWorld().getPlayers()) {
                 switch (cause) {
-                    case FALL ->
-                            a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " fell to their death" + (killer.equals("") ? "." : " with help from " + killer + "."));
-                    case FIRE, FIRE_TICK ->
-                            a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " burnt to death" + (killer.equals("") ? "." : " while trying to fight " + killer + "."));
-                    case VOID ->
-                            a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + (!killer.equals("") ? " was thrown into the void by " + killer : " fell into the void"));
-                    case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK, ENTITY_EXPLOSION, MAGIC ->
-                            a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " was slain by " + killer + ".");
-                    case SUFFOCATION ->
-                            a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " suffocated.");
-                    case DROWNING ->
-                            a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " drowned.");
-                    case BLOCK_EXPLOSION ->
-                            a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " blew up.");
+                    case FALL -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " fell to their death" + (killer.equals("") ? "." : " with help from " + killer + "."));
+                    case FIRE, FIRE_TICK -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " burnt to death" + (killer.equals("") ? "." : " while trying to fight " + killer + "."));
+                    case VOID -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + (!killer.equals("") ? " was thrown into the void by " + killer : " fell into the void"));
+                    case ENTITY_ATTACK, ENTITY_SWEEP_ATTACK, ENTITY_EXPLOSION, MAGIC -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " was slain by " + killer + ".");
+                    case SUFFOCATION -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " suffocated.");
+                    case DROWNING -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " drowned.");
+                    case BLOCK_EXPLOSION -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " blew up.");
                     default -> a.sendMessage(ChatColor.RED + "☠ " + ChatColor.GRAY + p.getDisplayName() + " died");
                 }
             }
@@ -279,7 +272,9 @@ public class DamageManager implements Listener {
             if (receiver instanceof Player) {
                 damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
-                dealDamage(receiver, new HashMap<>(){{put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));}}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
+                dealDamage(receiver, new HashMap<>() {{
+                    put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));
+                }}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
             }
         }
     }
@@ -316,7 +311,9 @@ public class DamageManager implements Listener {
             if (receiver instanceof Player) {
                 damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
-                dealDamage(receiver, new HashMap<>(){{put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));}}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
+                dealDamage(receiver, new HashMap<>() {{
+                    put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));
+                }}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
             }
         }
         e.getEntity().remove();
@@ -342,15 +339,17 @@ public class DamageManager implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void naturalDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof LivingEntity &&
-                e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK &&
-                e.getCause() != EntityDamageEvent.DamageCause.PROJECTILE &&
-                e.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK &&
-                e.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
+            e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK &&
+            e.getCause() != EntityDamageEvent.DamageCause.PROJECTILE &&
+            e.getCause() != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK &&
+            e.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
         ) {
             if (e.getEntity() instanceof Player) {
                 damagePlayer((Player) e.getEntity(), getHitDamageOn((Player) e.getEntity(), null, e.getDamage() * 5, false), e.getCause(), "");
             } else {
-                dealDamage((LivingEntity) e.getEntity(), new HashMap<>(){{put(Element.NONE, e.getDamage() * 5);}}, new Pair<>(e.getDamage() * 5, false), true);
+                dealDamage((LivingEntity) e.getEntity(), new HashMap<>() {{
+                    put(Element.NONE, e.getDamage() * 5);
+                }}, new Pair<>(e.getDamage() * 5, false), true);
             }
             e.setDamage(0);
         }

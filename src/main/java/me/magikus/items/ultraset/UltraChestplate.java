@@ -17,17 +17,12 @@ public class UltraChestplate extends MagikusItem {
     }
 
     public UltraChestplate() {
-        super("ultrachestplate", true, ItemType.CHESTPLATE, null, new String[]{"ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots"});
+        super("ultrachestplate", true, ItemType.CHESTPLATE, null, new String[]{ "ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots" });
     }
 
     @Override
-    public boolean fraggable() {
-        return true;
-    }
-
-    @Override
-    public boolean enhanceable() {
-        return true;
+    public Color getColor() {
+        return Color.fromRGB(10, 10, 10);
     }
 
     @Override
@@ -46,11 +41,6 @@ public class UltraChestplate extends MagikusItem {
     }
 
     @Override
-    public Color getColor() {
-        return Color.fromRGB(10, 10, 10);
-    }
-
-    @Override
     public boolean isEnchanted() {
         return true;
     }
@@ -58,17 +48,17 @@ public class UltraChestplate extends MagikusItem {
     @Override
     public StatList getStats() {
         return new StatList(
-                new Stat(StatType.CRIT_CHANCE, 40),
-                new Stat(StatType.CRIT_DAMAGE, 300),
-                new Stat(StatType.ATTACK_SPEED, 20),
-                new Stat(StatType.LOOT_BONUS, 10),
-                new Stat(StatType.INTELLIGENCE, 280),
-                new Stat(StatType.STRENGTH, 120),
-                new Stat(StatType.SPEED, 120),
-                new Stat(StatType.WATER_DEFENSE, 420),
-                new Stat(StatType.FIRE_DEFENSE, 420),
-                new Stat(StatType.EARTH_DEFENSE, 420),
-                new Stat(StatType.MAX_HEALTH, 620)
+            new Stat(StatType.CRIT_CHANCE, 40),
+            new Stat(StatType.CRIT_DAMAGE, 300),
+            new Stat(StatType.ATTACK_SPEED, 20),
+            new Stat(StatType.LOOT_BONUS, 10),
+            new Stat(StatType.INTELLIGENCE, 280),
+            new Stat(StatType.STRENGTH, 120),
+            new Stat(StatType.SPEED, 120),
+            new Stat(StatType.WATER_DEFENSE, 420),
+            new Stat(StatType.FIRE_DEFENSE, 420),
+            new Stat(StatType.EARTH_DEFENSE, 420),
+            new Stat(StatType.MAX_HEALTH, 620)
         );
     }
 
@@ -80,5 +70,15 @@ public class UltraChestplate extends MagikusItem {
     @Override
     public Rarity getRarity() {
         return Rarity.LEGENDARY;
+    }
+
+    @Override
+    public boolean fraggable() {
+        return true;
+    }
+
+    @Override
+    public boolean enhanceable() {
+        return true;
     }
 }

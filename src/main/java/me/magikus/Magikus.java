@@ -3,8 +3,8 @@ package me.magikus;
 import me.magikus.additions.AdditionRegister;
 import me.magikus.core.ConsoleLogger;
 import me.magikus.core.commands.*;
-import me.magikus.core.entities.damage.DamageManager;
 import me.magikus.core.entities.EntityUpdater;
+import me.magikus.core.entities.damage.DamageManager;
 import me.magikus.core.items.ItemUpdater;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
@@ -26,24 +26,6 @@ import static me.magikus.items.ItemRegister.registerItems;
 public final class Magikus extends JavaPlugin {
 
     public static ConfigManager configManager;
-
-    @Override
-    public void onEnable() {
-        configManager = new ConfigManager(JavaPlugin.getPlugin(Magikus.class));
-        repairDefaultStats();
-        initializeBaseStats(this);
-        registerCommands();
-        AdditionRegister.registerEnchants();
-        registerListeners();
-        registerItems();
-        registerAbilities();
-        AdditionRegister.registerAdditions();
-        AdditionRegister.registerAscensions();
-        registerEntityInfos();
-        registerRecipes();
-        updateEverything();
-        ConsoleLogger.console("Loaded Magikus plugin on version " + getDescription().getVersion() + "...");
-    }
 
     private void updateEverything() {
         for (Player p : getServer().getOnlinePlayers()) {
@@ -85,6 +67,24 @@ public final class Magikus extends JavaPlugin {
     @Override
     public void onDisable() {
         ConsoleLogger.console("Shutting down Magikus plugin...");
+    }
+
+    @Override
+    public void onEnable() {
+        configManager = new ConfigManager(JavaPlugin.getPlugin(Magikus.class));
+        repairDefaultStats();
+        initializeBaseStats(this);
+        registerCommands();
+        AdditionRegister.registerEnchants();
+        registerListeners();
+        registerItems();
+        registerAbilities();
+        AdditionRegister.registerAdditions();
+        AdditionRegister.registerAscensions();
+        registerEntityInfos();
+        registerRecipes();
+        updateEverything();
+        ConsoleLogger.console("Loaded Magikus plugin on version " + getDescription().getVersion() + "...");
     }
 
 }
