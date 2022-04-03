@@ -4,12 +4,13 @@ import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTListCompound;
 import me.magikus.Magikus;
+import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.enums.Rarity;
 import me.magikus.core.items.abilities.AbilityList;
 import me.magikus.core.items.additions.*;
 import me.magikus.core.items.additions.enchants.Enchant;
 import me.magikus.core.items.additions.enchants.EnchantList;
-import me.magikus.core.items.additions.reforges.ReforgeManager;
+import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.items.lore.LoreBuilder;
 import me.magikus.core.items.name.NameBuilder;
 import me.magikus.core.stats.StatList;
@@ -27,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -42,9 +44,8 @@ public abstract class MagikusItem implements Listener {
     private final AdditionList rarityAdditions = new AdditionList(ModifierType.RARITY, this);
     private final AdditionList abilityAdditions = new AdditionList(ModifierType.ABILITY, this);
     private final EnchantList enchants = new EnchantList(this);
-    private boolean fragged = false;
-    private int stars = 0;
-    private String reforge = null;
+    private int enhancements = 0;
+    private String ascension = null;
     private int stackCount = 1;
     private Material baseMaterial = getDefaultItem();
     //If this is true, it means it will be generated an uuid. Also if this is true the item cannot stack so yeah
@@ -54,6 +55,8 @@ public abstract class MagikusItem implements Listener {
     private ItemStack asSkyblockItem;
     private Player owner;
     private String[] fullSet;
+    @NotNull
+    private DamageType damageType = DamageType.PHYSICAL;
 
     protected MagikusItem(String id, boolean unique, ItemType type, @Nullable Player owner) {
         this.id = id;
@@ -116,14 +119,11 @@ public abstract class MagikusItem implements Listener {
         if (nbti.hasKey("mg_vanilla")) {
             item.setVanilla(nbti.getBoolean("mg_vanilla"));
         }
-        if (nbti.hasKey("fragged")) {
-            item.setFragged(nbti.getBoolean("fragged"));
+        if (nbti.hasKey("enhancements")) {
+            item.setEnhancements(nbti.getInteger("enhancements"));
         }
-        if (nbti.hasKey("stars")) {
-            item.setStars(nbti.getInteger("stars"));
-        }
-        if (nbti.hasKey("reforge")) {
-            item.setReforge(nbti.getString("reforge"));
+        if (nbti.hasKey("ascension")) {
+            item.setAscension(nbti.getString("ascension"));
         }
         item.stackCount = s.getAmount();
         NBTCompound abilityAdditions = nbti.getCompound("abilityAdditions");
@@ -222,6 +222,10 @@ public abstract class MagikusItem implements Listener {
         return itemStack;
     }
 
+    public DamageType damageType() {
+        return damageType;
+    }
+
     public UUID skullId() {
         return null;
     }
@@ -284,42 +288,32 @@ public abstract class MagikusItem implements Listener {
 
     public abstract Rarity getRarity();
 
-    public void setFragged(boolean fragged) {
-        if (fraggable()) {
-            this.fragged = fragged;
-        }
-    }
-
     public boolean fraggable() {
         return false;
     }
 
-    public void setStars(int stars) {
-        if (starrable()) {
-            this.stars = stars;
+    public void setEnhancements(int enhancements) {
+        if (enhanceable()) {
+            this.enhancements = enhancements;
         }
     }
 
-    public boolean starrable() {
+    public boolean enhanceable() {
         return false;
     }
 
-    public void setReforge(String reforge) {
-        if (type.reforgable() && ReforgeManager.getReforge(reforge) != null && ReforgeManager.getReforge(reforge).canApply(this)) {
-            this.reforge = reforge;
+    public void setAscension(String ascension) {
+        if (type.reforgable() && AscensionManager.getAscension(ascension) != null && AscensionManager.getAscension(ascension).canApply(this)) {
+            this.ascension = ascension;
         }
     }
 
-    public boolean fragged() {
-        return fragged;
+    public int enhancements() {
+        return enhancements;
     }
 
-    public int stars() {
-        return stars;
-    }
-
-    public String reforge() {
-        return reforge;
+    public String ascension() {
+        return ascension;
     }
 
     public StatList getCombinedStats(Player p, Entity e) {
@@ -331,14 +325,11 @@ public abstract class MagikusItem implements Listener {
                 base = base.merge(a.getStats(p, e));
             }
         }
-        if (reforge != null && type.reforgable()) {
-            StatList addition = DataUtils.getStatsOfBest(reforge, getFinalRarity());
+        if (ascension != null && type.reforgable()) {
+            StatList addition = DataUtils.getStatsOfBest(ascension, getFinalRarity());
             if (addition != null) {
                 base = base.merge(addition);
             }
-        }
-        if (fragged) {
-            base = base.merge(getFraggedBonuses().b());
         }
         return base;
     }
@@ -367,14 +358,7 @@ public abstract class MagikusItem implements Listener {
         for (IRarityAddition a : rarityAdditions.asRarityList()) {
             base = Rarity.add(base, a.getLevelChange());
         }
-        if (fragged) {
-            base = Rarity.add(base, getFraggedBonuses().a());
-        }
         return base;
-    }
-
-    public Pair<Integer, StatList> getFraggedBonuses() {
-        return new Pair<>(0, new StatList());
     }
 
     public ItemStack getSkyblockItem() {
@@ -414,10 +398,10 @@ public abstract class MagikusItem implements Listener {
                 ((LeatherArmorMeta) m).setColor(getColor());
             }
         }
-        m.setDisplayName(new NameBuilder().setName(getDisplayName()).setRarity(getFinalRarity()).setFragged(fragged).setStars(stars).setReforge(reforge).build());
+        m.setDisplayName(new NameBuilder().setName(getDisplayName()).setRarity(getFinalRarity()).setEnhancements(enhancements).setAscension(ascension).build());
         m.setLore(new LoreBuilder()
                 .setEnchants(enchants)
-                .setReforge(type.reforgable() ? reforge : null)
+                .setAscension(type.reforgable() ? ascension : null)
                 .setDescription(getDescription() != null ? getDescription() : "")
                 .setRarity(getFinalRarity())
                 .setStats(getCombinedStats(owner, null), statAdditions(), getFinalRarity(), owner)
@@ -433,9 +417,8 @@ public abstract class MagikusItem implements Listener {
         nbti.setString("mg_id", id);
         nbti.setBoolean("mg_unique", unique);
         nbti.setBoolean("vanilla", vanilla);
-        nbti.setBoolean("fragged", fragged);
-        nbti.setInteger("stars", stars);
-        nbti.setString("reforge", reforge);
+        nbti.setInteger("enhancements", enhancements);
+        nbti.setString("ascension", ascension);
         if (skullId() != null) {
             NBTCompound skull = nbti.addCompound("SkullOwner");
             skull.setUUID("Id", skullId());
@@ -443,7 +426,7 @@ public abstract class MagikusItem implements Listener {
             NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
             texture.setString("Value", skullValue());
         }
-        if ((fragged || stars > 0 || (reforge != null && !reforge.equals(""))) && !unique) {
+        if ((enhancements > 0 || (ascension != null && !ascension.equals(""))) && !unique) {
             unique = true;
             if (uniqueId == null) {
                 this.uniqueId = UUID.randomUUID();

@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class MagikusEnchant implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("sbenchant")) {
+        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("menchant")) {
             return true;
         }
         String enchantId = strings[0];
@@ -33,28 +33,28 @@ public class MagikusEnchant implements CommandExecutor {
             return true;
         }
         ItemStack stack = p.getInventory().getItemInMainHand();
-        MagikusItem sbi;
+        MagikusItem mgi;
         if (new NBTItem(stack).getBoolean("vanilla")) {
-            sbi = MagikusItem.getItemFrom(stack, p);
+            mgi = MagikusItem.getItemFrom(stack, p);
         } else {
-            sbi = DataUtils.getSkyblockItem(stack, p);
+            mgi = DataUtils.getSkyblockItem(stack, p);
         }
-        if (sbi == null) {
+        if (mgi == null) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + stack.getType());
             return true;
         }
-        if (!info.canApply(sbi)) {
+        if (!info.canApply(mgi)) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not compatible with this enchant!");
             return true;
         }
         /*
-        if (level > info.maxLevel() || (level == sbi.enchants().getLevelOf(enchantId) && level + 1 > info.maxLevel())) {
+        if (level > info.maxLevel() || (level == mgi.enchants().getLevelOf(enchantId) && level + 1 > info.maxLevel())) {
             p.sendMessage(ChatColor.RED + "The enchant level is too high!");
             return true;
         }
          */
-        sbi.enchants().addEnchant(info.id(), level);
-        p.getInventory().setItemInMainHand(sbi.getSkyblockItem());
+        mgi.enchants().addEnchant(info.id(), level);
+        p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
         p.sendMessage(ChatColor.GREEN + "Successfully applied the enchant " + info.id() + " of level " + level + " to your held item");
         return true;
     }

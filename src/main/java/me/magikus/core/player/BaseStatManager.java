@@ -27,7 +27,6 @@ public class BaseStatManager {
         put(StatType.INTELLIGENCE.toString(), 100D);
         put(StatType.CRIT_CHANCE.toString(), 30D);
         put(StatType.CRIT_DAMAGE.toString(), 50D);
-        put(StatType.SEA_CREATURE_CHANCE.toString(), 20D);
     }};
 
     //cuz im too lazy to write them all down in the constructor

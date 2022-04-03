@@ -11,41 +11,39 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class MagikusFrag implements CommandExecutor {
+public class MagikusEnhance implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender instanceof Player p) || !s.equals("sbfrag")) {
+        if (!(commandSender instanceof Player p) || strings.length < 0 || !s.equals("menhance")) {
             return true;
         }
-        String bool;
+        String number;
         if (strings.length > 0) {
-            bool = strings[0];
+            number = strings[0];
         } else {
-            bool = "true";
+            number = "5";
         }
-        boolean frag = false;
-        if (bool.equals("0") || bool.equals("true")) {
-            frag = true;
-        } else if (bool.equals("1") || bool.equals("false")) {
-            frag = false;
-        } else {
-            p.sendMessage(ChatColor.RED + "Please enter true or false.");
+        int enhancements;
+        try {
+            enhancements = Integer.parseInt(number);
+        } catch (NumberFormatException e) {
+            p.sendMessage(ChatColor.RED + "Invalid number provided.");
             return true;
         }
         ItemStack stack = p.getInventory().getItemInMainHand();
-        MagikusItem sbi;
+        MagikusItem mgi;
         if (new NBTItem(stack).getBoolean("vanilla")) {
-            sbi = MagikusItem.getItemFrom(stack, p);
+            mgi = MagikusItem.getItemFrom(stack, p);
         } else {
-            sbi = DataUtils.getSkyblockItem(stack, p);
+            mgi = DataUtils.getSkyblockItem(stack, p);
         }
-        if (sbi == null) {
+        if (mgi == null) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + stack.getType());
             return true;
         }
-        sbi.setFragged(frag);
-        p.getInventory().setItemInMainHand(sbi.getSkyblockItem());
-        p.sendMessage(ChatColor.GREEN + "Successfully fragged / defragged your item");
+        mgi.setEnhancements(enhancements);
+        p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+        p.sendMessage(ChatColor.GREEN + "Successfully added " + enhancements + " enhancements to your item.");
         return true;
     }
 }

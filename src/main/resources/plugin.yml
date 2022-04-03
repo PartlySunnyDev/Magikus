@@ -18,17 +18,13 @@ commands:
     description: Adds an addition to your held item
     usage: /madd <addition-id>
     permission: magikus.op
-  mreforge:
-    description: Adds a reforge to your held item
-    usage: /mreforge <reforge-id>
+  mascend:
+    description: Adds a ascension to your held item
+    usage: /mascension <ascension-id>
     permission: magikus.op
-  smstar:
-    description: Adds a amount of stars to your held item (default 5)
-    usage: /mstar [optional-amount]
-    permission: magikus.op
-  mfrag:
-    description: Sets your held item to fragged / unfragged (default true)
-    usage: /mfrag [optional-boolean]
+  menhance:
+    description: Adds a amount of enhancements to your held item (default 5)
+    usage: /menhance [optional-amount]
     permission: magikus.op
   menchant:
     description: Adds and enchant to your held item (default 1)

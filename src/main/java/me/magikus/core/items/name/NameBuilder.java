@@ -1,16 +1,16 @@
 package me.magikus.core.items.name;
 
 import me.magikus.core.enums.Rarity;
-import me.magikus.core.items.additions.reforges.Reforge;
-import me.magikus.core.items.additions.reforges.ReforgeManager;
+import me.magikus.core.items.additions.ascensions.Ascension;
+import me.magikus.core.items.additions.ascensions.AscensionManager;
 import org.bukkit.ChatColor;
 
 public class NameBuilder {
 
     private String displayName;
-    private String reforgeName;
+    private String ascensionName;
     private boolean frag;
-    private int stars;
+    private int enhancements;
     private ChatColor rarity;
 
     public NameBuilder setName(String name) {
@@ -18,16 +18,11 @@ public class NameBuilder {
         return this;
     }
 
-    public NameBuilder setReforge(String name) {
-        Reforge reforge = ReforgeManager.getReforge(name);
-        if (reforge != null) {
-            this.reforgeName = reforge.displayName();
+    public NameBuilder setAscension(String name) {
+        Ascension ascension = AscensionManager.getAscension(name);
+        if (ascension != null) {
+            this.ascensionName = ascension.displayName();
         }
-        return this;
-    }
-
-    public NameBuilder setFragged(boolean fragged) {
-        this.frag = fragged;
         return this;
     }
 
@@ -37,21 +32,21 @@ public class NameBuilder {
     }
 
     public String build() {
-        return rarity + (frag ? "⚚ " : "") + ((reforgeName == null || reforgeName.equals("")) ? "" : reforgeName + " ") + displayName + " " + getStars();
+        return rarity + displayName + " " + getEnhancements();
     }
 
-    private String getStars() {
-        if (stars < 6) {
-            return ChatColor.GOLD + "✪".repeat(stars);
+    private String getEnhancements() {
+        if (enhancements < 6) {
+            return ChatColor.GOLD + "✚".repeat(enhancements);
         }
-        return ChatColor.RED + "✪".repeat(stars - 5) + ChatColor.GOLD + "✪".repeat(10 - stars);
+        return ChatColor.RED + "✚".repeat(enhancements - 5) + ChatColor.GOLD + "✪".repeat(10 - enhancements);
     }
 
-    public NameBuilder setStars(int stars) {
-        if (stars > 9 || stars < 0) {
+    public NameBuilder setEnhancements(int enhancements) {
+        if (enhancements > 9 || enhancements < 0) {
             return this;
         }
-        this.stars = stars;
+        this.enhancements = enhancements;
         return this;
     }
 

@@ -2,8 +2,8 @@ package me.magikus.core.commands;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.magikus.core.items.MagikusItem;
-import me.magikus.core.items.additions.reforges.Reforge;
-import me.magikus.core.items.additions.reforges.ReforgeManager;
+import me.magikus.core.items.additions.ascensions.Ascension;
+import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.util.DataUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -13,40 +13,40 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class MagikusReforge implements CommandExecutor {
+public class MagikusAscend implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("sbreforge")) {
+        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("mascend")) {
             return true;
         }
-        String reforgeId = strings[0];
-        Reforge info = ReforgeManager.getReforge(reforgeId);
+        String ascensionId = strings[0];
+        Ascension info = AscensionManager.getAscension(ascensionId);
         if (info == null) {
-            p.sendMessage(ChatColor.RED + "Invalid reforge type: " + reforgeId);
+            p.sendMessage(ChatColor.RED + "Invalid ascension type: " + ascensionId);
             return true;
         }
         ItemStack stack = p.getInventory().getItemInMainHand();
-        MagikusItem sbi;
+        MagikusItem mgi;
         if (new NBTItem(stack).getBoolean("vanilla")) {
-            sbi = MagikusItem.getItemFrom(stack, p);
+            mgi = MagikusItem.getItemFrom(stack, p);
         } else {
-            sbi = DataUtils.getSkyblockItem(stack, p);
+            mgi = DataUtils.getSkyblockItem(stack, p);
         }
-        if (sbi == null) {
+        if (mgi == null) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + stack.getType());
             return true;
         }
-        if (!sbi.type().reforgable()) {
+        if (!mgi.type().reforgable()) {
             p.sendMessage(ChatColor.RED + "Item on your hand is not reforgable!");
             return true;
         }
-        if (!info.canApply(sbi)) {
-            p.sendMessage(ChatColor.RED + "Item on your hand is not compatible with this reforge!");
+        if (!info.canApply(mgi)) {
+            p.sendMessage(ChatColor.RED + "Item on your hand is not compatible with this ascension!");
             return true;
         }
-        sbi.setReforge(info.id());
-        p.getInventory().setItemInMainHand(sbi.getSkyblockItem());
-        p.sendMessage(ChatColor.GREEN + "Successfully applied the reforge " + info.id() + " to your held item");
+        mgi.setAscension(info.id());
+        p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
+        p.sendMessage(ChatColor.GREEN + "Successfully applied the ascension " + info.id() + " to your held item");
         return true;
     }
 }

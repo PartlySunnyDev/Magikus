@@ -25,15 +25,15 @@ public class AbilityUtils {
         if (!ItemUpdater.items.containsKey(mg_unique_id)) {
             ItemUpdater.registerItem(i);
         }
-        MagikusItem sbi = ItemUpdater.items.get(mg_unique_id);
-        if (sbi.getAbilities() != null) {
-            for (Ability a : sbi.getAbilities().asList()) {
+        MagikusItem mgi = ItemUpdater.items.get(mg_unique_id);
+        if (mgi.getAbilities() != null) {
+            for (Ability a : mgi.getAbilities().asList()) {
                 if (Objects.equals(a.id(), type)) {
                     return true;
                 }
             }
         }
-        for (IAbilityAddition a : sbi.abilityAdditions().asAbilityList()) {
+        for (IAbilityAddition a : mgi.abilityAdditions().asAbilityList()) {
             if (Objects.equals(a.getAbilities().id(), type)) {
                 return true;
             }

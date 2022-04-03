@@ -1,4 +1,4 @@
-package me.magikus.core.items.additions.reforges;
+package me.magikus.core.items.additions.ascensions;
 
 import me.magikus.Magikus;
 import me.magikus.core.enums.Rarity;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class Reforge implements Listener {
+public abstract class Ascension implements Listener {
 
     private static final ArrayList<String> registered = new ArrayList<>();
     private final String id;
@@ -22,18 +22,18 @@ public abstract class Reforge implements Listener {
     private final ItemType[] canApply;
     private MagikusItem parent;
 
-    public Reforge(String id, String displayName, String bonusDesc, HashMap<Rarity, StatList> statBonuses, ItemType... canApply) {
+    public Ascension(String id, String displayName, String bonusDesc, HashMap<Rarity, StatList> statBonuses, ItemType... canApply) {
         this(id, displayName, bonusDesc, statBonuses, null, canApply);
     }
 
-    public Reforge(String id, String displayName, String bonusDesc, HashMap<Rarity, StatList> statBonuses, MagikusItem parent, ItemType... canApply) {
+    public Ascension(String id, String displayName, String bonusDesc, HashMap<Rarity, StatList> statBonuses, MagikusItem parent, ItemType... canApply) {
         this.parent = parent;
         this.id = id;
         this.displayName = displayName;
         this.bonusDesc = bonusDesc;
         this.statBonuses = statBonuses;
         this.canApply = canApply;
-        ReforgeManager.addReforge(this);
+        AscensionManager.addAscension(this);
         if (!registered.contains(id)) {
             Magikus plugin = JavaPlugin.getPlugin(Magikus.class);
             plugin.getServer().getPluginManager().registerEvents(this, plugin);

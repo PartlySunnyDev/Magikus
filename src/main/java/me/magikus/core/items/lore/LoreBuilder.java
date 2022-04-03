@@ -12,8 +12,8 @@ import me.magikus.core.items.additions.AdditionList;
 import me.magikus.core.items.additions.IStatAddition;
 import me.magikus.core.items.additions.enchants.Enchant;
 import me.magikus.core.items.additions.enchants.EnchantList;
-import me.magikus.core.items.additions.reforges.Reforge;
-import me.magikus.core.items.additions.reforges.ReforgeManager;
+import me.magikus.core.items.additions.ascensions.Ascension;
+import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
@@ -35,12 +35,12 @@ public class LoreBuilder {
     private final List<String> statAbilityLore = new ArrayList<>();
     private final List<String> enchantLore = new ArrayList<>();
     private String description = "";
-    private Reforge reforge;
+    private Ascension ascension;
     private Rarity r = Rarity.COMMON;
     private ItemType type = ItemType.ITEM;
 
-    public LoreBuilder setReforge(String r) {
-        reforge = ReforgeManager.getReforge(r);
+    public LoreBuilder setAscension(String r) {
+        ascension = AscensionManager.getAscension(r);
         return this;
     }
 
@@ -106,10 +106,10 @@ public class LoreBuilder {
         return this;
     }
 
-    //Must be called AFTER setReforge or will bug out
+    //Must be called AFTER setAscension or will bug out
     public LoreBuilder setStats(StatList stats, AdditionList additions, Rarity rarity, Player player) {
-        if (reforge != null) {
-            setStats(stats, additions, DataUtils.getStatsOfBest(reforge.id(), rarity), reforge.displayName(), player);
+        if (ascension != null) {
+            setStats(stats, additions, DataUtils.getStatsOfBest(ascension.id(), rarity), ascension.displayName(), player);
         } else {
             setStats(stats, additions, null, null, player);
         }
@@ -137,7 +137,7 @@ public class LoreBuilder {
         }
     }
 
-    public LoreBuilder setStats(StatList stats, AdditionList additions, StatList reforgeBonus, String reforgeName, Player player) {
+    public LoreBuilder setStats(StatList stats, AdditionList additions, StatList ascensionBonus, String ascensionName, Player player) {
         Map<StatType, HashMap<AdditionInfo, Double>> sorted;
         TreeMap<StatType, HashMap<AdditionInfo, Double>> realSorted = null;
         if (additions != null) {
@@ -168,9 +168,9 @@ public class LoreBuilder {
             realSorted.remove(StatType.DAMAGE_REDUCTION);
             realSorted.remove(StatType.DAMAGE_MULTIPLIER);
         }
-        Stat[] reforgeAdditions = null;
-        if (reforgeBonus != null && reforgeName != null) {
-            reforgeAdditions = reforgeBonus.asList();
+        Stat[] ascensionAdditions = null;
+        if (ascensionBonus != null && ascensionName != null) {
+            ascensionAdditions = ascensionBonus.asList();
         }
         List<Stat> listed = new ArrayList<>(stats.statList.values());
         Comparator<Stat> compareByType = Comparator.comparingInt(o -> (o.type().level()));
@@ -189,9 +189,9 @@ public class LoreBuilder {
             }
             StringBuilder stat = new StringBuilder();
             if (type.isGreen()) {
-                stat.append(ChatColor.GRAY).append(type.displayName()).append(": ").append(ChatColor.GREEN).append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
+                stat.append(type.color()).append(type.displayName()).append(" ").append(type.symbol()).append(": ").append(type.color()).append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
             } else {
-                stat.append(ChatColor.GRAY).append(type.displayName()).append(": ").append(ChatColor.RED).append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
+                stat.append(type.color()).append(type.displayName()).append(" ").append(type.symbol()).append(": ").append(type.color()).append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
             }
             if (additions != null) {
                 if (realSorted.containsKey(s.type())) {
@@ -205,10 +205,10 @@ public class LoreBuilder {
                     }
                 }
             }
-            if (reforgeAdditions != null) {
-                for (Stat reforgeStat : reforgeAdditions) {
-                    if (reforgeStat.type() == type) {
-                        stat.append(" ").append(ChatColor.BLUE).append("(").append(reforgeName).append(" +").append(getIntegerStringOf(reforgeStat.value(), 1)).append(")");
+            if (ascensionAdditions != null) {
+                for (Stat ascensionStat : ascensionAdditions) {
+                    if (ascensionStat.type() == type) {
+                        stat.append(" ").append(ChatColor.BLUE).append("(").append(ascensionName).append(" +").append(getIntegerStringOf(ascensionStat.value(), 1)).append(")");
                     }
                 }
             }
@@ -228,6 +228,10 @@ public class LoreBuilder {
     }
 
     public List<String> build() {
+        if (ascension != null) {
+            lore.add(ChatColor.GOLD + "" + ChatColor.MAGIC + "|" + ChatColor.GOLD + ascension.displayName() + " Ascension" + ChatColor.MAGIC + "|");
+            lore.add("");
+        }
         if (statLore.size() > 0) {
             lore.addAll(statLore);
             lore.add("");
@@ -265,16 +269,16 @@ public class LoreBuilder {
                 lore.add("");
             }
         }
-        if (reforge != null && reforge.bonusDesc() != null) {
-            lore.add(ChatColor.BLUE + reforge.displayName() + " Bonus");
-            List<String> reforgeText = TextUtils.wrap(TextUtils.getHighlightedText(reforge.bonusDesc()), 30);
-            for (String s : reforgeText) {
+        if (ascension != null && ascension.bonusDesc() != null) {
+            lore.add(ChatColor.BLUE + ascension.displayName() + " Bonus");
+            List<String> ascensionText = TextUtils.wrap(TextUtils.getHighlightedText(ascension.bonusDesc()), 30);
+            for (String s : ascensionText) {
                 lore.add(ChatColor.GRAY + s);
             }
             lore.add("");
         }
-        if (type.reforgable()) {
-            lore.add(ChatColor.DARK_GRAY + "This item can be reforged!");
+        if (type.reforgable() && ascension == null) {
+            lore.add(ChatColor.DARK_GRAY + "This item can be ascended!");
         }
         lore.add(r.color() + "" + ChatColor.BOLD + r + " " + type.display().toUpperCase());
         return lore;

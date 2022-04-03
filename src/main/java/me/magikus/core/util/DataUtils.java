@@ -10,8 +10,8 @@ import me.magikus.core.items.ItemType;
 import me.magikus.core.items.ItemUpdater;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.items.abilities.AbilityList;
-import me.magikus.core.items.additions.reforges.Reforge;
-import me.magikus.core.items.additions.reforges.ReforgeManager;
+import me.magikus.core.items.additions.ascensions.Ascension;
+import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
@@ -197,11 +197,11 @@ public class DataUtils {
         };
     }
 
-    public static StatList getStatsOfBest(String reforge, Rarity ra) {
+    public static StatList getStatsOfBest(String ascension, Rarity ra) {
         StatList addition;
-        Reforge r = ReforgeManager.getReforge(reforge);
+        Ascension r = AscensionManager.getAscension(ascension);
         if (r == null) {
-            ConsoleLogger.console("Illegal reforge " + reforge + " found on item");
+            ConsoleLogger.console("Illegal ascension " + ascension + " found on item");
             return null;
         }
         if (r.statBonuses().containsKey(ra)) {

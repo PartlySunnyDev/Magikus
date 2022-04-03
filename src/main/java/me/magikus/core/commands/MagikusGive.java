@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class MagikusGive implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("sbgive")) {
+        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("mgive")) {
             return true;
         }
         String itemId = strings[0];

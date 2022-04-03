@@ -1,5 +1,6 @@
 package me.magikus.core.util;
 
+import me.magikus.core.entities.damage.Element;
 import me.magikus.core.stats.StatType;
 import org.bukkit.ChatColor;
 
@@ -9,10 +10,24 @@ import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class TextUtils {
     public static List<String> wrap(String text, int width) {
         return wrap(text, width, ChatColor.GRAY);
+    }
+
+    public static String getDamageText(Map<Element, Double> elementalInfo, boolean isCritical) {
+        StringBuilder damageText = new StringBuilder();
+        if (isCritical) {
+            damageText.append(ChatColor.DARK_PURPLE).append("✧");
+        }
+        for (Element e : elementalInfo.keySet()) {
+            if (elementalInfo.get(e) > 0) {
+                damageText.append(e.color()).append(getHealthText(elementalInfo.get(e))).append(e.icon());
+            }
+        }
+        return damageText.toString();
     }
 
     public static List<String> wrap(String text, int width, ChatColor defaultColor) {

@@ -1,7 +1,9 @@
 package me.magikus.core.entities.damage;
 
 import me.magikus.Magikus;
+import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.stats.EntityStatType;
+import me.magikus.core.items.MagikusItem;
 import me.magikus.core.player.BaseStatManager;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
@@ -32,6 +34,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -47,38 +50,38 @@ public class DamageManager implements Listener {
 
     private static final Map<UUID, Pair<String, Long>> lastDamagedBy = new HashMap<>();
 
-    public static void dealDamage(LivingEntity e, double damage, boolean isCritical, boolean showDamageIndicator) {
+    public static void dealDamage(LivingEntity e, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, boolean showDamageIndicator) {
         if (e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.PLAYER) {
             return;
         }
         if (EntityUtils.getHealth(e) == null) {
             EntityUtils.repairEntity(e);
         }
-        EntityUtils.setHealth(EntityUtils.getHealth(e) - damage, e);
+        EntityUtils.setHealth(EntityUtils.getHealth(e) - damageInfo.a(), e);
         if (EntityUtils.getHealth(e) < 1) {
             e.setHealth(0);
             EntityUtils.setHealth(0, e);
         }
         e.setCustomName(EntityUtils.getDisplayName(e));
         if (showDamageIndicator)
-            summonDamageIndicator(e.getLocation(), damage, isCritical, e.getHeight());
+            summonDamageIndicator(e.getLocation(), elementalInfo, damageInfo, e.getHeight());
     }
 
-    public static void dealDamage(LivingEntity e, double damage, boolean isCritical, boolean showDamageIndicator, Player p, boolean ferocity) {
-        dealDamage(e, damage, isCritical, showDamageIndicator);
-        double ferocityChance = PlayerStatManager.getStat(p.getUniqueId(), StatType.FEROCITY);
+    public static void dealDamage(LivingEntity e, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, boolean showDamageIndicator, Player p, boolean ferocity) {
+        dealDamage(e, elementalInfo, damageInfo, showDamageIndicator);
+        double ferocityChance = PlayerStatManager.getStat(p.getUniqueId(), StatType.ATTACK_EFFICIENCY);
         if (!ferocity) {
             int one = (int) ((ferocityChance) % 10);
             int tens = (int) ((ferocityChance / 10) % 10);
-            int hundred = (int) ((ferocityChance / 100) % 10);
+            int hundred = (int) (Math.floor(ferocityChance / 100));
             boolean ferocityActive = new Random().nextInt(100) < one + tens * 10;
             for (int i = 0; i < hundred; i++) {
-                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 0.7f, 1.5f);
-                dealDamage(e, damage, isCritical, showDamageIndicator, p, true);
+                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EGG_THROW, 0.7f, 1.5f);
+                dealDamage(e, elementalInfo, damageInfo, showDamageIndicator, p, true);
             }
             if (ferocityActive) {
-                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 0.7f, 1.5f);
-                dealDamage(e, damage, isCritical, showDamageIndicator, p, true);
+                p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EGG_THROW, 0.7f, 1.5f);
+                dealDamage(e, elementalInfo, damageInfo, showDamageIndicator, p, true);
             }
             return;
         }
@@ -87,7 +90,7 @@ public class DamageManager implements Listener {
         ((CraftLivingEntity) e).getHandle().invulnerableTime = (int) (10 / (1 + attackSpeed / 100));
     }
 
-    public static void summonDamageIndicator(Location central, double damage, boolean critical, double entityHeight) {
+    public static void summonDamageIndicator(Location central, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, double entityHeight) {
         Random r = new Random();
         double xOffset = (r.nextInt(200) / 100f) - 1;
         double yOffset = (entityHeight / 2 + ((r.nextInt((int) (entityHeight * 50)) / 100f) - entityHeight / 4)) + entityHeight / 2;
@@ -97,11 +100,7 @@ public class DamageManager implements Listener {
         temp.setInvisible(true);
         temp.setNoGravity(true);
         temp.noCulling = true;
-        if (critical) {
-            temp.setCustomName(new TextComponent(getCritText(TextUtils.getHealthText(damage))));
-        } else {
-            temp.setCustomName(new TextComponent(ChatColor.GRAY + TextUtils.getHealthText(damage)));
-        }
+        temp.setCustomName(new TextComponent(TextUtils.getDamageText(elementalInfo, damageInfo.b())));
         temp.setCustomNameVisible(true);
         EntityUtils.spawnEntity(temp);
         new BukkitRunnable() {
@@ -137,17 +136,19 @@ public class DamageManager implements Listener {
         return temp.toString();
     }
 
-    public static Pair<Double, Boolean> getHitDamage(Player p, Entity e, boolean ignoreHand) {
-        StatList stats = PlayerUpdater.getStats(p, ignoreHand, e);
-        double damage = (5 + stats.getStat(StatType.DAMAGE)) * (1 + stats.getStat(StatType.STRENGTH) / 100);
-        double multiplier = /*TODO combat level*/ stats.getStat(StatType.DAMAGE_MULTIPLIER);
-        double critBonus = 1 + stats.getStat(StatType.CRIT_DAMAGE) / 100;
-        boolean critical = new Random().nextInt(100) < stats.getStat(StatType.CRIT_CHANCE);
-        double finalDamage = damage * multiplier * (critical ? critBonus : 1);
-        if (finalDamage > 50) {
-            finalDamage = finalDamage + (new Random().nextInt((int) Math.floor(finalDamage / 25)) - (int) Math.floor(finalDamage / 50));
+    public static Pair<Map<Element, Double>, Pair<Double, Boolean>> getHitDamage(Player p, Entity e, boolean ignoreHand) {
+        ItemStack itemInMainHand = p.getInventory().getItemInMainHand();
+        if (itemInMainHand.hasItemMeta()) {
+            MagikusItem itemFrom = MagikusItem.getItemFrom(itemInMainHand, p);
+            if (itemFrom == null) {
+                ConsoleLogger.console("Invalid item in main hand");
+                return null;
+            }
+            DamageType t = itemFrom.damageType();
+            return PlayerUpdater.getStats(p, ignoreHand, e).getFinalDamage(e, ignoreHand, t);
+        } else {
+            return PlayerUpdater.getStats(p, ignoreHand, e).getFinalDamage(e, ignoreHand, DamageType.PHYSICAL);
         }
-        return new Pair<>(finalDamage, critical);
     }
 
     public static double getHitDamageOn(Player p, Entity e, double rawDamage, boolean trueDamage) {
@@ -179,12 +180,12 @@ public class DamageManager implements Listener {
         updatePlayerHealthBar(p, health, maxHealth, cause);
     }
 
-    public static void updatePlayerHealthBar(Player p, double sbHp, double sbMaxHp) {
-        updatePlayerHealthBar(p, sbHp, sbMaxHp, null);
+    public static void updatePlayerHealthBar(Player p, double mgHp, double mgMaxHp) {
+        updatePlayerHealthBar(p, mgHp, mgMaxHp, null);
     }
 
-    public static void updatePlayerHealthBar(Player p, double sbHp, double sbMaxHp, EntityDamageEvent.DamageCause cause) {
-        if (sbHp < 1) {
+    public static void updatePlayerHealthBar(Player p, double mgHp, double mgMaxHp, EntityDamageEvent.DamageCause cause) {
+        if (mgHp < 1) {
             Pair<String, Long> info = lastDamagedBy.get(p.getUniqueId());
             if (info == null) {
                 kill(p, cause, "");
@@ -197,15 +198,15 @@ public class DamageManager implements Listener {
             }
         } else {
             double newHp = 20;
-            if (sbMaxHp < 200) {
+            if (mgMaxHp < 200) {
                 p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
             } else {
-                p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20 + NumberUtils.clamp((int) (sbMaxHp / 50f), 0, 20));
+                p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20 + NumberUtils.clamp((int) (mgMaxHp / 50f), 0, 20));
             }
-            if (sbHp - 100 < 0) {
-                newHp = sbHp / 5;
+            if (mgHp - 100 < 0) {
+                newHp = mgHp / 5;
             } else {
-                newHp += NumberUtils.clamp((int) (sbHp / 50f), 0, 20);
+                newHp += NumberUtils.clamp((int) (mgHp / 50f), 0, 20);
             }
             setHealth(p, newHp);
         }
@@ -278,7 +279,7 @@ public class DamageManager implements Listener {
             if (receiver instanceof Player) {
                 damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
-                dealDamage(receiver, getStat(damager, EntityStatType.DAMAGE), false, false);
+                dealDamage(receiver, new HashMap<>(){{put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));}}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
             }
         }
     }
@@ -296,11 +297,11 @@ public class DamageManager implements Listener {
             e.setCancelled(true);
         } else {
             if ((p).getInventory().getItemInMainHand().getType() == Material.CROSSBOW || p.getInventory().getItemInMainHand().getType() == Material.BOW) {
-                Pair<Double, Boolean> hitDamage = getHitDamage(p, receiver, true);
+                Pair<Map<Element, Double>, Pair<Double, Boolean>> hitDamage = getHitDamage(p, receiver, true);
                 dealDamage(receiver, hitDamage.a(), hitDamage.b(), true, p, false);
                 return;
             }
-            Pair<Double, Boolean> hitDamage = getHitDamage(p, receiver, false);
+            Pair<Map<Element, Double>, Pair<Double, Boolean>> hitDamage = getHitDamage(p, receiver, false);
             dealDamage(receiver, hitDamage.a(), hitDamage.b(), true, p, false);
         }
     }
@@ -315,7 +316,7 @@ public class DamageManager implements Listener {
             if (receiver instanceof Player) {
                 damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
-                dealDamage(receiver, getStat(damager, EntityStatType.DAMAGE), false, false);
+                dealDamage(receiver, new HashMap<>(){{put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));}}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
             }
         }
         e.getEntity().remove();
@@ -331,7 +332,7 @@ public class DamageManager implements Listener {
         if (receiver instanceof Player) {
             e.setCancelled(true);
         } else {
-            Pair<Double, Boolean> hitDamage = getHitDamage(p, receiver, false);
+            Pair<Map<Element, Double>, Pair<Double, Boolean>> hitDamage = getHitDamage(p, receiver, false);
             dealDamage(receiver, hitDamage.a(), hitDamage.b(), true, p, false);
         }
         e.getEntity().remove();
@@ -349,7 +350,7 @@ public class DamageManager implements Listener {
             if (e.getEntity() instanceof Player) {
                 damagePlayer((Player) e.getEntity(), getHitDamageOn((Player) e.getEntity(), null, e.getDamage() * 5, false), e.getCause(), "");
             } else {
-                dealDamage((LivingEntity) e.getEntity(), e.getDamage() * 5, false, true);
+                dealDamage((LivingEntity) e.getEntity(), new HashMap<>(){{put(Element.NONE, e.getDamage() * 5);}}, new Pair<>(e.getDamage() * 5, false), true);
             }
             e.setDamage(0);
         }

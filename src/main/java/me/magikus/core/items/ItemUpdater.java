@@ -142,10 +142,10 @@ public class ItemUpdater implements Listener {
             return i;
         }
         if (items.containsKey(nbti.getUUID("mg_unique_id")) && !nbti.getBoolean("vanilla")) {
-            MagikusItem sbi = items.get(nbti.getUUID("mg_unique_id"));
-            sbi.setOwner(entity);
-            sbi.updateSkyblockItem();
-            ItemStack skyblockItem = sbi.getSkyblockItem();
+            MagikusItem mgi = items.get(nbti.getUUID("mg_unique_id"));
+            mgi.setOwner(entity);
+            mgi.updateSkyblockItem();
+            ItemStack skyblockItem = mgi.getSkyblockItem();
             if (skyblockItem != null && skyblockItem.getItemMeta() != null && i.getItemMeta() != null) {
                 if (
                         !new NBTItem(skyblockItem).equals(nbti)

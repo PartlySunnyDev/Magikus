@@ -38,7 +38,7 @@ public final class Magikus extends JavaPlugin {
         registerItems();
         registerAbilities();
         AdditionRegister.registerAdditions();
-        AdditionRegister.registerReforges();
+        AdditionRegister.registerAscensions();
         registerEntityInfos();
         registerRecipes();
         updateEverything();
@@ -69,9 +69,8 @@ public final class Magikus extends JavaPlugin {
         getCommand("mgive").setExecutor(new MagikusGive());
         getCommand("msummon").setExecutor(new MagikusSummon());
         getCommand("madd").setExecutor(new MagikusAddAddition());
-        getCommand("mreforge").setExecutor(new MagikusReforge());
-        getCommand("mstar").setExecutor(new MagikusStar());
-        getCommand("mfrag").setExecutor(new MagikusFrag());
+        getCommand("mascend").setExecutor(new MagikusAscend());
+        getCommand("menhance").setExecutor(new MagikusEnhance());
         getCommand("menchant").setExecutor(new MagikusEnchant());
     }
 

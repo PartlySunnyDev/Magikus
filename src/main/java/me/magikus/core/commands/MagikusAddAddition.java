@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class MagikusAddAddition implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("sbadd")) {
+        if (!(commandSender instanceof Player p) || strings.length < 1 || !s.equals("madd")) {
             return true;
         }
         String additionId = strings[0];
@@ -29,49 +29,49 @@ public class MagikusAddAddition implements CommandExecutor {
         }
         ItemStack stack = p.getInventory().getItemInMainHand();
         if (new NBTItem(stack).getBoolean("vanilla")) {
-            MagikusItem sbi = MagikusItem.getItemFrom(stack, p);
-            if (sbi == null) {
+            MagikusItem mgi = MagikusItem.getItemFrom(stack, p);
+            if (mgi == null) {
                 p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + additionId);
                 return true;
             }
             boolean a = false;
-            Addition instance = info.getNewInstance(sbi);
+            Addition instance = info.getNewInstance(mgi);
             if (info.type() == ModifierType.ABILITY) {
-                sbi.abilityAdditions().addAddition(instance);
+                mgi.abilityAdditions().addAddition(instance);
                 a = true;
             } else if (info.type() == ModifierType.STAT) {
-                sbi.statAdditions().addAddition(instance);
+                mgi.statAdditions().addAddition(instance);
                 a = true;
             } else if (info.type() == ModifierType.RARITY) {
-                sbi.rarityAdditions().addAddition(instance);
+                mgi.rarityAdditions().addAddition(instance);
                 a = true;
             }
-            p.getInventory().setItemInMainHand(sbi.getSkyblockItem());
+            p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
             if (a) {
                 p.sendMessage(ChatColor.GREEN + "Successfully applied the addition " + info.id() + " to your held item");
             } else {
                 p.sendMessage(ChatColor.RED + "Ummm if your seeing thins it means something went wrong probably. ADDITION_ID: " + info.id());
             }
-            p.getInventory().setItemInMainHand(sbi.getSkyblockItem());
+            p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
         } else {
-            MagikusItem sbi = DataUtils.getSkyblockItem(stack, p);
-            if (sbi == null) {
+            MagikusItem mgi = DataUtils.getSkyblockItem(stack, p);
+            if (mgi == null) {
                 p.sendMessage(ChatColor.RED + "Item on your hand is not valid: " + additionId);
                 return true;
             }
             boolean a = false;
-            Addition instance = info.getNewInstance(sbi);
+            Addition instance = info.getNewInstance(mgi);
             if (info.type() == ModifierType.ABILITY) {
-                sbi.abilityAdditions().addAddition(instance);
+                mgi.abilityAdditions().addAddition(instance);
                 a = true;
             } else if (info.type() == ModifierType.STAT) {
-                sbi.statAdditions().addAddition(instance);
+                mgi.statAdditions().addAddition(instance);
                 a = true;
             } else if (info.type() == ModifierType.RARITY) {
-                sbi.rarityAdditions().addAddition(instance);
+                mgi.rarityAdditions().addAddition(instance);
                 a = true;
             }
-            p.getInventory().setItemInMainHand(sbi.getSkyblockItem());
+            p.getInventory().setItemInMainHand(mgi.getSkyblockItem());
             if (a) {
                 p.sendMessage(ChatColor.GREEN + "Successfully applied the addition " + info.id() + " to your held item");
             } else {
