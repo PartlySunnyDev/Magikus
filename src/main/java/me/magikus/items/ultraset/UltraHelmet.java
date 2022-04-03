@@ -54,17 +54,17 @@ public class UltraHelmet extends MagikusItem {
     @Override
     public StatList getStats() {
         return new StatList(
-            new Stat(StatType.CRIT_CHANCE, 20),
-            new Stat(StatType.CRIT_DAMAGE, 250),
-            new Stat(StatType.ATTACK_SPEED, 20),
-            new Stat(StatType.LOOT_BONUS, 10),
-            new Stat(StatType.INTELLIGENCE, 100),
-            new Stat(StatType.STRENGTH, 320),
-            new Stat(StatType.SPEED, 120),
-            new Stat(StatType.WATER_DEFENSE, 250),
-            new Stat(StatType.FIRE_DEFENSE, 250),
-            new Stat(StatType.EARTH_DEFENSE, 250),
-            new Stat(StatType.MAX_HEALTH, 830)
+                new Stat(StatType.CRIT_CHANCE, 20),
+                new Stat(StatType.CRIT_DAMAGE, 250),
+                new Stat(StatType.ATTACK_SPEED, 20),
+                new Stat(StatType.LOOT_BONUS, 10),
+                new Stat(StatType.INTELLIGENCE, 100),
+                new Stat(StatType.STRENGTH, 320),
+                new Stat(StatType.SPEED, 120),
+                new Stat(StatType.WATER_DEFENSE, 250),
+                new Stat(StatType.FIRE_DEFENSE, 250),
+                new Stat(StatType.ELECTRIC_DEFENSE, 250),
+                new Stat(StatType.MAX_HEALTH, 830)
         );
     }
 
