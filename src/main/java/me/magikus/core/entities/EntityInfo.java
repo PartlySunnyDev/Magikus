@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public record EntityInfo(String id, String displayName, String color, int level, boolean isBoss,
                          EntityStatSet stats, Class<?> entityClass, /*REMEMBER THIS IS IN REVERSE (BOOTS TO HELMET)*/
-                         ItemStack[] armorSlots, Element[] types) {
+                         ItemStack[] armorSlots, Element type) {
 
     public static Entity getEntity(EntityInfo info, Level world) {
         try {

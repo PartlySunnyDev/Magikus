@@ -116,7 +116,7 @@ public class PlayerUpdater implements Listener {
     }
 
     public static String getPlayerDisplay(StatList stats, boolean notEnoughMana) {
-        return ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.GREEN + "" + getIntegerStringOf(stats.getStat(StatType.DEFENSE), 0) + "❈ Defense   " + (notEnoughMana ? ChatColor.RED + "" + ChatColor.BOLD + "NOT ENOUGH MANA" : ChatColor.AQUA + "" + getIntegerStringOf(stats.getStat(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.INTELLIGENCE), 0) + "✎ Mana");
+        return ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + (notEnoughMana ? ChatColor.RED + "" + ChatColor.BOLD + "OUT OF MANA" : ChatColor.AQUA + "" + getIntegerStringOf(stats.getStat(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.INTELLIGENCE), 0) + "✜ Mana");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

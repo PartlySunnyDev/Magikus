@@ -111,26 +111,26 @@ public class StatList {
             elementalDamages.put(Element.NONE, regularDamage);
             finalDamage = combined;
         } else {
-            for (Element element : i.types()) {
-                Element strength = element.elementStrength();
-                Element weakness = element.elementWeakness();
-                switch (strength) {
-                    case ICE -> iceDamage /= 2;
-                    case WATER -> waterDamage /= 2;
-                    case WIND -> windDamage /= 2;
-                    case ELECTRIC -> electricDamage /= 2;
-                    case FIRE -> fireDamage /= 2;
-                    case EARTH -> earthDamage /= 2;
-                }
-                switch (weakness) {
-                    case ICE -> iceDamage *= 2;
-                    case WATER -> waterDamage *= 2;
-                    case WIND -> windDamage *= 2;
-                    case ELECTRIC -> electricDamage *= 2;
-                    case FIRE -> fireDamage *= 2;
-                    case EARTH -> earthDamage *= 2;
-                }
+            Element element = i.type();
+            Element strength = element.elementStrength();
+            Element weakness = element.elementWeakness();
+            switch (strength) {
+                case ICE -> iceDamage /= 2;
+                case WATER -> waterDamage /= 2;
+                case WIND -> windDamage /= 2;
+                case ELECTRIC -> electricDamage /= 2;
+                case FIRE -> fireDamage /= 2;
+                case EARTH -> earthDamage /= 2;
             }
+            switch (weakness) {
+                case ICE -> iceDamage *= 2;
+                case WATER -> waterDamage *= 2;
+                case WIND -> windDamage *= 2;
+                case ELECTRIC -> electricDamage *= 2;
+                case FIRE -> fireDamage *= 2;
+                case EARTH -> earthDamage *= 2;
+            }
+
             double combined = fireDamage + waterDamage + windDamage + electricDamage + earthDamage + iceDamage + regularDamage;
             elementalDamages.put(Element.ELECTRIC, electricDamage);
             elementalDamages.put(Element.FIRE, fireDamage);

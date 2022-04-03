@@ -2,6 +2,8 @@ package me.magikus.core.entities.damage;
 
 import me.magikus.Magikus;
 import me.magikus.core.ConsoleLogger;
+import me.magikus.core.entities.EntityInfo;
+import me.magikus.core.entities.EntityManager;
 import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.player.BaseStatManager;
@@ -151,14 +153,28 @@ public class DamageManager implements Listener {
         }
     }
 
-    public static double getHitDamageOn(Player p, Entity e, double rawDamage, boolean trueDamage) {
+    public static double getHitDamageOn(Player p, Entity e, double rawDamage, boolean trueDamage, Element element) {
         StatList stats = PlayerUpdater.getStats(p, false, e);
         if (trueDamage) {
             return rawDamage;
         }
-        double defense = stats.getStat(StatType.DEFENSE);
+        double fireDefense = (stats.getStat(StatType.FIRE_DEFENSE));
+        double waterDefense = (stats.getStat(StatType.WATER_DEFENSE));
+        double windDefense = (stats.getStat(StatType.WIND_DEFENSE));
+        double electricDefense = (stats.getStat(StatType.ELECTRIC_DEFENSE));
+        double earthDefense = (stats.getStat(StatType.EARTH_DEFENSE));
+        double iceDefense = (stats.getStat(StatType.ICE_DEFENSE));
+        double regularDefense = (stats.getStat(StatType.DEFENSE));
         double reduction = stats.getStat(StatType.DAMAGE_REDUCTION);
-        double reducedDamage = rawDamage - ((reduction / 100) * rawDamage) - ((defense / (defense + 100)) * rawDamage);
+        switch (element) {
+            case ICE -> rawDamage -= (((reduction / 100) * rawDamage) + ((iceDefense / (iceDefense + 100)) * rawDamage));
+            case WATER -> rawDamage -= (((reduction / 100) * rawDamage) + ((waterDefense / (waterDefense + 100)) * rawDamage));
+            case WIND -> rawDamage -= (((reduction / 100) * rawDamage) + ((windDefense / (windDefense + 100)) * rawDamage));
+            case ELECTRIC -> rawDamage -= (((reduction / 100) * rawDamage) + ((electricDefense / (electricDefense + 100)) * rawDamage));
+            case FIRE -> rawDamage -= (((reduction / 100) * rawDamage) + ((fireDefense / (fireDefense + 100)) * rawDamage));
+            case EARTH -> rawDamage -= (((reduction / 100) * rawDamage) + ((earthDefense / (earthDefense + 100)) * rawDamage));
+        }
+        double reducedDamage = rawDamage - ((regularDefense / (regularDefense + 100)) * rawDamage);
         if (reducedDamage < 0) {
             return 0;
         }
@@ -221,8 +237,6 @@ public class DamageManager implements Listener {
         p.teleport(bedSpawnLocation);
         p.setFireTicks(0);
         p.setVisualFire(false);
-        //TODO make this sound when losing coins
-        //p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 2);
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT, 1, 1);
         if (cause == null) {
             for (Player a : p.getWorld().getPlayers()) {
@@ -277,7 +291,7 @@ public class DamageManager implements Listener {
         e.setDamage(0);
         if (!(damager instanceof Player)) {
             if (receiver instanceof Player) {
-                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
+                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false, EntityManager.getEntity(EntityUtils.getId(damager)) != null ? EntityManager.getEntity(EntityUtils.getId(damager)).type() : Element.NONE), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
                 dealDamage(receiver, new HashMap<>(){{put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));}}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
             }
@@ -314,7 +328,7 @@ public class DamageManager implements Listener {
         receiver.damage(0, damager);
         if (!(damager instanceof Player)) {
             if (receiver instanceof Player) {
-                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
+                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false, EntityManager.getEntity(EntityUtils.getId(damager)) != null ? EntityManager.getEntity(EntityUtils.getId(damager)).type() : Element.NONE), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
                 dealDamage(receiver, new HashMap<>(){{put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));}}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false);
             }
@@ -348,7 +362,7 @@ public class DamageManager implements Listener {
                 e.getCause() != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
         ) {
             if (e.getEntity() instanceof Player) {
-                damagePlayer((Player) e.getEntity(), getHitDamageOn((Player) e.getEntity(), null, e.getDamage() * 5, false), e.getCause(), "");
+                damagePlayer((Player) e.getEntity(), getHitDamageOn((Player) e.getEntity(), null, e.getDamage() * 5, false, Element.NONE), e.getCause(), "");
             } else {
                 dealDamage((LivingEntity) e.getEntity(), new HashMap<>(){{put(Element.NONE, e.getDamage() * 5);}}, new Pair<>(e.getDamage() * 5, false), true);
             }

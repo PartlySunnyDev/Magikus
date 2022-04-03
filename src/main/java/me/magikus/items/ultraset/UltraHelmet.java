@@ -74,7 +74,7 @@ public class UltraHelmet extends MagikusItem {
                 new Stat(StatType.SPEED, 120),
                 new Stat(StatType.WATER_DEFENSE, 250),
                 new Stat(StatType.FIRE_DEFENSE, 250),
-                new Stat(StatType.EARTH_DEFENSE, 250),
+                new Stat(StatType.ELECTRIC_DEFENSE, 250),
                 new Stat(StatType.MAX_HEALTH, 830)
         );
     }
