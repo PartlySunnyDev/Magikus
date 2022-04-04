@@ -108,9 +108,11 @@ public class DamageManager implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
+                //To prevent stupid noise
+                temp.teleportTo(temp.getX(), -50, temp.getY());
                 temp.kill();
             }
-        }.runTaskLater(JavaPlugin.getPlugin(Magikus.class), 40);
+        }.runTaskLater(JavaPlugin.getPlugin(Magikus.class), 35 + new Random().nextInt(10));
     }
 
     public static String getCritText(String before) {

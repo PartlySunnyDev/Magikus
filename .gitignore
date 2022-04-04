@@ -1,5 +1,8 @@
 .paper-nms
 *.jar
 *.iml
+*.class
 /.idea
 /target
+/out
+/libs
