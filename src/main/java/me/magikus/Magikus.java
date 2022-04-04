@@ -8,6 +8,7 @@ import me.magikus.core.entities.damage.DamageManager;
 import me.magikus.core.items.ItemUpdater;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
+import me.magikus.core.magic.spells.SpellCastListener;
 import me.magikus.core.util.ConfigManager;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -22,6 +23,7 @@ import static me.magikus.core.player.BaseStatManager.repairDefaultStats;
 import static me.magikus.data.recipes.RecipeRegister.registerRecipes;
 import static me.magikus.entities.EntityRegister.registerEntityInfos;
 import static me.magikus.items.ItemRegister.registerItems;
+import static me.magikus.magic.MagicRegister.registerSpells;
 
 public final class Magikus extends JavaPlugin {
 
@@ -62,6 +64,7 @@ public final class Magikus extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new DamageManager(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerStatManager(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerUpdater(getServer()), this);
+        this.getServer().getPluginManager().registerEvents(new SpellCastListener(), this);
     }
 
     @Override
@@ -72,6 +75,7 @@ public final class Magikus extends JavaPlugin {
     @Override
     public void onEnable() {
         configManager = new ConfigManager(JavaPlugin.getPlugin(Magikus.class));
+        SpellCastListener.initPlayers(getServer());
         repairDefaultStats();
         initializeBaseStats(this);
         registerCommands();
@@ -79,6 +83,7 @@ public final class Magikus extends JavaPlugin {
         registerListeners();
         registerItems();
         registerAbilities();
+        registerSpells();
         AdditionRegister.registerAdditions();
         AdditionRegister.registerAscensions();
         registerEntityInfos();

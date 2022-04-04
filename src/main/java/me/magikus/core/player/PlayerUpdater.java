@@ -7,6 +7,7 @@ import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
 import me.magikus.core.util.DataUtils;
+import me.magikus.core.util.classes.Pair;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -22,16 +23,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static me.magikus.core.util.NumberUtils.getIntegerStringOf;
 
 public class PlayerUpdater implements Listener {
 
+    public static final Map<UUID, Pair<String, Integer>> messagesToSend = new HashMap<>();
+    public static final Map<UUID, Integer> timeRemaining = new HashMap<>();
     private static final UUID movementSpeedUUID = UUID.fromString("2029ae02-a2cf-4224-9d4f-5df0db423a44");
 
     public PlayerUpdater(Server s) {
-        new ConstantUpdater(s).runTaskTimer(JavaPlugin.getPlugin(Magikus.class), 0, 10);
+        new ConstantUpdater(s).runTaskTimer(JavaPlugin.getPlugin(Magikus.class), 0, 1);
         new NaturalRegeneration(s).runTaskTimer(JavaPlugin.getPlugin(Magikus.class), 0, 20);
     }
 
@@ -110,13 +115,13 @@ public class PlayerUpdater implements Listener {
         PlayerStatManager.playerStats.put(player.getUniqueId(), stats);
     }
 
-    public static void sendPlayerDisplay(Player p, boolean notEnoughMana) {
+    public static void sendPlayerDisplay(Player p) {
         StatList stats = getStats(p, false, null);
-        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(getPlayerDisplay(stats, notEnoughMana)));
+        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(getPlayerDisplay(stats)));
     }
 
-    public static String getPlayerDisplay(StatList stats, boolean notEnoughMana) {
-        return ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + (notEnoughMana ? ChatColor.RED + "" + ChatColor.BOLD + "OUT OF MANA" : ChatColor.AQUA + "" + getIntegerStringOf(stats.getStat(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.INTELLIGENCE), 0) + "✜ Mana");
+    public static String getPlayerDisplay(StatList stats) {
+        return ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStat(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.INTELLIGENCE), 0) + "✜ Mana";
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -124,6 +129,11 @@ public class PlayerUpdater implements Listener {
         if (e.getDamager() instanceof Player p) {
             updatePlayer(p);
         }
+    }
+
+    public static void sendMessageToPlayer(Player p, String message, int timeInTicks) {
+        messagesToSend.put(p.getUniqueId(), new Pair<>(message, timeInTicks));
+        timeRemaining.put(p.getUniqueId(), timeInTicks);
     }
 }
 
@@ -152,23 +162,28 @@ class NaturalRegeneration extends BukkitRunnable {
 
 class ConstantUpdater extends BukkitRunnable {
     private final Server s;
-    private int count = 0;
-
     public ConstantUpdater(Server s) {
         this.s = s;
     }
 
     @Override
     public void run() {
-        if (count == 4) {
-            count = 0;
-            for (Player p : s.getOnlinePlayers()) {
-                PlayerUpdater.sendPlayerDisplay(p, false);
+        for (Player p : s.getOnlinePlayers()) {
+            Pair<String, Integer> specialMessage = PlayerUpdater.messagesToSend.get(p.getUniqueId());
+            if (specialMessage != null) {
+                if (PlayerUpdater.timeRemaining.get(p.getUniqueId()) < 1) {
+                    PlayerUpdater.messagesToSend.put(p.getUniqueId(), null);
+                    PlayerUpdater.timeRemaining.put(p.getUniqueId(), 0);
+                } else {
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(specialMessage.a()));
+                    PlayerUpdater.timeRemaining.put(p.getUniqueId(), PlayerUpdater.timeRemaining.get(p.getUniqueId()) - 1);
+                }
+            } else {
+                PlayerUpdater.sendPlayerDisplay(p);
             }
         }
         for (Player p : s.getOnlinePlayers()) {
             PlayerUpdater.updatePlayer(p);
         }
-        count++;
     }
 }

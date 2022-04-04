@@ -5,6 +5,7 @@ import me.magikus.core.items.ItemType;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
+import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
 import me.magikus.core.util.AbilityUtils;
 import me.magikus.core.util.DataUtils;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static me.magikus.core.util.AbilityUtils.hasAbility;
+import static me.magikus.core.util.NumberUtils.getIntegerStringOf;
 
 public abstract class Ability implements Listener {
 
@@ -173,12 +175,6 @@ public abstract class Ability implements Listener {
             case RIGHT_CLICK -> {
                 return "RIGHT CLICK";
             }
-            case SHIFT_LEFT_CLICK -> {
-                return "SNEAK LEFT CLICK";
-            }
-            case SHIFT_RIGHT_CLICK -> {
-                return "SNEAK RIGHT CLICK";
-            }
         }
         return "";
     }
@@ -195,24 +191,14 @@ public abstract class Ability implements Listener {
                 return;
             }
             if ((e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)) {
-                if (e.getPlayer().isSneaking() && type == AbilityType.SHIFT_LEFT_CLICK) {
-                    if (mana(e.getPlayer())) {
-                        trigger(e.getPlayer(), e.getPlayer().getInventory().getItemInMainHand());
-                        startCooldown(e.getPlayer());
-                    }
-                } else if (type == AbilityType.LEFT_CLICK) {
+                if (type == AbilityType.LEFT_CLICK && !e.getPlayer().isSneaking()) {
                     if (mana(e.getPlayer())) {
                         trigger(e.getPlayer(), e.getPlayer().getInventory().getItemInMainHand());
                         startCooldown(e.getPlayer());
                     }
                 }
             } else if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR)) {
-                if (e.getPlayer().isSneaking() && type == AbilityType.SHIFT_RIGHT_CLICK) {
-                    if (mana(e.getPlayer())) {
-                        trigger(e.getPlayer(), e.getPlayer().getInventory().getItemInMainHand());
-                        startCooldown(e.getPlayer());
-                    }
-                } else if (type == AbilityType.RIGHT_CLICK) {
+                if (type == AbilityType.RIGHT_CLICK && !e.getPlayer().isSneaking()) {
                     if (mana(e.getPlayer())) {
                         trigger(e.getPlayer(), e.getPlayer().getInventory().getItemInMainHand());
                         startCooldown(e.getPlayer());
@@ -225,7 +211,8 @@ public abstract class Ability implements Listener {
     private boolean mana(Player p) {
         double mana = PlayerStatManager.getStat(p.getUniqueId(), StatType.MANA);
         if (mana < manaCost) {
-            PlayerUpdater.sendPlayerDisplay(p, true);
+            StatList stats = PlayerStatManager.playerStats.get(p.getUniqueId());
+            PlayerUpdater.sendMessageToPlayer(p,  ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.RED + "" + ChatColor.BOLD + "OUT OF MANA", 40);
             p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
             return false;
         }
