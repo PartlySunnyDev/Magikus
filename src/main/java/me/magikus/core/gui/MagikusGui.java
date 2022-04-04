@@ -17,7 +17,6 @@ public abstract class MagikusGui {
     protected final String guiName;
     protected final List<GuiComponent> contents = new ArrayList<>();
     private final Inventory inventory;
-    private final UUID uniqueId = UUID.randomUUID();
 
     protected MagikusGui(String id, int slots, String guiName) {
         this.id = id;

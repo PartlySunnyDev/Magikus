@@ -22,6 +22,7 @@ import static me.magikus.core.player.BaseStatManager.initializeBaseStats;
 import static me.magikus.core.player.BaseStatManager.repairDefaultStats;
 import static me.magikus.data.recipes.RecipeRegister.registerRecipes;
 import static me.magikus.entities.EntityRegister.registerEntityInfos;
+import static me.magikus.guis.GuiRegister.registerGuis;
 import static me.magikus.items.ItemRegister.registerItems;
 import static me.magikus.magic.MagicRegister.registerSpells;
 
@@ -56,6 +57,7 @@ public final class Magikus extends JavaPlugin {
         getCommand("mascend").setExecutor(new MagikusAscend());
         getCommand("menhance").setExecutor(new MagikusEnhance());
         getCommand("menchant").setExecutor(new MagikusEnchant());
+        getCommand("mgui").setExecutor(new MagikusGui());
     }
 
     private void registerListeners() {
@@ -88,6 +90,7 @@ public final class Magikus extends JavaPlugin {
         AdditionRegister.registerAscensions();
         registerEntityInfos();
         registerRecipes();
+        registerGuis();
         updateEverything();
         ConsoleLogger.console("Loaded Magikus plugin on version " + getDescription().getVersion() + "...");
     }

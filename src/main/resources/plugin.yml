@@ -30,6 +30,10 @@ commands:
     description: Adds and enchant to your held item (default 1)
     usage: /menchant <enchant-id> [level]
     permission: magikus.op
+  mgui:
+    description: Opens a Magikus GUI
+    usage: /mgui <gui-id>
+    permission: magikus.op
 permissions:
   magikus.op:
     description: Gives you access to commands like mgive and msummon
