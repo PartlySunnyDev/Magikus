@@ -15,7 +15,11 @@ public class MagikusGui implements CommandExecutor {
             return true;
         }
         String guiId = strings[0];
-        GuiManager.setInventory(p, GuiRegister.findGui(guiId));
+        me.magikus.core.gui.MagikusGui gui = GuiRegister.findGui(guiId);
+        if (gui == null) {
+            return true;
+        }
+        GuiManager.setInventory(p, gui);
         return true;
     }
 }

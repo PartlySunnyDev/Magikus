@@ -1,10 +1,11 @@
 package me.magikus.core.gui.components;
 
+import me.magikus.Magikus;
 import me.magikus.core.gui.MagikusGui;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class GuiComponent implements Listener {
 
@@ -13,10 +14,11 @@ public abstract class GuiComponent implements Listener {
     @Nullable
     private ItemStack shownItem;
 
-    public GuiComponent(String id, ItemStack shownItem, MagikusGui parent) {
+    public GuiComponent(String id, @Nullable ItemStack shownItem, MagikusGui parent) {
         this.id = id;
         this.shownItem = shownItem;
         this.parent = parent;
+        Bukkit.getServer().getPluginManager().registerEvents(this, Magikus.getPlugin(Magikus.class));
     }
 
     public String id() {
