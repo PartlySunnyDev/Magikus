@@ -35,6 +35,7 @@ public class ItemUtils {
     public static void setUnstackable(ItemStack i) {
         NBTItem nbti = new NBTItem(i);
         nbti.setUUID("unstack", UUID.randomUUID());
+        nbti.applyNBT(i);
     }
 
     public static UUID getUniqueId(ItemStack i) {
@@ -48,6 +49,7 @@ public class ItemUtils {
     public static void setUniqueId(ItemStack i, UUID id) {
         NBTItem nbti = new NBTItem(i);
         nbti.setUUID("mg_unique_id", id);
+        nbti.applyNBT(i);
     }
 
     public static ItemStack getItemFrom(Material m, String name, String lore, boolean stackable) {
@@ -100,5 +102,6 @@ public class ItemUtils {
     public static void setId(ItemStack i, String id) {
         NBTItem nbti = new NBTItem(i);
         nbti.setString("mg_id", id);
+        nbti.applyNBT(i);
     }
 }
