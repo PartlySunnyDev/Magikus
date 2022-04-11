@@ -19,23 +19,17 @@ public class ButtonComponent extends GuiComponent {
     public ButtonComponent(ItemStack i, Consumer<InventoryClickEvent> action, MagikusGui parent) {
         super("button_gui", i, parent);
         ItemUtils.setId(i, id());
+        ItemUtils.setUniqueId(i, uniqueID);
         this.action = action;
-    }
-
-    private void call(InventoryClickEvent type) {
-        action.accept(type);
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
         if (ItemUtils.getId(e.getCurrentItem()).equals(id()) && Objects.equals(ItemUtils.getUniqueId(e.getCurrentItem()), uniqueID)) {
-            call(e);
+            action.accept(e);
             e.setCancelled(true);
         }
     }
 
-    public Consumer<InventoryClickEvent> action() {
-        return action;
-    }
 }

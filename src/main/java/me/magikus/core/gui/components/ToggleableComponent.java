@@ -19,6 +19,8 @@ public class ToggleableComponent extends GuiComponent {
 
     public ToggleableComponent(ItemStack off, ItemStack on, MagikusGui parent) {
         super("toggleable_gui", off, parent);
+        ItemUtils.setId(off, id());
+        ItemUtils.setId(on, id());
         ItemUtils.setUniqueId(off, uniqueID);
         ItemUtils.setUniqueId(on, uniqueID);
         this.onItem = on;
