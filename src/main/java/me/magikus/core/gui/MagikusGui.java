@@ -1,5 +1,6 @@
 package me.magikus.core.gui;
 
+import me.magikus.core.gui.components.EmptyComponent;
 import me.magikus.core.gui.components.GuiComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -7,21 +8,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class MagikusGui {
 
     protected final String id;
     protected final int slots;
     protected final String guiName;
-    protected final List<GuiComponent> contents = new ArrayList<>();
+    protected final List<GuiComponent> contents;
     private final Inventory inventory;
 
     protected MagikusGui(String id, int slots, String guiName) {
         this.id = id;
         this.slots = slots;
         this.guiName = guiName;
+        this.contents = new ArrayList<>(Collections.nCopies(slots, new EmptyComponent(this)));
         buildGui();
         inventory = Bukkit.createInventory(null, slots, guiName);
         updateInventory();
