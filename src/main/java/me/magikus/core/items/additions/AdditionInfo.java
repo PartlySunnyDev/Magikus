@@ -117,7 +117,7 @@ public class AdditionInfo {
         try {
             return cl.getDeclaredConstructor(MagikusItem.class).newInstance(parent);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-            NoSuchMethodException e) {
+                 NoSuchMethodException e) {
             e.printStackTrace();
         }
         return null;

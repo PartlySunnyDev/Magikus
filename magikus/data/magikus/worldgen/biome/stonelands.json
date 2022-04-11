@@ -1,0 +1,107 @@
+{
+
+    "depth": 0.1,
+    "scale": 0.1,
+    "precipitation": "none",
+    "category": "icy",
+    "temperature": 0.2,
+    "temperature_modifier": "none",
+    "downfall": 0.0,
+    "player_spawn_friendly": false,
+    "creature_spawn_probability": 1,
+    "effects": {
+        "sky_color": 6843757,
+        "fog_color": 5658455,
+        "water_color": 3093106,
+        "water_fog_color": 12764870,
+        "grass_color": 3102515,
+        "ambient_sound": "minecraft:ambient.cave",
+        "mood_sound": {
+            "sound": "minecraft:ambient.cave",
+            "tick_delay": 200,
+            "block_search_extent": 20,
+            "offset": 1
+        },
+        "particle": {
+            "probability": 0.7,
+            "options": {
+                "type": "dust",
+                "color": [0.2, 0.2, 0.2],
+                "scale": 1
+            }
+        }
+    },
+    "spawners": {
+        "monster": [
+            {
+                "type": "minecraft:zombie",
+                "weight": 1,
+                "minCount": 0,
+                "maxCount": 4
+            },
+            {
+                "type": "minecraft:pig",
+                "weight": 1,
+                "minCount": 0,
+                "maxCount": 3
+            }
+        ],
+        "ambient": [],
+        "creature": [],
+        "water_ambient": [],
+        "water_creature": [],
+        "axolotls": [],
+        "misc": []
+    },
+    "spawn_costs": {
+        "minecraft:zombie":{
+            "energy_budget": 0.12,
+            "charge": 0.9
+        },
+        "minecraft:pig": {
+            "energy_budget": 0.12,
+            "charge": 1
+        }
+    },
+    "carvers": {
+        "air": [
+            "minecraft:cave",
+            "minecraft:canyon"
+        ],
+        "liquid": [
+            "minecraft:cave",
+            "minecraft:canyon"
+        ]
+    },
+    "features": [
+        [],
+        [
+            "minecraft:lake_lava_underground",
+            "minecraft:lake_lava_surface"
+        ],
+        [
+            "minecraft:amethyst_geode"
+        ],
+        [
+            "minecraft:monster_room",
+            "minecraft:monster_room_deep"
+        ],
+        [],
+        [],
+        [
+            "magikus:blockore_coal",
+            "magikus:blockore_diamond",
+            "magikus:blockore_iron"
+        ],
+        [],
+        [],
+        [
+            "magikus:petrified_tree"
+        ],
+        [
+            "minecraft:freeze_top_layer"
+        ]
+    ]
+    
+
+}

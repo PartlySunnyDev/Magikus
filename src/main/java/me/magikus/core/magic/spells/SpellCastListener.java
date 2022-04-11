@@ -1,13 +1,10 @@
 package me.magikus.core.magic.spells;
 
 import me.magikus.Magikus;
-import me.magikus.core.ConsoleLogger;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -35,6 +32,12 @@ public class SpellCastListener implements Listener {
     private static final Map<UUID, BukkitTask> playerExpireTasks = new HashMap<>();
     private static final int comboExpireTimeInTicks = 60;
 
+    public static void initPlayers(Server s) {
+        for (Player p : s.getOnlinePlayers()) {
+            playerCurrentCombo.put(p.getUniqueId(), "");
+        }
+    }
+
     @EventHandler
     public void onPlayerStartSpellCast(PlayerInteractEvent e) {
         Player p = e.getPlayer();
@@ -43,7 +46,7 @@ public class SpellCastListener implements Listener {
             String playerCombo = playerCurrentCombo.get(p.getUniqueId());
             playerCombo = playerCombo + (isRightClick ? "r" : "l");
             playerCurrentCombo.put(p.getUniqueId(), playerCombo);
-            p.sendTitle(getFormattedSpellText(playerCombo), "", (int)Math.floor(comboExpireTimeInTicks / 6f), comboExpireTimeInTicks - 2 * (int)Math.floor(comboExpireTimeInTicks / 6f), (int)Math.floor(comboExpireTimeInTicks / 6f));
+            p.sendTitle(getFormattedSpellText(playerCombo), "", (int) Math.floor(comboExpireTimeInTicks / 6f), comboExpireTimeInTicks - 2 * (int) Math.floor(comboExpireTimeInTicks / 6f), (int) Math.floor(comboExpireTimeInTicks / 6f));
             if (playerCombo.length() == 3) {
                 if (playerExpireTasks.containsKey(p.getUniqueId())) {
                     playerExpireTasks.get(p.getUniqueId()).cancel();
@@ -75,12 +78,13 @@ public class SpellCastListener implements Listener {
                 double mana = PlayerStatManager.getStat(p.getUniqueId(), StatType.MANA);
                 if (mana < spell.manaCost()) {
                     StatList stats = PlayerStatManager.playerStats.get(p.getUniqueId());
-                    PlayerUpdater.sendMessageToPlayer(p,  ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.RED + "" + ChatColor.BOLD + "OUT OF MANA", 40);
+                    PlayerUpdater.sendMessageToPlayer(p, ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.RED + "" + ChatColor.BOLD + "OUT OF MANA", 40);
                     p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
                     return;
                 }
                 PlayerStatManager.setStat(p.getUniqueId(), StatType.MANA, mana - spell.manaCost());
                 PlayerUpdater.sendMessageToPlayer(p, ChatColor.AQUA + "Cast spell " + spell.displayName() + "! (-" + spell.manaCost() + " mana)", 40);
+                p.sendTitle("", "", 0, 0, 0);
                 return;
             }
             BukkitTask t = Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Magikus.class), () -> {
@@ -101,12 +105,6 @@ public class SpellCastListener implements Listener {
             sb.append(ChatColor.LIGHT_PURPLE).append(Character.toUpperCase(c)).append(ChatColor.GRAY).append(" - ");
         }
         return sb.substring(0, sb.length() - 2);
-    }
-
-    public static void initPlayers(Server s) {
-        for (Player p : s.getOnlinePlayers()) {
-            playerCurrentCombo.put(p.getUniqueId(), "");
-        }
     }
 
     @EventHandler

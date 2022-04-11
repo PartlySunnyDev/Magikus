@@ -1,6 +1,7 @@
 name: Magikus
 version: '0.0.0'
 main: me.magikus.Magikus
+load: STARTUP
 api-version: 1.18
 authors: [ PartlySunny, 65_7a ]
 depend: [ NBTAPI ]

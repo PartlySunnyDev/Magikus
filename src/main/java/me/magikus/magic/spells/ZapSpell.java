@@ -1,6 +1,7 @@
 package me.magikus.magic.spells;
 
 import me.magikus.core.entities.damage.DamageManager;
+import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;
 import me.magikus.core.magic.spells.Spell;
 import me.magikus.core.player.PlayerStatManager;
@@ -26,7 +27,7 @@ public class ZapSpell extends Spell {
                 e.getWorld().strikeLightningEffect(e.getLocation());
                 DamageManager.dealDamage((LivingEntity) e, new HashMap<>() {{
                     put(Element.ELECTRIC, damage);
-                }}, new Pair<>(damage, false), true);
+                }}, new Pair<>(damage, false), true, DamageType.MAGICAL);
             }
         }
     }

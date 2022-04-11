@@ -27,7 +27,7 @@ public class ItemManager {
         try {
             return type.itemType().getDeclaredConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-            NoSuchMethodException e) {
+                 NoSuchMethodException e) {
             e.printStackTrace();
         }
         return null;
@@ -37,7 +37,7 @@ public class ItemManager {
         try {
             return type.itemType().getDeclaredConstructor(Player.class).newInstance(p);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-            NoSuchMethodException e) {
+                 NoSuchMethodException e) {
             ConsoleLogger.console("This item has no player constructor! ITEM_ID: " + type.id());
         }
         return null;

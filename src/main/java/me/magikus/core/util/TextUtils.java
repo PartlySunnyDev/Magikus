@@ -1,5 +1,6 @@
 package me.magikus.core.util;
 
+import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;
 import me.magikus.core.stats.StatType;
 import org.bukkit.ChatColor;
@@ -17,10 +18,15 @@ public class TextUtils {
         return wrap(text, width, ChatColor.GRAY);
     }
 
-    public static String getDamageText(Map<Element, Double> elementalInfo, boolean isCritical) {
+    public static String getDamageText(Map<Element, Double> elementalInfo, boolean isCritical, DamageType type) {
         StringBuilder damageText = new StringBuilder();
         if (isCritical) {
             damageText.append(ChatColor.DARK_PURPLE).append("✧");
+        }
+        if (type == DamageType.PHYSICAL) {
+            damageText.append(ChatColor.RED).append("✊");
+        } else {
+            damageText.append(ChatColor.LIGHT_PURPLE).append("☯");
         }
         for (Element e : elementalInfo.keySet()) {
             if (elementalInfo.get(e) > 0) {
@@ -32,9 +38,9 @@ public class TextUtils {
 
     public static List<String> wrap(String text, int width, ChatColor defaultColor) {
         if (text == null) {
-            return List.of(new String[]{ "" });
+            return List.of(new String[]{""});
         } else if (text.length() <= width && !text.contains("\n")) {
-            return List.of(new String[]{ defaultColor + text });
+            return List.of(new String[]{defaultColor + text});
         } else {
             char[] rawChars = (text + ' ').toCharArray();
             StringBuilder word = new StringBuilder();
@@ -127,9 +133,9 @@ public class TextUtils {
 
     public static String getHealthText(Double num) {
         final String[] cp
-            = { "", "", "", "", "", "000K", "0M", "00M", "000M", "0B", "00B", "000B", "0T", "00T", "000T", "0Qa", "00Qa", "000Qa", "0Qi", "00Qi", "000Qi", "0Sx", "00Sx", "000Sx", "0Sp", "00Sp", "000Sp" };
+                = {"", "", "", "", "", "000K", "0M", "00M", "000M", "0B", "00B", "000B", "0T", "00T", "000T", "0Qa", "00Qa", "000Qa", "0Qi", "00Qi", "000Qi", "0Sx", "00Sx", "000Sx", "0Sp", "00Sp", "000Sp"};
         final DecimalFormat df
-            = (DecimalFormat) NumberFormat.getInstance(new Locale("en", "US"));
+                = (DecimalFormat) NumberFormat.getInstance(new Locale("en", "US"));
         NumberFormat fmt = new CompactNumberFormat(df.toPattern(), df.getDecimalFormatSymbols(), cp);
         fmt.setMinimumFractionDigits(1);
         String format = fmt.format(num);
@@ -145,7 +151,6 @@ public class TextUtils {
      * and red if surrounded by @@.
      *
      * @param text The description / ability text to update
-     *
      * @return New text
      */
     public static String getHighlightedText(String text) {

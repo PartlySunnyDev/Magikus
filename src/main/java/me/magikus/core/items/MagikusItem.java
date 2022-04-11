@@ -399,14 +399,14 @@ public abstract class MagikusItem implements Listener {
         }
         m.setDisplayName(new NameBuilder().setName(getDisplayName()).setRarity(getFinalRarity()).setEnhancements(enhancements).setAscension(ascension).build());
         m.setLore(new LoreBuilder()
-            .setEnchants(enchants)
-            .setAscension(type.reforgable() ? ascension : null)
-            .setDescription(getDescription() != null ? getDescription() : "")
-            .setRarity(getFinalRarity())
-            .setStats(getCombinedStats(owner, null), statAdditions(), getFinalRarity(), owner)
-            .addAbilities(getCombinedAbilities())
-            .setType(type)
-            .build()
+                .setEnchants(enchants)
+                .setAscension(type.reforgable() ? ascension : null)
+                .setDescription(getDescription() != null ? getDescription() : "")
+                .setRarity(getFinalRarity())
+                .setStats(getCombinedStats(owner, null), statAdditions(), getFinalRarity(), owner)
+                .addAbilities(getCombinedAbilities())
+                .setType(type)
+                .build()
         );
         m.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_PLACED_ON);
         m.setUnbreakable(true);

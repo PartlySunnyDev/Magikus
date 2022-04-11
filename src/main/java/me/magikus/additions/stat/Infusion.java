@@ -41,8 +41,8 @@ public class Infusion extends Addition implements IStatAddition {
             health = PlayerStatManager.getStat(player.getUniqueId(), StatType.HEALTH);
         }
         StatList statList = new StatList(
-            new Stat(StatType.CRIT_DAMAGE, health / 2),
-            new Stat(StatType.STRENGTH, health / 2)
+                new Stat(StatType.CRIT_DAMAGE, health / 2),
+                new Stat(StatType.STRENGTH, health / 2)
         );
         if (player != null) {
             if (health > PlayerStatManager.getStat(player.getUniqueId(), StatType.MAX_HEALTH) / 2) {

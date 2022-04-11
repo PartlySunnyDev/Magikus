@@ -1,10 +1,14 @@
 package me.magikus.core.util;
 
+import com.google.common.collect.ImmutableSet;
 import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
 import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.enums.VanillaEntityDamageAttributes;
 import me.magikus.core.enums.VanillaEntityHealthAttributes;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,7 +20,6 @@ import java.util.Objects;
 import static me.magikus.core.util.TextUtils.getHealthText;
 
 public class EntityUtils {
-    //This option will make the entity health display as one number instead of x/x (0=true, 1=false)
     public static void setBoss(byte b, Entity e) {
         DataUtils.setData("mg_boss", b, PersistentDataType.BYTE, e);
     }
@@ -24,6 +27,15 @@ public class EntityUtils {
     public static Boolean isBoss(Entity e) {
         Byte boss = (Byte) DataUtils.getData("mg_boss", PersistentDataType.BYTE, e);
         return boss != null ? boss == 0 : null;
+    }
+
+    public static EntityType<?> getTypeOfCustomEntity(String entityId) throws Exception {
+        EntityInfo entity = EntityManager.getEntity(entityId);
+        return entity.entityType();
+    }
+
+    public static EntityType<?> getNewHostileType(EntityType.EntityFactory<?> factory, boolean immuneToFire, EntityDimensions entitySize, int clientTrackingRange) {
+        return new EntityType<>(factory, MobCategory.MONSTER, true, true, immuneToFire, true, ImmutableSet.of(), entitySize, clientTrackingRange, 1);
     }
 
     public static void setId(String s, Entity e) {
@@ -44,6 +56,10 @@ public class EntityUtils {
 
     public static void spawnEntity(net.minecraft.world.entity.Entity entity) {
         entity.level.addFreshEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }
+
+    public static void spawnEntity(net.minecraft.world.entity.Entity entity, CreatureSpawnEvent.SpawnReason r) {
+        entity.level.addFreshEntity(entity, r);
     }
 
     public static void setVanilla(Entity e) {
@@ -120,7 +136,7 @@ public class EntityUtils {
                 return ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + "1" /*TODO make this a real lvl for each vanilla mob*/ + ChatColor.DARK_GRAY + "] " + ChatColor.RED + TextUtils.capitalizeWord(e.getType().toString().toLowerCase().replace('_', ' ')) + " " + ChatColor.GREEN + (getHealthText(hp) + "/" + VanillaEntityHealthAttributes.valueOf(e.getType().toString()).getValue() * 5) + ChatColor.RED + "❤";
             } else {
                 //Custom entity
-                return ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + info.level() + ChatColor.DARK_GRAY + "] " + info.color() + info.displayName() + " " + ChatColor.GREEN + (info.isBoss() ? getHealthText(hp) : getHealthText(hp) + "/" + getHealthText(info.stats().maxHealth().value())) + ChatColor.RED + "❤";
+                return info.type().color() + info.type().icon() + " " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + info.level() + ChatColor.DARK_GRAY + "] " + info.color() + info.displayName() + " " + ChatColor.GREEN + (info.isBoss() ? getHealthText(hp) : getHealthText(hp) + "/" + getHealthText(info.stats().maxHealth().value())) + ChatColor.RED + "❤";
             }
         }
         return "NULL";

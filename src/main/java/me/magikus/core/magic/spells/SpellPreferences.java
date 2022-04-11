@@ -63,9 +63,9 @@ public class SpellPreferences {
     private static void createPlayerInstance(UUID player) {
         if (!playerSpellPreferences.contains(player.toString())) {
             ConfigurationSection playerInfo = playerSpellPreferences.createSection(player.toString());
-            playerInfo.set("spellCombos", List.of(new String[] {"RRR", "RLR", "RRL"}));
-            playerInfo.set("unlockedSpells", List.of(new String[] {}));
-            playerInfo.set("spellSlots", List.of(new String[] {"", "", ""}));
+            playerInfo.set("spellCombos", List.of(new String[]{"RRR", "RLR", "RRL"}));
+            playerInfo.set("unlockedSpells", List.of(new String[]{}));
+            playerInfo.set("spellSlots", List.of(new String[]{"", "", ""}));
             Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
         }
     }

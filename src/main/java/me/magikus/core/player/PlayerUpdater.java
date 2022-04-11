@@ -124,16 +124,16 @@ public class PlayerUpdater implements Listener {
         return ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStat(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.INTELLIGENCE), 0) + "✜ Mana";
     }
 
+    public static void sendMessageToPlayer(Player p, String message, int timeInTicks) {
+        messagesToSend.put(p.getUniqueId(), new Pair<>(message, timeInTicks));
+        timeRemaining.put(p.getUniqueId(), timeInTicks);
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void hit(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player p) {
             updatePlayer(p);
         }
-    }
-
-    public static void sendMessageToPlayer(Player p, String message, int timeInTicks) {
-        messagesToSend.put(p.getUniqueId(), new Pair<>(message, timeInTicks));
-        timeRemaining.put(p.getUniqueId(), timeInTicks);
     }
 }
 
@@ -162,6 +162,7 @@ class NaturalRegeneration extends BukkitRunnable {
 
 class ConstantUpdater extends BukkitRunnable {
     private final Server s;
+
     public ConstantUpdater(Server s) {
         this.s = s;
     }

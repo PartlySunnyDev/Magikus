@@ -11,10 +11,10 @@ public record EntityStatSet(EntityStat maxHealth,
 
     public EntityStatSet {
         if (
-            maxHealth.type() != EntityStatType.MAX_HEALTH ||
-                defense.type() != EntityStatType.DEFENSE ||
-                damage.type() != EntityStatType.DAMAGE ||
-                speed.type() != EntityStatType.SPEED
+                maxHealth.type() != EntityStatType.MAX_HEALTH ||
+                        defense.type() != EntityStatType.DEFENSE ||
+                        damage.type() != EntityStatType.DAMAGE ||
+                        speed.type() != EntityStatType.SPEED
         ) {
             throw new IllegalArgumentException("Wrong entity stat type in set!");
         }

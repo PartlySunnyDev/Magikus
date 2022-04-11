@@ -18,7 +18,7 @@ public class UltraHelmet extends MagikusItem {
     }
 
     public UltraHelmet() {
-        super("ultrahelmet", true, ItemType.HELMET, null, new String[]{ "ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots" });
+        super("ultrahelmet", true, ItemType.HELMET, null, new String[]{"ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots"});
     }
 
     @Override

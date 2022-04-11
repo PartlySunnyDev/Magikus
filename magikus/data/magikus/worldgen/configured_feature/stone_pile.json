@@ -1,0 +1,14 @@
+{
+    "config": {
+      "state_provider": {
+        "state": {
+          "Properties": {
+            "axis": "y"
+          },
+          "Name": "minecraft:gravel"
+        },
+        "type": "minecraft:rotated_block_provider"
+      }
+    },
+    "type": "minecraft:block_pile"
+}

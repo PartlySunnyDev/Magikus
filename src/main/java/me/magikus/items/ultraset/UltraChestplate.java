@@ -17,7 +17,7 @@ public class UltraChestplate extends MagikusItem {
     }
 
     public UltraChestplate() {
-        super("ultrachestplate", true, ItemType.CHESTPLATE, null, new String[]{ "ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots" });
+        super("ultrachestplate", true, ItemType.CHESTPLATE, null, new String[]{"ultrahelmet", "ultrachestplate", "ultraleggings", "ultraboots"});
     }
 
     @Override
