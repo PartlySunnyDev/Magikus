@@ -1,6 +1,7 @@
 package me.magikus.core.magic.spells;
 
 import me.magikus.Magikus;
+import me.magikus.core.items.MagikusItem;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
 import me.magikus.core.stats.StatList;
@@ -17,6 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -42,6 +44,14 @@ public class SpellCastListener implements Listener {
     public void onPlayerStartSpellCast(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (p.isSneaking() && e.getHand() == EquipmentSlot.HAND) {
+            ItemStack itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
+            if (!itemInMainHand.hasItemMeta()) {
+                return;
+            }
+            MagikusItem item = MagikusItem.getItemFrom(itemInMainHand, e.getPlayer());
+            if (item == null || !item.canCastSpells()) {
+                return;
+            }
             boolean isRightClick = (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK);
             String playerCombo = playerCurrentCombo.get(p.getUniqueId());
             playerCombo = playerCombo + (isRightClick ? "r" : "l");

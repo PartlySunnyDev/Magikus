@@ -6,6 +6,7 @@ import me.magikus.core.ConsoleLogger;
 import me.magikus.core.enums.Rarity;
 import me.magikus.core.enums.VanillaArmorAttributes;
 import me.magikus.core.enums.VanillaDamageAttributes;
+import me.magikus.core.enums.VanillaSpellCastables;
 import me.magikus.core.items.ItemType;
 import me.magikus.core.items.ItemUpdater;
 import me.magikus.core.items.MagikusItem;
@@ -121,6 +122,16 @@ public class DataUtils {
                 @Override
                 public Rarity getRarity() {
                     return Rarity.NORMAL;
+                }
+
+                @Override
+                public boolean canCastSpells() {
+                    try {
+                        VanillaSpellCastables a = VanillaSpellCastables.valueOf(s.getType().toString().toUpperCase());
+                        return true;
+                    } catch (IllegalArgumentException e) {
+                        return false;
+                    }
                 }
             };
             magikusItem.setStackCount(s.getAmount());

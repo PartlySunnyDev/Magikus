@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class UltraKatana extends MagikusItem {
     public UltraKatana(Player p) {
-        super("ultrakatana", true, ItemType.SWORD, p);
+        super("ultrakatana", true, ItemType.SWORD, p, true, false);
     }
 
     public UltraKatana() {

@@ -56,6 +56,7 @@ public abstract class MagikusItem implements Listener {
     private ItemStack asMagikusItem;
     private Player owner;
     private String[] fullSet;
+    private boolean canCastSpells = false;
 
     protected MagikusItem(String id, boolean unique, ItemType type, @Nullable Player owner) {
         this.id = id;
@@ -78,6 +79,12 @@ public abstract class MagikusItem implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         ItemManager.addItem(new ItemInfo(id, getClass(), type));
         updateMagikusItem();
+    }
+
+    protected MagikusItem(String id, boolean unique, ItemType type, @Nullable Player owner, boolean canCastSpells, boolean vanilla) {
+        this(id, unique, type, owner);
+        this.vanilla = vanilla;
+        this.canCastSpells = canCastSpells;
     }
 
     protected MagikusItem(String id, boolean unique, ItemType type, @Nullable Player owner, boolean vanilla) {
@@ -239,6 +246,10 @@ public abstract class MagikusItem implements Listener {
 
     public ItemType type() {
         return type;
+    }
+
+    public boolean canCastSpells() {
+        return canCastSpells;
     }
 
     public String[] fullSet() {

@@ -24,7 +24,7 @@ public class TextUtils {
             damageText.append(ChatColor.DARK_PURPLE).append("✧");
         }
         if (type == DamageType.PHYSICAL) {
-            damageText.append(ChatColor.RED).append("✊");
+            damageText.append(ChatColor.RED).append("۞");
         } else {
             damageText.append(ChatColor.LIGHT_PURPLE).append("☯");
         }
