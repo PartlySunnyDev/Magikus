@@ -92,7 +92,7 @@ public class EntityUtils {
 
     public static void repairEntity(Entity e) {
         for (EntityStatType s : EntityStatType.values()) {
-            if (EntityStatType.getStat(e, s) == null) {
+            if (EntityStatType.getStatWithBonus(e, s) == null) {
                 switch (s) {
                     case SPEED -> EntityStatType.setStat(e, s, 100);
                     case DAMAGE -> {
@@ -116,7 +116,7 @@ public class EntityUtils {
             }
         }
         if (EntityUtils.getHealth(e) == null) {
-            EntityUtils.setHealth(EntityStatType.getStat(e, EntityStatType.MAX_HEALTH), e);
+            EntityUtils.setHealth(EntityStatType.getStatWithBonus(e, EntityStatType.MAX_HEALTH), e);
         }
         if (EntityUtils.isBoss(e) == null) {
             EntityUtils.setBoss((byte) 1, e);

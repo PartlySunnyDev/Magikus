@@ -209,10 +209,10 @@ public abstract class Ability implements Listener {
     }
 
     private boolean mana(Player p) {
-        double mana = PlayerStatManager.getStat(p.getUniqueId(), StatType.MANA);
+        double mana = PlayerStatManager.getStatWithBonus(p.getUniqueId(), StatType.MANA);
         if (mana < manaCost) {
             StatList stats = PlayerStatManager.playerStats.get(p.getUniqueId());
-            PlayerUpdater.sendMessageToPlayer(p, ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.RED + "" + ChatColor.BOLD + "OUT OF MANA", 40);
+            PlayerUpdater.sendMessageToPlayer(p, ChatColor.RED + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.RED + "" + ChatColor.BOLD + "OUT OF MANA", 40);
             p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
             return false;
         }

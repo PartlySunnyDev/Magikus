@@ -15,6 +15,7 @@ import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.items.additions.enchants.Enchant;
 import me.magikus.core.items.additions.enchants.EnchantList;
 import me.magikus.core.stats.Stat;
+import me.magikus.core.stats.StatBonus;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
 import me.magikus.core.util.DataUtils;
@@ -78,25 +79,25 @@ public class LoreBuilder {
             abilityLore.add("");
             if (a.type().weapon()) {
                 if (!Objects.equals(a.type().toString(), "")) {
-                    abilityLore.add(ChatColor.GOLD + "Ability: " + a.name() + " " + ChatColor.YELLOW + ChatColor.BOLD + a);
+                    abilityLore.add(ChatColor.BLUE + "" + ChatColor.BOLD + a + " " + ChatColor.LIGHT_PURPLE + "Ability: " + a.name());
                 }
                 for (String s : split) {
                     abilityLore.add(ChatColor.GRAY + s);
                 }
                 if (a.manaCost() > 0) {
-                    abilityLore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.DARK_AQUA + a.manaCost());
+                    abilityLore.add(ChatColor.DARK_GRAY + "Cost: " + ChatColor.DARK_AQUA + a.manaCost() + " Mana " + StatType.MANA.symbol());
                 }
                 if (a.cooldown() > 0) {
-                    abilityLore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + a.cooldown() + "s");
+                    abilityLore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.RED + a.cooldown() + "s");
                 }
             } else {
                 if (a.type() == AbilityType.PASSIVE) {
-                    abilityLore.add(ChatColor.GOLD + "Ability: " + a.name());
+                    abilityLore.add(ChatColor.LIGHT_PURPLE + "Ability: " + a.name());
                     for (String s : split) {
                         abilityLore.add(ChatColor.GRAY + s);
                     }
                 } else {
-                    abilityLore.add(ChatColor.GOLD + (a.type() == AbilityType.FULL_SET_BONUS ? "Full Set Bonus: " : "Piece Bonus: ") + a.name());
+                    abilityLore.add(ChatColor.LIGHT_PURPLE + (a.type() == AbilityType.FULL_SET_BONUS ? "Set Bonus: " : "Item Bonus: ") + a.name());
                     for (String s : split) {
                         abilityLore.add(ChatColor.GRAY + s);
                     }
@@ -137,6 +138,42 @@ public class LoreBuilder {
         }
     }
 
+    public String getStatWithBonusLineLore(Stat s, Stat[] ascensionAdditions, AdditionList additions, TreeMap<StatType, HashMap<AdditionInfo, Double>> realSorted, String ascensionName, List<StatBonus> bonuses, boolean bold) {
+        StatType type = s.type();
+        StringBuilder stat = new StringBuilder();
+        stat.append(type.color()).append(bold ? ChatColor.BOLD : "").append(type.displayName()).append(" ").append(type.symbol()).append(": ").append(type.color()).append(bold ? ChatColor.BOLD : "").append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
+        if (additions != null) {
+            if (realSorted.containsKey(s.type())) {
+                HashMap<AdditionInfo, Double> sortedValue = realSorted.get(s.type());
+                for (AdditionInfo t : sortedValue.keySet()) {
+                    if (t.bt() == null || t.shownLevel() == null || t.color() == null) {
+                        continue;
+                    }
+                    Double amount = sortedValue.get(t);
+                    stat.append(" ").append(t.color()).append(bold ? ChatColor.BOLD : "").append(t.bt().start()).append(amount > -1 ? "+" : "-").append(getIntegerStringOf(amount, 1)).append(type.percent() ? "%" : "").append(t.bt().end());
+                }
+            }
+        }
+        if (ascensionAdditions != null) {
+            for (Stat ascensionStat : ascensionAdditions) {
+                if (ascensionStat.type() == type) {
+                    stat.append(" ").append(ChatColor.GOLD).append(bold ? ChatColor.BOLD : "").append("(").append(ascensionName).append(" +").append(getIntegerStringOf(ascensionStat.value(), 1)).append(")");
+                }
+            }
+        }
+        StatBonus b = null;
+        for (StatBonus bonus : bonuses) {
+            if (bonus.t() == s.type()) {
+                b = bonus;
+                break;
+            }
+        }
+        if (b != null) {
+            stat.append(" ").append(ChatColor.WHITE).append(bold ? ChatColor.BOLD : "").append("| +").append(b.bonus() * 100).append("% |");
+        }
+        return stat.toString();
+    }
+
     public LoreBuilder setStats(StatList stats, AdditionList additions, StatList ascensionBonus, String ascensionName, Player player) {
         Map<StatType, HashMap<AdditionInfo, Double>> sorted;
         TreeMap<StatType, HashMap<AdditionInfo, Double>> realSorted = null;
@@ -150,7 +187,7 @@ public class LoreBuilder {
             for (Addition a : additionList) {
                 IStatAddition isa = (IStatAddition) a;
                 if (isa.show()) {
-                    for (Stat s : isa.getStats(player, null).asList()) {
+                    for (Stat s : isa.getStats(player, null).getStatWithBonusList()) {
                         if (sorted.containsKey(s.type())) {
                             sorted.get(s.type()).put(a.type(), s.value());
                         } else {
@@ -166,53 +203,44 @@ public class LoreBuilder {
             realSorted.remove(StatType.HEALTH);
             realSorted.remove(StatType.MANA);
             realSorted.remove(StatType.DAMAGE_REDUCTION);
-            realSorted.remove(StatType.DAMAGE_MULTIPLIER);
         }
         Stat[] ascensionAdditions = null;
         if (ascensionBonus != null && ascensionName != null) {
-            ascensionAdditions = ascensionBonus.asList();
+            ascensionAdditions = ascensionBonus.getStatWithBonusList();
         }
-        List<Stat> listed = new ArrayList<>(stats.statList.values());
+        List<Stat> statsListed = new ArrayList<>(stats.statList.values());
+        List<Stat> combatStatsListed = new ArrayList<>();
+        for (Stat s : statsListed) {
+            if (s.type().toString().toLowerCase().contains("defense") || s.type().toString().toLowerCase().contains("damage")) {
+                if (!s.type().toString().equalsIgnoreCase("crit_damage") && !s.type().toString().equalsIgnoreCase("damage_reduction")) {
+                    combatStatsListed.add(s);
+                }
+            }
+        }
+        for (Stat s : combatStatsListed) {
+            statsListed.remove(s);
+        }
+        List<StatBonus> bonusesListed = new ArrayList<>(stats.bonusList.values());
         Comparator<Stat> compareByType = Comparator.comparingInt(o -> (o.type().level()));
-        listed.sort(compareByType);
+        statsListed.sort(compareByType);
         statLore.clear();
-        for (Stat s : listed) {
+        for (Stat s : combatStatsListed) {
+            statLore.add(getStatWithBonusLineLore(s, ascensionAdditions, additions, realSorted, ascensionName, bonusesListed, true));
+        }
+        if (statLore.size() > 0 && statsListed.size() > 0) {
+            statLore.add("");
+        }
+        for (Stat s : statsListed) {
             StatType type = s.type();
             if (
                     type == StatType.SPEED_CAP ||
                             type == StatType.HEALTH ||
                             type == StatType.MANA ||
-                            type == StatType.DAMAGE_REDUCTION ||
-                            type == StatType.DAMAGE_MULTIPLIER
+                            type == StatType.DAMAGE_REDUCTION
             ) {
                 continue;
             }
-            StringBuilder stat = new StringBuilder();
-            if (type.isGreen()) {
-                stat.append(type.color()).append(type.displayName()).append(" ").append(type.symbol()).append(": ").append(type.color()).append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
-            } else {
-                stat.append(type.color()).append(type.displayName()).append(" ").append(type.symbol()).append(": ").append(type.color()).append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
-            }
-            if (additions != null) {
-                if (realSorted.containsKey(s.type())) {
-                    HashMap<AdditionInfo, Double> sortedValue = realSorted.get(s.type());
-                    for (AdditionInfo t : sortedValue.keySet()) {
-                        if (t.bt() == null || t.shownLevel() == null || t.color() == null) {
-                            continue;
-                        }
-                        Double amount = sortedValue.get(t);
-                        stat.append(" ").append(t.color()).append(t.bt().start()).append(amount > -1 ? "+" : "-").append(getIntegerStringOf(amount, 1)).append(type.percent() ? "%" : "").append(t.bt().end());
-                    }
-                }
-            }
-            if (ascensionAdditions != null) {
-                for (Stat ascensionStat : ascensionAdditions) {
-                    if (ascensionStat.type() == type) {
-                        stat.append(" ").append(ChatColor.BLUE).append("(").append(ascensionName).append(" +").append(getIntegerStringOf(ascensionStat.value(), 1)).append(")");
-                    }
-                }
-            }
-            statLore.add(String.valueOf(stat));
+            statLore.add(getStatWithBonusLineLore(s, ascensionAdditions, additions, realSorted, ascensionName, bonusesListed, false));
         }
         return this;
     }

@@ -28,7 +28,7 @@ public final class JavaAccessor {
         }
     }
 
-    public static Object getStaticValue(final VarHandle handle) {
+    public static Object getStatWithBonusicValue(final VarHandle handle) {
         return INSTANCE.getValueSafe(null, handle);
     }
 
@@ -141,8 +141,8 @@ public final class JavaAccessor {
         return getObjectValue(instance, getField(clazz, fieldName));
     }
 
-    public static Object getStaticValue(final Class<?> clazz, final String fieldName) {
-        return getStaticValue(getField(clazz, fieldName));
+    public static Object getStatWithBonusicValue(final Class<?> clazz, final String fieldName) {
+        return getStatWithBonusicValue(getField(clazz, fieldName));
     }
 
     public static Object getValue(final Object instance, final Field field) {
@@ -150,7 +150,7 @@ public final class JavaAccessor {
             return null;
         }
         if (Modifier.isStatic(field.getModifiers())) {
-            return getStaticValue(field);
+            return getStatWithBonusicValue(field);
         }
         return getObjectValue(instance, field);
     }
@@ -174,14 +174,14 @@ public final class JavaAccessor {
      * Static Accessors Helper
      */
 
-    public static Object getStaticValue(final Field field) {
+    public static Object getStatWithBonusicValue(final Field field) {
         if (field == null) {
             return null;
         }
         try {
-            return INSTANCE.getStaticValueSafe(field);
+            return INSTANCE.getStatWithBonusicValueSafe(field);
         } catch (final AccessUnsuccessful unsafe) {
-            return INSTANCE.getStaticValueUnsafe(field);
+            return INSTANCE.getStatWithBonusicValueUnsafe(field);
         }
     }
 
@@ -443,7 +443,7 @@ public final class JavaAccessor {
         if (lookup != null) {
             return lookup;
         }
-        return lookup = (Lookup) getStaticValueUnsafe(getField(Lookup.class, "IMPL_LOOKUP"));
+        return lookup = (Lookup) getStatWithBonusicValueUnsafe(getField(Lookup.class, "IMPL_LOOKUP"));
     }
 
     public Object execute(final Object instance, final Method method, final Object... arguments) {
@@ -603,7 +603,7 @@ public final class JavaAccessor {
         }
     }
 
-    public Object getStaticValueSafe(final Field field) {
+    public Object getStatWithBonusicValueSafe(final Field field) {
         if (field == null) {
             return null;
         }
@@ -646,7 +646,7 @@ public final class JavaAccessor {
         return unsafe.getObjectVolatile(instance, unsafe.objectFieldOffset(field));
     }
 
-    public Object getStaticValueUnsafe(final Field field) {
+    public Object getStatWithBonusicValueUnsafe(final Field field) {
         if (field == null) {
             return null;
         }

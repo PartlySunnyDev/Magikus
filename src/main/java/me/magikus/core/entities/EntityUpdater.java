@@ -1,8 +1,10 @@
 package me.magikus.core.entities;
 
 import me.magikus.Magikus;
+import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.util.EntityUtils;
+import me.magikus.core.util.JavaAccessor;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -19,6 +21,8 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.Field;
+
 public class EntityUpdater implements Listener {
 
     public EntityUpdater(Server s) {
@@ -29,7 +33,7 @@ public class EntityUpdater implements Listener {
     public static void updateStats(Entity e) {
         EntityUtils.repairEntity(e);
         if (e instanceof LivingEntity) {
-            ((LivingEntity) e).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(EntityStatType.getStat(e, EntityStatType.SPEED).floatValue() / 500f);
+            ((LivingEntity) e).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(EntityStatType.getStatWithBonus(e, EntityStatType.SPEED).floatValue() / 500f);
         }
     }
 
@@ -73,7 +77,10 @@ class PlayerAttackStrengthUpdater extends BukkitRunnable {
     public void run() {
         for (Player p : s.getOnlinePlayers()) {
             ServerPlayer cp = ((CraftPlayer) p).getHandle();
-            cp.resetAttackStrengthTicker();
+            Field aQ = JavaAccessor.getField(net.minecraft.world.entity.LivingEntity.class, "aQ");
+            if ((int) JavaAccessor.getValue(cp, aQ) > cp.getCurrentItemAttackStrengthDelay() * 0.9 - 0.5) {
+                JavaAccessor.setValue(cp, aQ, cp.getCurrentItemAttackStrengthDelay() * 0.9 - 0.5);
+            }
         }
     }
 }

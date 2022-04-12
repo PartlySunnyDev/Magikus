@@ -12,6 +12,8 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,7 +45,7 @@ public class PlayerUpdater implements Listener {
     public static StatList getStats(Player player, boolean ignoreHand, @Nullable Entity targetEntity) {
         UUID id = player.getUniqueId();
         StatList oldStats = PlayerStatManager.playerStats.get(id);
-        StatList newStats = BaseStatManager.getStatListOf(id);
+        StatList newStats = BaseStatManager.getStatWithBonusListOf(id);
         PlayerInventory inventory = player.getInventory();
         MagikusItem helmet = DataUtils.getMagikusItem(inventory.getHelmet(), player);
         MagikusItem chestplate = DataUtils.getMagikusItem(inventory.getChestplate(), player);
@@ -74,17 +76,17 @@ public class PlayerUpdater implements Listener {
             newStats = newStats.merge(hand.getEnchantStats(player, targetEntity));
         }
         if (BaseStatManager.hasInitializedChangableStats.get(id)) {
-            newStats.addStat(new Stat(StatType.HEALTH, oldStats.getStat(StatType.HEALTH)));
-            newStats.addStat(new Stat(StatType.MANA, oldStats.getStat(StatType.MANA)));
+            newStats.addStat(new Stat(StatType.HEALTH, oldStats.getStatWithBonus(StatType.HEALTH)));
+            newStats.addStat(new Stat(StatType.MANA, oldStats.getStatWithBonus(StatType.MANA)));
         } else {
-            newStats.addStat(new Stat(StatType.HEALTH, newStats.getStat(StatType.MAX_HEALTH)));
-            newStats.addStat(new Stat(StatType.MANA, newStats.getStat(StatType.INTELLIGENCE)));
+            newStats.addStat(new Stat(StatType.HEALTH, newStats.getStatWithBonus(StatType.MAX_HEALTH)));
+            newStats.addStat(new Stat(StatType.MANA, newStats.getStatWithBonus(StatType.MAX_MANA)));
             BaseStatManager.hasInitializedChangableStats.put(id, true);
         }
-        double speedCap = newStats.getStat(StatType.SPEED_CAP);
+        double speedCap = newStats.getStatWithBonus(StatType.SPEED_CAP);
         //ConsoleLogger.console(String.valueOf(speedCap));
-        //ConsoleLogger.console(String.valueOf(newStats.getStat(StatType.SPEED)));
-        if (newStats.getStat(StatType.SPEED) > speedCap) {
+        //ConsoleLogger.console(String.valueOf(newStats.getStatWithBonus(StatType.SPEED)));
+        if (newStats.getStatWithBonus(StatType.SPEED) > speedCap) {
             newStats.addStat(new Stat(StatType.SPEED, speedCap));
         }
         return newStats;
@@ -92,10 +94,11 @@ public class PlayerUpdater implements Listener {
 
     public static void updatePlayer(Player player) {
         StatList stats = getStats(player, false, null);
-        double health = PlayerStatManager.getStat(player.getUniqueId(), StatType.HEALTH);
-        double speed = PlayerStatManager.getStat(player.getUniqueId(), StatType.SPEED);
-        double speedCap = PlayerStatManager.getStat(player.getUniqueId(), StatType.SPEED_CAP);
-        double maxHealth = PlayerStatManager.getStat(player.getUniqueId(), StatType.MAX_HEALTH);
+        double health = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.HEALTH);
+        double speed = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.SPEED);
+        double speedCap = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.SPEED_CAP);
+        double maxHealth = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.MAX_HEALTH);
+        double attackSpeed = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.ATTACK_SPEED);
         if (speed > speedCap) {
             speed = speedCap;
         }
@@ -121,7 +124,7 @@ public class PlayerUpdater implements Listener {
     }
 
     public static String getPlayerDisplay(StatList stats) {
-        return ChatColor.RED + "" + getIntegerStringOf(stats.getStat(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStat(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStat(StatType.INTELLIGENCE), 0) + "✜ Mana";
+        return ChatColor.RED + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_MANA), 0) + "✜ Mana";
     }
 
     public static void sendMessageToPlayer(Player p, String message, int timeInTicks) {
@@ -148,12 +151,12 @@ class NaturalRegeneration extends BukkitRunnable {
     public void run() {
         for (Player p : s.getOnlinePlayers()) {
             UUID uniqueId = p.getUniqueId();
-            double regenSpeed = PlayerStatManager.getStat(uniqueId, StatType.HEALTH_REGEN_SPEED);
-            double maxHealth = PlayerStatManager.getStat(uniqueId, StatType.MAX_HEALTH);
-            double health = PlayerStatManager.getStat(uniqueId, StatType.HEALTH);
-            double maxMana = PlayerStatManager.getStat(uniqueId, StatType.INTELLIGENCE);
-            double manaSpeed = PlayerStatManager.getStat(uniqueId, StatType.MANA_REGEN_SPEED);
-            double mana = PlayerStatManager.getStat(uniqueId, StatType.MANA);
+            double regenSpeed = PlayerStatManager.getStatWithBonus(uniqueId, StatType.HEALTH_REGEN_SPEED);
+            double maxHealth = PlayerStatManager.getStatWithBonus(uniqueId, StatType.MAX_HEALTH);
+            double health = PlayerStatManager.getStatWithBonus(uniqueId, StatType.HEALTH);
+            double maxMana = PlayerStatManager.getStatWithBonus(uniqueId, StatType.MAX_MANA);
+            double manaSpeed = PlayerStatManager.getStatWithBonus(uniqueId, StatType.MANA_REGEN_SPEED);
+            double mana = PlayerStatManager.getStatWithBonus(uniqueId, StatType.MANA);
             PlayerStatManager.setStat(uniqueId, StatType.HEALTH, Math.min(health + (maxHealth * (regenSpeed / 100)), maxHealth));
             PlayerStatManager.setStat(uniqueId, StatType.MANA, Math.min(mana + (maxMana * (manaSpeed / 100)), maxMana));
         }

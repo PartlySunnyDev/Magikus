@@ -20,7 +20,7 @@ public enum EntityStatType {
         DataUtils.setData(s.id, v, PersistentDataType.DOUBLE, e);
     }
 
-    public static Double getStat(Entity e, EntityStatType s) {
+    public static Double getStatWithBonus(Entity e, EntityStatType s) {
         return (Double) DataUtils.getData(s.id, PersistentDataType.DOUBLE, e);
     }
 

@@ -4,6 +4,7 @@ import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTListCompound;
 import me.magikus.core.stats.Stat;
+import me.magikus.core.stats.StatBonus;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -23,6 +24,17 @@ public class ItemUtils {
                 continue;
             }
             item.setDouble(s.type().id(), s.value());
+        }
+        return item;
+    }
+
+    public static NBTItem setItemBonus(NBTItem item, StatBonus... stats) {
+        for (StatBonus s : stats) {
+            if (s.bonus() == 1) {
+                item.removeKey(s.t().id());
+                continue;
+            }
+            item.setDouble(s.t().id(), s.bonus());
         }
         return item;
     }

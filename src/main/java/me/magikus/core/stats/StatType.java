@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 
 public enum StatType {
 
-    DAMAGE_MULTIPLIER("mg_damage_multiplier", "damage_multiplier", ChatColor.GRAY, "X", false, 0, false),
     DAMAGE_REDUCTION("mg_damage_reduction", "damage_reduction", ChatColor.GRAY, "-", false, 0, false),
     MAX_HEALTH("mg_max_health", "Health", ChatColor.RED, "❤", false, 8, true),
     HEALTH("mg_health", "hp", ChatColor.RED, "❤", false, 8, true),
@@ -27,8 +26,8 @@ public enum StatType {
     TRUE_DEFENSE("mg_true_defense", "True Defense", ChatColor.WHITE, "❂", false, 10, true),
     SPEED("mg_speed", "Speed", ChatColor.WHITE, "✦", false, 12, true),
     SPEED_CAP("mg_speed_cap", "Speed Cap", ChatColor.WHITE, "✦", false, 0, true),
-    INTELLIGENCE("mg_intelligence", "Intelligence", ChatColor.AQUA, "✎", false, 11, true),
-    MANA("mg_mana", "Mana", ChatColor.AQUA, "✎", false, 11, true),
+    MAX_MANA("mg_max_mana", "Mana", ChatColor.AQUA, "♅", false, 11, true),
+    MANA("mg_mana", "Mana", ChatColor.AQUA, "♅", false, 11, true),
     CRIT_CHANCE("mg_crit_chance", "Crit Chance", ChatColor.BLUE, "☣", true, 3, false),
     CRIT_DAMAGE("mg_crit_damage", "Crit Damage", ChatColor.BLUE, "☠", true, 4, false),
     ATTACK_SPEED("mg_attack_speed", "Attack Speed", ChatColor.YELLOW, "⚔", true, 5, false),

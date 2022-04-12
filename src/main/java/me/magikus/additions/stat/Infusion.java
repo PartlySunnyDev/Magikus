@@ -38,14 +38,14 @@ public class Infusion extends Addition implements IStatAddition {
         if (player == null) {
             health = 100;
         } else {
-            health = PlayerStatManager.getStat(player.getUniqueId(), StatType.HEALTH);
+            health = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.HEALTH);
         }
         StatList statList = new StatList(
                 new Stat(StatType.CRIT_DAMAGE, health / 2),
                 new Stat(StatType.STRENGTH, health / 2)
         );
         if (player != null) {
-            if (health > PlayerStatManager.getStat(player.getUniqueId(), StatType.MAX_HEALTH) / 2) {
+            if (health > PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.MAX_HEALTH) / 2) {
                 statList.addStat(new Stat(StatType.SPEED_CAP, 100));
             }
         }

@@ -241,7 +241,7 @@ public class DataUtils {
     }
 
     @SafeVarargs
-    public static HashMap<Rarity, StatList> getStatModifiersFrom(Pair<Rarity, StatList>... stats) {
+    public static HashMap<Rarity, StatList> getStatWithBonusModifiersFrom(Pair<Rarity, StatList>... stats) {
         HashMap<Rarity, StatList> r = new HashMap<>();
         for (Pair<Rarity, StatList> s : stats) {
             r.put(s.a(), s.b());

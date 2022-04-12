@@ -6,6 +6,7 @@ import me.magikus.core.items.ItemType;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.items.abilities.AbilityList;
 import me.magikus.core.stats.Stat;
+import me.magikus.core.stats.StatBonus;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
 import org.bukkit.Material;
@@ -18,6 +19,7 @@ public class UltraKatana extends MagikusItem {
 
     public UltraKatana() {
         super("ultrakatana", true, ItemType.SWORD, null);
+        this.setCanCastSpells(true);
     }
 
     @Override
@@ -45,14 +47,13 @@ public class UltraKatana extends MagikusItem {
         return new StatList(
                 new Stat(StatType.CRIT_CHANCE, 20),
                 new Stat(StatType.CRIT_DAMAGE, 250),
-                new Stat(StatType.WATER_DAMAGE, 370),
+                new Stat(StatType.WIND_DAMAGE, 740),
                 new Stat(StatType.EARTH_DAMAGE, 370),
-                new Stat(StatType.WIND_DAMAGE, 370),
+                new Stat(StatType.FIRE_DAMAGE, 370),
                 new Stat(StatType.LOOT_BONUS, 10),
-                new Stat(StatType.INTELLIGENCE, 100),
+                new Stat(StatType.MAX_MANA, 800),
                 new Stat(StatType.STRENGTH, 320),
-                new Stat(StatType.ATTACK_EFFICIENCY, 500)
-        );
+                new Stat(StatType.ATTACK_SPEED, 1000));
     }
 
     @Override

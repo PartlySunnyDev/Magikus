@@ -3,6 +3,7 @@ package me.magikus.abilities.rightClick;
 import me.magikus.core.entities.damage.DamageManager;
 import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;
+import me.magikus.core.entities.damage.modifiers.DamageModifier;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.items.abilities.Ability;
 import me.magikus.core.items.abilities.AbilityType;
@@ -29,13 +30,13 @@ public class SmiteAbility extends Ability {
 
     @Override
     protected void trigger(Player player, ItemStack parent) {
-        double damage = PlayerStatManager.getStat(player.getUniqueId(), StatType.STRENGTH) * 5;
+        double damage = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.STRENGTH) * 5;
         for (Entity e : player.getNearbyEntities(5, 5, 5)) {
             if (e instanceof LivingEntity) {
                 e.getWorld().strikeLightningEffect(e.getLocation());
-                DamageManager.dealDamage((LivingEntity) e, new HashMap<>() {{
+                DamageManager.dealDamage((LivingEntity) e, new HashMap<>(){{
                     put(Element.ELECTRIC, damage);
-                }}, new Pair<>(damage, false), true, DamageType.MAGICAL);
+                }}, new Pair<>(damage, false), new DamageModifier[]{}, true, DamageType.MAGICAL);
             }
         }
     }

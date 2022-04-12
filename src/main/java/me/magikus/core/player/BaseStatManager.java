@@ -16,7 +16,6 @@ public class BaseStatManager {
     private static final YamlConfiguration baseStats = Magikus.configManager.getConfig("baseStats");
     private static final HashMap<String, Double> defaultStats = new HashMap<>() {{
         put(StatType.HEALTH.toString(), 100D);
-        put(StatType.DAMAGE_MULTIPLIER.toString(), 1D);
         put(StatType.HEALTH_REGEN_SPEED.toString(), 1.5D);
         put(StatType.MANA_REGEN_SPEED.toString(), 2D);
         put(StatType.MAX_HEALTH.toString(), 100D);
@@ -24,7 +23,7 @@ public class BaseStatManager {
         put(StatType.SPEED.toString(), 100D);
         put(StatType.SPEED_CAP.toString(), 400D);
         put(StatType.MANA.toString(), 100D);
-        put(StatType.INTELLIGENCE.toString(), 100D);
+        put(StatType.MAX_MANA.toString(), 100D);
         put(StatType.CRIT_CHANCE.toString(), 30D);
         put(StatType.CRIT_DAMAGE.toString(), 50D);
     }};
@@ -71,7 +70,7 @@ public class BaseStatManager {
         return list;
     }
 
-    public static StatList getStatListOf(UUID id) {
+    public static StatList getStatWithBonusListOf(UUID id) {
         StatList list = new StatList();
         if (!baseStats.contains(id.toString())) {
             addDefaultPlayer(id);

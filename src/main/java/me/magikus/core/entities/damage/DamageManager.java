@@ -3,6 +3,7 @@ package me.magikus.core.entities.damage;
 import me.magikus.Magikus;
 import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.EntityManager;
+import me.magikus.core.entities.damage.modifiers.DamageModifier;
 import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.player.BaseStatManager;
@@ -16,42 +17,35 @@ import me.magikus.core.util.TextUtils;
 import me.magikus.core.util.classes.Pair;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nullable;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import static me.magikus.core.entities.stats.EntityStatType.getStat;
+import static me.magikus.core.entities.stats.EntityStatType.getStatWithBonus;
 
 public class DamageManager implements Listener {
 
     private static final Map<UUID, Pair<String, Long>> lastDamagedBy = new HashMap<>();
+    private static final Map<UUID, Float> lastArrowForce = new HashMap<>();
 
-    public static void dealDamage(LivingEntity e, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, boolean showDamageIndicator, DamageType type) {
+    public static void dealDamage(LivingEntity e, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, DamageModifier[] modifiers, boolean showDamageIndicator, DamageType type) {
         if (e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.PLAYER) {
             return;
         }
@@ -65,33 +59,41 @@ public class DamageManager implements Listener {
         }
         e.setCustomName(EntityUtils.getDisplayName(e));
         if (showDamageIndicator)
-            summonDamageIndicator(e.getLocation(), elementalInfo, damageInfo, e.getHeight(), type);
+            summonDamageIndicator(e.getLocation(), elementalInfo, damageInfo, modifiers, e.getHeight(), type);
     }
 
-    public static void dealDamage(LivingEntity e, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, boolean showDamageIndicator, Player p, boolean ferocity, DamageType type) {
-        dealDamage(e, elementalInfo, damageInfo, showDamageIndicator, type);
-        double ferocityChance = PlayerStatManager.getStat(p.getUniqueId(), StatType.ATTACK_EFFICIENCY);
-        if (!ferocity) {
-            int one = (int) ((ferocityChance) % 10);
-            int tens = (int) ((ferocityChance / 10) % 10);
-            int hundred = (int) (Math.floor(ferocityChance / 100));
-            boolean ferocityActive = new Random().nextInt(100) < one + tens * 10;
+    public static void dealDamage(LivingEntity e, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, DamageModifier[] modifiers, boolean showDamageIndicator, Player p, boolean efficientAttack, DamageType type) {
+        double attackSpeed = PlayerStatManager.getStatWithBonus(p.getUniqueId(), StatType.ATTACK_SPEED);
+        double attackStrengthScale = ((CraftPlayer) p).getHandle().getAttackStrengthScale(0.5f);
+        attackStrengthScale += 1 - ((1 - attackStrengthScale) / (Math.pow(2, attackSpeed / 100)));
+        damageInfo.setA(attackStrengthScale * damageInfo.a());
+        for (Element element : elementalInfo.keySet()) {
+            elementalInfo.put(element, elementalInfo.get(element) * attackStrengthScale);
+        }
+        dealDamage(e, elementalInfo, damageInfo, modifiers, showDamageIndicator, type);
+        double efficientAttackChance = PlayerStatManager.getStatWithBonus(p.getUniqueId(), StatType.ATTACK_EFFICIENCY);
+        if (!efficientAttack) {
+            int one = (int) ((efficientAttackChance) % 10);
+            int tens = (int) ((efficientAttackChance / 10) % 10);
+            int hundred = (int) (Math.floor(efficientAttackChance / 100));
+            boolean efficientAttackActive = new Random().nextInt(100) < one + tens * 10;
             for (int i = 0; i < hundred; i++) {
                 p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EGG_THROW, 0.7f, 1.5f);
-                dealDamage(e, elementalInfo, damageInfo, showDamageIndicator, p, true, type);
+                dealDamage(e, elementalInfo, damageInfo, modifiers, showDamageIndicator, p, true, type);
             }
-            if (ferocityActive) {
+            if (efficientAttackActive) {
                 p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EGG_THROW, 0.7f, 1.5f);
-                dealDamage(e, elementalInfo, damageInfo, showDamageIndicator, p, true, type);
+                dealDamage(e, elementalInfo, damageInfo, modifiers, showDamageIndicator, p, true, type);
             }
-            return;
         }
-        double attackSpeed = PlayerStatManager.getStat(p.getUniqueId(), StatType.ATTACK_SPEED);
-        ((CraftLivingEntity) e).getHandle().invulnerableDuration = (int) (10 / (1 + attackSpeed / 100));
-        ((CraftLivingEntity) e).getHandle().invulnerableTime = (int) (10 / (1 + attackSpeed / 100));
+        Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Magikus.class), () -> {
+            int newVal = (int) Math.ceil(10 / (1 + attackSpeed / 100));
+            ((CraftLivingEntity) e).getHandle().invulnerableTime = newVal;
+            ((CraftLivingEntity) e).getHandle().invulnerableDuration = newVal;
+        }, 2L);
     }
 
-    public static void summonDamageIndicator(Location central, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, double entityHeight, DamageType type) {
+    public static void summonDamageIndicator(Location central, Map<Element, Double> elementalInfo, Pair<Double, Boolean> damageInfo, DamageModifier[] modifiers, double entityHeight, DamageType type) {
         Random r = new Random();
         double xOffset = (r.nextInt(200) / 100f) - 1;
         double yOffset = (entityHeight / 2 + ((r.nextInt((int) (entityHeight * 50)) / 100f) - entityHeight / 4)) + entityHeight / 2;
@@ -101,7 +103,7 @@ public class DamageManager implements Listener {
         temp.setInvisible(true);
         temp.setNoGravity(true);
         temp.noCulling = true;
-        temp.setCustomName(new TextComponent(TextUtils.getDamageText(elementalInfo, damageInfo.b(), type)));
+        temp.setCustomName(new TextComponent(TextUtils.getDamageText(modifiers, elementalInfo, damageInfo.b(), type)));
         temp.setCustomNameVisible(true);
         EntityUtils.spawnEntity(temp);
         new BukkitRunnable() {
@@ -134,14 +136,14 @@ public class DamageManager implements Listener {
         if (trueDamage) {
             return rawDamage;
         }
-        double fireDefense = (stats.getStat(StatType.FIRE_DEFENSE));
-        double waterDefense = (stats.getStat(StatType.WATER_DEFENSE));
-        double windDefense = (stats.getStat(StatType.WIND_DEFENSE));
-        double electricDefense = (stats.getStat(StatType.ELECTRIC_DEFENSE));
-        double earthDefense = (stats.getStat(StatType.EARTH_DEFENSE));
-        double iceDefense = (stats.getStat(StatType.ICE_DEFENSE));
-        double regularDefense = (stats.getStat(StatType.DEFENSE));
-        double reduction = stats.getStat(StatType.DAMAGE_REDUCTION);
+        double fireDefense = (stats.getStatWithBonus(StatType.FIRE_DEFENSE));
+        double waterDefense = (stats.getStatWithBonus(StatType.WATER_DEFENSE));
+        double windDefense = (stats.getStatWithBonus(StatType.WIND_DEFENSE));
+        double electricDefense = (stats.getStatWithBonus(StatType.ELECTRIC_DEFENSE));
+        double earthDefense = (stats.getStatWithBonus(StatType.EARTH_DEFENSE));
+        double iceDefense = (stats.getStatWithBonus(StatType.ICE_DEFENSE));
+        double regularDefense = (stats.getStatWithBonus(StatType.DEFENSE));
+        double reduction = stats.getStatWithBonus(StatType.DAMAGE_REDUCTION);
         switch (element) {
             case ICE ->
                     rawDamage -= (((reduction / 100) * rawDamage) + ((iceDefense / (iceDefense + 100)) * rawDamage));
@@ -170,8 +172,8 @@ public class DamageManager implements Listener {
     public static void damagePlayer(Player p, double damage, EntityDamageEvent.DamageCause cause, String entityName) {
         UUID uniqueId = p.getUniqueId();
         PlayerStatManager.changeStat(uniqueId, StatType.HEALTH, -damage);
-        double health = PlayerStatManager.getStat(uniqueId, StatType.HEALTH);
-        double maxHealth = PlayerStatManager.getStat(uniqueId, StatType.MAX_HEALTH);
+        double health = PlayerStatManager.getStatWithBonus(uniqueId, StatType.HEALTH);
+        double maxHealth = PlayerStatManager.getStatWithBonus(uniqueId, StatType.MAX_HEALTH);
         if (!entityName.equals("")) {
             lastDamagedBy.put(p.getUniqueId(), new Pair<>(entityName, Instant.now().getEpochSecond()));
         }
@@ -273,11 +275,11 @@ public class DamageManager implements Listener {
         e.setDamage(0);
         if (!(damager instanceof Player)) {
             if (receiver instanceof Player) {
-                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false, EntityManager.getEntity(EntityUtils.getId(damager)) != null ? EntityManager.getEntity(EntityUtils.getId(damager)).type() : Element.NONE), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
+                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStatWithBonus(damager, EntityStatType.DAMAGE), false, EntityManager.getEntity(EntityUtils.getId(damager)) != null ? EntityManager.getEntity(EntityUtils.getId(damager)).type() : Element.NONE), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
                 dealDamage(receiver, new HashMap<>() {{
-                    put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));
-                }}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false, DamageType.PHYSICAL);
+                    put(Element.NONE, getStatWithBonus(damager, EntityStatType.DAMAGE));
+                }}, new Pair<>(getStatWithBonus(damager, EntityStatType.DAMAGE), false), new DamageModifier[] {}, false, DamageType.PHYSICAL);
             }
         }
     }
@@ -295,13 +297,12 @@ public class DamageManager implements Listener {
             e.setCancelled(true);
         } else {
             if ((p).getInventory().getItemInMainHand().getType() == Material.CROSSBOW || p.getInventory().getItemInMainHand().getType() == Material.BOW) {
-
                 Pair<Pair<Map<Element, Double>, Pair<Double, Boolean>>, DamageType> hitDamage = getHitDamage(p, receiver, true);
-                dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), true, p, false, hitDamage.b());
+                dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), new DamageModifier[]{getDamageModifierFromAttackSpeedTicker(p.getAttackCooldown())}, true, p, false, hitDamage.b());
                 return;
             }
             Pair<Pair<Map<Element, Double>, Pair<Double, Boolean>>, DamageType> hitDamage = getHitDamage(p, receiver, false);
-            dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), true, p, false, hitDamage.b());
+            dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), new DamageModifier[]{getDamageModifierFromAttackSpeedTicker(p.getAttackCooldown())}, true, p, false, hitDamage.b());
         }
     }
 
@@ -313,15 +314,20 @@ public class DamageManager implements Listener {
         receiver.damage(0, damager);
         if (!(damager instanceof Player)) {
             if (receiver instanceof Player) {
-                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStat(damager, EntityStatType.DAMAGE), false, EntityManager.getEntity(EntityUtils.getId(damager)) != null ? EntityManager.getEntity(EntityUtils.getId(damager)).type() : Element.NONE), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
+                damagePlayer((Player) receiver, getHitDamageOn((Player) receiver, damager, EntityStatType.getStatWithBonus(damager, EntityStatType.DAMAGE), false, EntityManager.getEntity(EntityUtils.getId(damager)) != null ? EntityManager.getEntity(EntityUtils.getId(damager)).type() : Element.NONE), EntityDamageEvent.DamageCause.ENTITY_ATTACK, EntityUtils.getName(damager));
             } else {
                 dealDamage(receiver, new HashMap<>() {{
-                    put(Element.NONE, getStat(damager, EntityStatType.DAMAGE));
-                }}, new Pair<>(getStat(damager, EntityStatType.DAMAGE), false), false, DamageType.PHYSICAL);
+                    put(Element.NONE, getStatWithBonus(damager, EntityStatType.DAMAGE));
+                }}, new Pair<>(getStatWithBonus(damager, EntityStatType.DAMAGE), false), new DamageModifier[] {}, false, DamageType.PHYSICAL);
             }
         }
         e.getEntity().remove();
         e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void playerDrawbackBow(EntityShootBowEvent e) {
+        if (e.getEntity() instanceof Player p) lastArrowForce.put(p.getUniqueId(), e.getForce());
     }
 
     @EventHandler
@@ -333,8 +339,15 @@ public class DamageManager implements Listener {
         if (receiver instanceof Player) {
             e.setCancelled(true);
         } else {
+            DamageModifier m = DamageModifier.NORMAL;
+            if (e.getEntity() instanceof Arrow) {
+                if (lastArrowForce.containsKey(p.getUniqueId())) {
+                    m = getDamageModifierFromAttackSpeedTicker(lastArrowForce.get(p.getUniqueId()));
+                    lastArrowForce.remove(p.getUniqueId());
+                }
+            }
             Pair<Pair<Map<Element, Double>, Pair<Double, Boolean>>, DamageType> hitDamage = getHitDamage(p, receiver, false);
-            dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), true, p, false, hitDamage.b());
+            dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), new DamageModifier[] {m}, true, p, false, hitDamage.b());
         }
         e.getEntity().remove();
         e.setCancelled(true);
@@ -353,10 +366,16 @@ public class DamageManager implements Listener {
             } else {
                 dealDamage((LivingEntity) e.getEntity(), new HashMap<>() {{
                     put(Element.NONE, e.getDamage() * 5);
-                }}, new Pair<>(e.getDamage() * 5, false), true, DamageType.PHYSICAL);
+                }}, new Pair<>(e.getDamage() * 5, false), new DamageModifier[]{DamageModifier.NORMAL}, true, DamageType.PHYSICAL);
             }
             e.setDamage(0);
         }
+    }
+
+    private DamageModifier getDamageModifierFromAttackSpeedTicker(float attackSpeedTicker) {
+        if (attackSpeedTicker < 0.4) return DamageModifier.WEAK;
+        else if (attackSpeedTicker >= 0.4 && attackSpeedTicker < 0.9) return DamageModifier.NORMAL;
+        else return DamageModifier.STRONG;
     }
 
 }

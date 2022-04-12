@@ -252,6 +252,10 @@ public abstract class MagikusItem implements Listener {
         return canCastSpells;
     }
 
+    public void setCanCastSpells(boolean canCastSpells) {
+        this.canCastSpells = canCastSpells;
+    }
+
     public String[] fullSet() {
         return fullSet;
     }

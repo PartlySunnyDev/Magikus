@@ -11,13 +11,13 @@ import me.magikus.core.util.classes.Pair;
 
 public class EnlightenedAscension extends Ascension {
     public EnlightenedAscension() {
-        super("enlightened", "Enlightened", "Increases your Wind Damage by @@2@@ for every level", DataUtils.getStatModifiersFrom(
-                new Pair<>(Rarity.NORMAL, new StatList(new Stat(StatType.INTELLIGENCE, 10))),
-                new Pair<>(Rarity.UNCOMMON, new StatList(new Stat(StatType.INTELLIGENCE, 20))),
-                new Pair<>(Rarity.RARE, new StatList(new Stat(StatType.INTELLIGENCE, 50))),
-                new Pair<>(Rarity.EPIC, new StatList(new Stat(StatType.INTELLIGENCE, 100))),
-                new Pair<>(Rarity.LEGENDARY, new StatList(new Stat(StatType.INTELLIGENCE, 200))),
-                new Pair<>(Rarity.RENOWNED, new StatList(new Stat(StatType.INTELLIGENCE, 275)))
+        super("enlightened", "Enlightened", "Increases your Wind Damage by @@2@@ for every level", DataUtils.getStatWithBonusModifiersFrom(
+                new Pair<>(Rarity.NORMAL, new StatList(new Stat(StatType.MAX_MANA, 10))),
+                new Pair<>(Rarity.UNCOMMON, new StatList(new Stat(StatType.MAX_MANA, 20))),
+                new Pair<>(Rarity.RARE, new StatList(new Stat(StatType.MAX_MANA, 50))),
+                new Pair<>(Rarity.EPIC, new StatList(new Stat(StatType.MAX_MANA, 100))),
+                new Pair<>(Rarity.LEGENDARY, new StatList(new Stat(StatType.MAX_MANA, 200))),
+                new Pair<>(Rarity.RENOWNED, new StatList(new Stat(StatType.MAX_MANA, 275)))
         ), AppliableTypeDefaults.meleeWeapons);
     }
 }

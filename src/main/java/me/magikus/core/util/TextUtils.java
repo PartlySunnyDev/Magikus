@@ -2,6 +2,7 @@ package me.magikus.core.util;
 
 import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;
+import me.magikus.core.entities.damage.modifiers.DamageModifier;
 import me.magikus.core.stats.StatType;
 import org.bukkit.ChatColor;
 
@@ -18,15 +19,24 @@ public class TextUtils {
         return wrap(text, width, ChatColor.GRAY);
     }
 
-    public static String getDamageText(Map<Element, Double> elementalInfo, boolean isCritical, DamageType type) {
+    public static String getDamageText(DamageModifier[] modifiers, Map<Element, Double> elementalInfo, boolean isCritical, DamageType type) {
         StringBuilder damageText = new StringBuilder();
+        StringBuilder modifierText = new StringBuilder();
         if (isCritical) {
-            damageText.append(ChatColor.DARK_PURPLE).append("✧");
+            modifierText.append(ChatColor.DARK_PURPLE).append("✧");
         }
         if (type == DamageType.PHYSICAL) {
-            damageText.append(ChatColor.RED).append("۞");
+            modifierText.append(ChatColor.RED).append("۞");
         } else {
-            damageText.append(ChatColor.LIGHT_PURPLE).append("☯");
+            modifierText.append(ChatColor.LIGHT_PURPLE).append("☯");
+        }
+        boolean show = false;
+        for (DamageModifier m : modifiers) {
+            show = true;
+            modifierText.append(m.color()).append(m.icon());
+        }
+        if (show) {
+            damageText.append(ChatColor.GRAY).append("[").append(modifierText).append(ChatColor.GRAY).append("] ");
         }
         for (Element e : elementalInfo.keySet()) {
             if (elementalInfo.get(e) > 0) {

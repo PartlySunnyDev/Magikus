@@ -1,6 +1,7 @@
 package me.magikus.core.stats;
 
 import de.tr7zw.nbtapi.NBTItem;
+import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
 import me.magikus.core.entities.damage.DamageType;
@@ -17,6 +18,7 @@ import java.util.Random;
 public class StatList {
 
     public final Map<StatType, Stat> statList = new HashMap<>();
+    public final Map<StatType, StatBonus> bonusList = new HashMap<>();
 
     public StatList() {
     }
@@ -27,9 +29,32 @@ public class StatList {
         }
     }
 
+    public StatList(Stat[] stats, StatBonus[] bonuses) {
+        for (Stat stat : stats) {
+            addStat(stat);
+        }
+        for (StatBonus stat : bonuses) {
+            addBonus(stat);
+        }
+    }
+
     public double getStat(StatType type) {
         Stat stat = statList.get(type);
         return stat == null ? 0 : stat.value();
+    }
+
+    public double getStatWithBonus(StatType type) {
+        Stat stat = statList.get(type);
+        StatBonus bonus = bonusList.get(type);
+        if (bonus != null && stat != null) {
+            stat.setValue(stat.value() * (bonus.bonus() + 1));
+        }
+        return stat == null ? 0 : stat.value();
+    }
+
+    public double getBonus(StatType type) {
+        StatBonus stat = bonusList.get(type);
+        return stat == null ? 0 : stat.bonus();
     }
 
     public void addStat(Stat stat) {
@@ -44,14 +69,38 @@ public class StatList {
         statList.remove(stat.type());
     }
 
-    public NBTItem applyStats(NBTItem item) {
-        return ItemUtils.setItemStats(item, asList());
+    public void addBonus(StatBonus stat) {
+        bonusList.put(stat.t(), stat);
     }
 
-    public Stat[] asList() {
+    public void removeBonus(StatType type) {
+        bonusList.remove(type);
+    }
+
+    public void removeBonus(StatBonus stat) {
+        bonusList.remove(stat.t());
+    }
+
+    public NBTItem applyStats(NBTItem item) {
+        ItemUtils.setItemStats(item, getStatWithBonusList());
+        ItemUtils.setItemBonus(item, getBonusList());
+        return item;
+    }
+
+    public Stat[] getStatWithBonusList() {
         Stat[] returned = new Stat[statList.size()];
         int count = 0;
         for (Stat s : statList.values()) {
+            returned[count] = s;
+            count++;
+        }
+        return returned;
+    }
+
+    public StatBonus[] getBonusList() {
+        StatBonus[] returned = new StatBonus[bonusList.size()];
+        int count = 0;
+        for (StatBonus s : bonusList.values()) {
             returned[count] = s;
             count++;
         }
@@ -65,39 +114,45 @@ public class StatList {
                 return oldVal;
             });
         }
+        for (StatType t : list.bonusList.keySet()) {
+            bonusList.merge(t, list.bonusList.get(t), (oldVal, newVal) -> {
+                oldVal.setBonus(oldVal.bonus() * newVal.bonus());
+                return oldVal;
+            });
+        }
         return this;
     }
 
     public Pair<Map<Element, Double>, Pair<Double, Boolean>> getFinalDamage(Entity e, boolean ignoreHand, DamageType type) {
         EntityInfo i = EntityManager.getEntity(EntityUtils.getId(e));
         Map<Element, Double> elementalDamages = new HashMap<>();
-        double multiplier = getStat(StatType.DAMAGE_MULTIPLIER);
-        double critBonus = 1 + getStat(StatType.CRIT_DAMAGE) / 100;
-        boolean critical = new Random().nextInt(100) < getStat(StatType.CRIT_CHANCE);
+        double bonus = 1 + getBonus(StatType.DAMAGE);
+        double critBonus = 1 + getStatWithBonus(StatType.CRIT_DAMAGE) / 100;
+        boolean critical = new Random().nextInt(100) < getStatWithBonus(StatType.CRIT_CHANCE);
         double finalDamage;
-        double fireDamage = (getStat(StatType.FIRE_DAMAGE));
-        double waterDamage = (getStat(StatType.WATER_DAMAGE));
-        double windDamage = (getStat(StatType.WIND_DAMAGE));
-        double electricDamage = (getStat(StatType.ELECTRIC_DAMAGE));
-        double earthDamage = (getStat(StatType.EARTH_DAMAGE));
-        double iceDamage = (getStat(StatType.ICE_DAMAGE));
-        double regularDamage = (getStat(StatType.DAMAGE));
+        double fireDamage = (getStatWithBonus(StatType.FIRE_DAMAGE));
+        double waterDamage = (getStatWithBonus(StatType.WATER_DAMAGE));
+        double windDamage = (getStatWithBonus(StatType.WIND_DAMAGE));
+        double electricDamage = (getStatWithBonus(StatType.ELECTRIC_DAMAGE));
+        double earthDamage = (getStatWithBonus(StatType.EARTH_DAMAGE));
+        double iceDamage = (getStatWithBonus(StatType.ICE_DAMAGE));
+        double regularDamage = (getStatWithBonus(StatType.DAMAGE));
         if (type == DamageType.PHYSICAL) {
-            fireDamage *= (1 + getStat(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * multiplier;
-            waterDamage *= (1 + getStat(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * multiplier;
-            windDamage *= (1 + getStat(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * multiplier;
-            electricDamage *= (1 + getStat(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * multiplier;
-            earthDamage *= (1 + getStat(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * multiplier;
-            iceDamage *= (1 + getStat(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * multiplier;
-            regularDamage *= (1 + getStat(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * multiplier;
+            fireDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            waterDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            windDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            electricDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            earthDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            iceDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            regularDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
         } else {
-            fireDamage *= (1 + getStat(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * multiplier;
-            waterDamage *= (1 + getStat(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * multiplier;
-            windDamage *= (1 + getStat(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * multiplier;
-            electricDamage *= (1 + getStat(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * multiplier;
-            earthDamage *= (1 + getStat(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * multiplier;
-            iceDamage *= (1 + getStat(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * multiplier;
-            regularDamage *= (1 + getStat(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * multiplier;
+            fireDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            waterDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            windDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            electricDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            earthDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            iceDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            regularDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
         }
 
         if (i == null) {
