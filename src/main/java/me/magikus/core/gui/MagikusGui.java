@@ -1,28 +1,33 @@
 package me.magikus.core.gui;
 
+import me.magikus.core.gui.components.DecorComponent;
 import me.magikus.core.gui.components.GuiComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
-public abstract class MagikusGui {
+public abstract class MagikusGui implements Listener {
 
     protected final String id;
     protected final int slots;
     protected final String guiName;
-    protected final List<GuiComponent> contents = new ArrayList<>();
+    protected final List<GuiComponent> contents;
     private final Inventory inventory;
-    private final UUID uniqueId = UUID.randomUUID();
 
     protected MagikusGui(String id, int slots, String guiName) {
         this.id = id;
         this.slots = slots;
         this.guiName = guiName;
+        this.contents = new ArrayList<>(Collections.nCopies(slots, new DecorComponent(Material.LIGHT_GRAY_STAINED_GLASS_PANE, this)));
         buildGui();
         inventory = Bukkit.createInventory(null, slots, guiName);
         updateInventory();
@@ -64,4 +69,13 @@ public abstract class MagikusGui {
     protected List<HumanEntity> getViewers() {
         return inventory.getViewers();
     }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent e) {
+        System.out.println(e.getInventory());
+        if (e.getInventory() == inventory) {
+            e.setCancelled(true);
+        }
+    }
+
 }

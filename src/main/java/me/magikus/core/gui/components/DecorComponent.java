@@ -19,6 +19,7 @@ public class DecorComponent extends GuiComponent {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
+        if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
         if (ItemUtils.getId(e.getCurrentItem()).equals(id())) {
             e.setCancelled(true);
         }
