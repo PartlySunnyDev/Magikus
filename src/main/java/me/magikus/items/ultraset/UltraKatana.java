@@ -6,7 +6,6 @@ import me.magikus.core.items.ItemType;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.items.abilities.AbilityList;
 import me.magikus.core.stats.Stat;
-import me.magikus.core.stats.StatBonus;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
 import org.bukkit.Material;

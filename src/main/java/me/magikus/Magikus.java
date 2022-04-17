@@ -69,7 +69,7 @@ public final class Magikus extends JavaPlugin {
         getCommand("mascend").setExecutor(new MagikusAscend());
         getCommand("menhance").setExecutor(new MagikusEnhance());
         getCommand("menchant").setExecutor(new MagikusEnchant());
-        getCommand("mgui").setExecutor(new MagikusGui());
+        getCommand("mgui").setExecutor(new MagikusOpenGui());
     }
 
     private void registerListeners() {

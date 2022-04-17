@@ -1,7 +1,6 @@
 package me.magikus.core.entities;
 
 import me.magikus.Magikus;
-import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.util.EntityUtils;
 import me.magikus.core.util.JavaAccessor;

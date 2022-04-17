@@ -2,14 +2,18 @@ package me.magikus.core.gui.components;
 
 import me.magikus.Magikus;
 import me.magikus.core.gui.MagikusGui;
+import me.magikus.core.util.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public abstract class GuiComponent implements Listener {
 
     protected final MagikusGui parent;
+    protected final UUID uniqueID = UUID.randomUUID();
     private final String id;
     @Nullable
     private ItemStack shownItem;
@@ -31,6 +35,7 @@ public abstract class GuiComponent implements Listener {
     }
 
     public void setShownItem(@Nullable ItemStack shownItem) {
+        ItemUtils.setUniqueId(shownItem, uniqueID);
         this.shownItem = shownItem;
     }
 }

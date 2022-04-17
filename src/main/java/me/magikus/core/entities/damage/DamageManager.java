@@ -31,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.annotation.Nullable;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -279,7 +278,7 @@ public class DamageManager implements Listener {
             } else {
                 dealDamage(receiver, new HashMap<>() {{
                     put(Element.NONE, getStatWithBonus(damager, EntityStatType.DAMAGE));
-                }}, new Pair<>(getStatWithBonus(damager, EntityStatType.DAMAGE), false), new DamageModifier[] {}, false, DamageType.PHYSICAL);
+                }}, new Pair<>(getStatWithBonus(damager, EntityStatType.DAMAGE), false), new DamageModifier[]{}, false, DamageType.PHYSICAL);
             }
         }
     }
@@ -318,7 +317,7 @@ public class DamageManager implements Listener {
             } else {
                 dealDamage(receiver, new HashMap<>() {{
                     put(Element.NONE, getStatWithBonus(damager, EntityStatType.DAMAGE));
-                }}, new Pair<>(getStatWithBonus(damager, EntityStatType.DAMAGE), false), new DamageModifier[] {}, false, DamageType.PHYSICAL);
+                }}, new Pair<>(getStatWithBonus(damager, EntityStatType.DAMAGE), false), new DamageModifier[]{}, false, DamageType.PHYSICAL);
             }
         }
         e.getEntity().remove();
@@ -347,7 +346,7 @@ public class DamageManager implements Listener {
                 }
             }
             Pair<Pair<Map<Element, Double>, Pair<Double, Boolean>>, DamageType> hitDamage = getHitDamage(p, receiver, false);
-            dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), new DamageModifier[] {m}, true, p, false, hitDamage.b());
+            dealDamage(receiver, hitDamage.a().a(), hitDamage.a().b(), new DamageModifier[]{m}, true, p, false, hitDamage.b());
         }
         e.getEntity().remove();
         e.setCancelled(true);

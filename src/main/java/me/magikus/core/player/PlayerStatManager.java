@@ -1,8 +1,8 @@
 package me.magikus.core.player;
 
 import me.magikus.core.stats.Stat;
-import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatBonus;
+import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,6 +34,7 @@ public class PlayerStatManager implements Listener {
     public static double getStatWithBonus(UUID id, StatType type) {
         return playerStats.get(id).getStatWithBonus(type);
     }
+
     public static double getStatWithBonusBonus(UUID id, StatType type) {
         Map<StatType, StatBonus> bonuses = playerStatBonuses.get(id);
         if (bonuses.containsKey(type)) {

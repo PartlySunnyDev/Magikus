@@ -3,19 +3,20 @@ package me.magikus.core.gui.components;
 import me.magikus.core.gui.MagikusGui;
 import me.magikus.core.util.ItemUtils;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class ToggleableComponent extends GuiComponent {
 
     private final ItemStack onItem;
     private final ItemStack offItem;
-    private final UUID uniqueID = UUID.randomUUID();
     private boolean toggleOn = false;
+    private Sound soundOnToggle = null;
 
     public ToggleableComponent(ItemStack off, ItemStack on, MagikusGui parent) {
         super("toggleable_gui", off, parent);
@@ -27,14 +28,28 @@ public class ToggleableComponent extends GuiComponent {
         this.offItem = off;
     }
 
+    public ToggleableComponent(ItemStack off, ItemStack on, MagikusGui parent, Sound soundOnToggle) {
+        this(off, on, parent);
+        this.soundOnToggle = soundOnToggle;
+    }
+
     public void toggle() {
         toggleOn = !toggleOn;
+    }
+
+    public boolean state() {
+        return toggleOn;
     }
 
     @EventHandler
     public void onToggle(InventoryClickEvent e) {
         if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
         if (ItemUtils.getId(e.getCurrentItem()).equals(id()) && Objects.equals(ItemUtils.getUniqueId(e.getCurrentItem()), uniqueID)) {
+            if (soundOnToggle != null) {
+                if (e.getWhoClicked() instanceof Player p) {
+                    p.playSound(p, soundOnToggle, 1, 1);
+                }
+            }
             toggle();
             if (e.getClickedInventory() != null) {
                 if (toggleOn) {

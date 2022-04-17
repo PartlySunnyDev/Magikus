@@ -7,9 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class DecorComponent extends GuiComponent {
-    public DecorComponent(Material showItem, MagikusGui parent) {
-        super("decor_gui", new ItemStack(showItem), parent);
+public class StaticComponent extends GuiComponent {
+    public StaticComponent(Material showItem, MagikusGui parent) {
+        super("static_gui", new ItemStack(showItem), parent);
         if (shownItem() != null) {
             ItemUtils.setId(shownItem(), id());
             ItemUtils.setUnstackable(shownItem());

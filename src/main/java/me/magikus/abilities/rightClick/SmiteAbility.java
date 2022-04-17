@@ -34,7 +34,7 @@ public class SmiteAbility extends Ability {
         for (Entity e : player.getNearbyEntities(5, 5, 5)) {
             if (e instanceof LivingEntity) {
                 e.getWorld().strikeLightningEffect(e.getLocation());
-                DamageManager.dealDamage((LivingEntity) e, new HashMap<>(){{
+                DamageManager.dealDamage((LivingEntity) e, new HashMap<>() {{
                     put(Element.ELECTRIC, damage);
                 }}, new Pair<>(damage, false), new DamageModifier[]{}, true, DamageType.MAGICAL);
             }

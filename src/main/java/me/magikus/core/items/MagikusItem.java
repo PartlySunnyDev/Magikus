@@ -4,6 +4,7 @@ import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTListCompound;
 import me.magikus.Magikus;
+import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.enums.Rarity;
 import me.magikus.core.items.abilities.AbilityList;
@@ -99,8 +100,10 @@ public abstract class MagikusItem implements Listener {
         if (type == null) {
             if (nbti.getBoolean("vanilla")) {
                 type = new ItemInfo(s.getType().toString().toLowerCase(), null, DataUtils.getTypeOfItem(s.getType()));
+            } else if (!nbti.hasKey("isgui") || !nbti.getBoolean("isgui")) {
+                ConsoleLogger.console("Bad Type: " + nbti.getString("mg_id"));
+                return null;
             } else {
-                System.out.println("Bad Type: " + nbti.getString("mg_id"));
                 return null;
             }
         }

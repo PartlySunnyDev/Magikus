@@ -29,7 +29,7 @@ public class SharpnessEnchant extends Enchant {
 
     @Override
     public StatList getBonusStats(@Nullable Player player, @Nullable Entity target) {
-        return new StatList(new Stat[] {}, new StatBonus[] {
+        return new StatList(new Stat[]{}, new StatBonus[]{
                 new StatBonus(StatType.DAMAGE, (level() * 5) / 100f)
         });
     }

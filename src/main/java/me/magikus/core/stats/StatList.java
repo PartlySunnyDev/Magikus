@@ -1,7 +1,6 @@
 package me.magikus.core.stats;
 
 import de.tr7zw.nbtapi.NBTItem;
-import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
 import me.magikus.core.entities.damage.DamageType;
@@ -138,21 +137,21 @@ public class StatList {
         double iceDamage = (getStatWithBonus(StatType.ICE_DAMAGE));
         double regularDamage = (getStatWithBonus(StatType.DAMAGE));
         if (type == DamageType.PHYSICAL) {
-            fireDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
-            waterDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
-            windDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
-            electricDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
-            earthDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
-            iceDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
-            regularDamage *= (1 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            fireDamage *= (5 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            waterDamage *= (5 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            windDamage *= (5 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            electricDamage *= (5 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            earthDamage *= (5 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            iceDamage *= (5 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
+            regularDamage *= (5 + getStatWithBonus(StatType.STRENGTH) / 100) * (critical ? critBonus : 1) * bonus;
         } else {
-            fireDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
-            waterDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
-            windDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
-            electricDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
-            earthDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
-            iceDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
-            regularDamage *= (1 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            fireDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            waterDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            windDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            electricDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            earthDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            iceDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
+            regularDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
         }
 
         if (i == null) {

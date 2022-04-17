@@ -91,7 +91,7 @@ public class ItemUpdater implements Listener {
 
     public static ItemStack getIded(ItemStack s, Player player) {
         NBTItem nbti = new NBTItem(s);
-        if (!nbti.hasKey("mg_unique") && !nbti.hasKey("mg_id") && !nbti.hasKey("vanilla")) {
+        if (!nbti.hasKey("mg_unique") || !nbti.hasKey("mg_id") || !nbti.hasKey("vanilla")) {
             ConsoleLogger.console("Item has been found with missing information");
             return s;
         }

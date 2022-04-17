@@ -8,9 +8,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class TextedDecorComponent extends GuiComponent {
-    public TextedDecorComponent(ItemStack i, MagikusGui parent) {
+    public TextedDecorComponent(ItemStack i, MagikusGui parent, String name, String lore) {
         super("texted_gui", i, parent);
-        ItemUtils.setId(shownItem(), id());
+        ItemStack a = shownItem();
+        if (a == null) {
+            return;
+        }
+        ItemUtils.setId(a, id());
+        ItemUtils.setNameAndLore(a, name, lore);
     }
 
     @EventHandler

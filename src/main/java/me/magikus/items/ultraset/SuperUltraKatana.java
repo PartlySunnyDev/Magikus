@@ -45,7 +45,7 @@ public class SuperUltraKatana extends MagikusItem {
     @Override
     public StatList getStats() {
         return new StatList(
-                new Stat[] {
+                new Stat[]{
                         new Stat(StatType.CRIT_CHANCE, 20),
                         new Stat(StatType.CRIT_DAMAGE, 250),
                         new Stat(StatType.WIND_DAMAGE, 740),
@@ -56,7 +56,7 @@ public class SuperUltraKatana extends MagikusItem {
                         new Stat(StatType.STRENGTH, 320),
                         new Stat(StatType.ATTACK_SPEED, 1000)
                 },
-                new StatBonus[] {
+                new StatBonus[]{
                         new StatBonus(StatType.MAX_MANA, 0.5),
                         new StatBonus(StatType.STRENGTH, 0.5),
                         new StatBonus(StatType.MAX_HEALTH, 0.5)

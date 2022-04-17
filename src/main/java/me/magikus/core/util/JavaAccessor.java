@@ -7,7 +7,10 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
 
 /*
  * NOT BY ME!!! https://gist.github.com/Lauriichan/294c64b63067dcb6a9a8658f2d040256
