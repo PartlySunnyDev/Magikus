@@ -1,6 +1,7 @@
 package me.magikus.core.player;
 
 import me.magikus.Magikus;
+import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.damage.DamageManager;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.stats.Stat;
@@ -33,7 +34,6 @@ public class PlayerUpdater implements Listener {
 
     public static final Map<UUID, Pair<String, Integer>> messagesToSend = new HashMap<>();
     public static final Map<UUID, Integer> timeRemaining = new HashMap<>();
-    private static final UUID movementSpeedUUID = UUID.fromString("2029ae02-a2cf-4224-9d4f-5df0db423a44");
 
     public PlayerUpdater(Server s) {
         new ConstantUpdater(s).runTaskTimer(JavaPlugin.getPlugin(Magikus.class), 0, 1);
@@ -79,6 +79,8 @@ public class PlayerUpdater implements Listener {
         } else {
             newStats.addStat(new Stat(StatType.HEALTH, newStats.getStatWithBonus(StatType.MAX_HEALTH)));
             newStats.addStat(new Stat(StatType.MANA, newStats.getStatWithBonus(StatType.MAX_MANA)));
+            DamageManager.updatePlayerHealthBar(player, newStats.getStatWithBonus(StatType.HEALTH), newStats.getStatWithBonus(StatType.MAX_HEALTH));
+            PlayerStatManager.playerStats.put(player.getUniqueId(), newStats);
             BaseStatManager.hasInitializedChangableStats.put(id, true);
         }
         double speedCap = newStats.getStatWithBonus(StatType.SPEED_CAP);
@@ -87,6 +89,8 @@ public class PlayerUpdater implements Listener {
         if (newStats.getStatWithBonus(StatType.SPEED) > speedCap) {
             newStats.addStat(new Stat(StatType.SPEED, speedCap));
         }
+        player.setWalkSpeed((float) (newStats.getStatWithBonus(StatType.SPEED) / 500));
+        player.setFlySpeed((float) (newStats.getStatWithBonus(StatType.SPEED) / 500));
         return newStats;
     }
 
@@ -96,7 +100,6 @@ public class PlayerUpdater implements Listener {
         double speed = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.SPEED);
         double speedCap = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.SPEED_CAP);
         double maxHealth = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.MAX_HEALTH);
-        double attackSpeed = PlayerStatManager.getStatWithBonus(player.getUniqueId(), StatType.ATTACK_SPEED);
         if (speed > speedCap) {
             speed = speedCap;
         }
@@ -122,7 +125,7 @@ public class PlayerUpdater implements Listener {
     }
 
     public static String getPlayerDisplay(StatList stats) {
-        return ChatColor.RED + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_MANA), 0) + "✜ Mana";
+        return ChatColor.RED + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_MANA), 0) + StatType.MANA.symbol() + " Mana";
     }
 
     public static void sendMessageToPlayer(Player p, String message, int timeInTicks) {

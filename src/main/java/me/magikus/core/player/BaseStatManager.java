@@ -45,8 +45,8 @@ public class BaseStatManager {
 
     public static void initializeStats(Player p) {
         UUID id = p.getUniqueId();
-        hasInitializedChangableStats.put(id, false);
         PlayerStatManager.playerStats.put(id, new StatList(getStatsOf(id).toArray(new Stat[0])));
+        hasInitializedChangableStats.put(id, false);
     }
 
     public static void removeStats(Player p) {

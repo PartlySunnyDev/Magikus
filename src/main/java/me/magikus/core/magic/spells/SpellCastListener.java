@@ -24,6 +24,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import static me.magikus.core.tools.util.NumberUtils.getIntegerStringOf;
@@ -44,6 +45,7 @@ public class SpellCastListener implements Listener {
     public void onPlayerStartSpellCast(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if (p.isSneaking() && e.getHand() == EquipmentSlot.HAND) {
+            Magikus plugin = JavaPlugin.getPlugin(Magikus.class);
             ItemStack itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
             if (!itemInMainHand.hasItemMeta()) {
                 return;
@@ -52,6 +54,7 @@ public class SpellCastListener implements Listener {
             if (item == null || !item.canCastSpells()) {
                 return;
             }
+            p.playSound(p.getLocation(), Sound.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, 1, 1);
             boolean isRightClick = (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK);
             String playerCombo = playerCurrentCombo.get(p.getUniqueId());
             playerCombo = playerCombo + (isRightClick ? "r" : "l");
@@ -65,7 +68,6 @@ public class SpellCastListener implements Listener {
                 int castSpellSlot = -1;
                 for (int i = 0; i < SpellPreferences.spellSlotsUnlocked(p); i++) {
                     if (SpellPreferences.getComboForSlot(p, i).equalsIgnoreCase(playerCombo)) {
-                        SpellManager.castSpell(SpellPreferences.getSpellInSlot(p, i), p);
                         castSpellSlot = i;
                     }
                 }
@@ -94,10 +96,17 @@ public class SpellCastListener implements Listener {
                 }
                 PlayerStatManager.setStat(p.getUniqueId(), StatType.MANA, mana - spell.manaCost());
                 PlayerUpdater.sendMessageToPlayer(p, ChatColor.AQUA + "Cast spell " + spell.displayName() + "! (-" + spell.manaCost() + " mana)", 40);
-                p.sendTitle("", "", 0, 0, 0);
+                SpellManager.castSpell(SpellPreferences.getSpellInSlot(p, castSpellSlot), p);
+                p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+                final String finalPlayerCombo = playerCombo;
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    if (Objects.equals(playerCurrentCombo.get(p.getUniqueId()), "")) {
+                        p.sendTitle(getFormattedSpellText(finalPlayerCombo, true), "", 0, 10, 5);
+                    }
+                }, 1);
                 return;
             }
-            BukkitTask t = Bukkit.getScheduler().runTaskLater(JavaPlugin.getPlugin(Magikus.class), () -> {
+            BukkitTask t = Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (playerCurrentCombo.containsKey(p.getUniqueId())) {
                     playerCurrentCombo.put(p.getUniqueId(), "");
                 }
@@ -110,9 +119,17 @@ public class SpellCastListener implements Listener {
     }
 
     private String getFormattedSpellText(String combo) {
+        return getFormattedSpellText(combo, false);
+    }
+
+    private String getFormattedSpellText(String combo, boolean bold) {
         StringBuilder sb = new StringBuilder();
         for (char c : combo.toCharArray()) {
-            sb.append(ChatColor.LIGHT_PURPLE).append(Character.toUpperCase(c)).append(ChatColor.GRAY).append(" - ");
+            if (!bold) {
+                sb.append(ChatColor.LIGHT_PURPLE).append(Character.toUpperCase(c)).append(ChatColor.GRAY).append(" - ");
+            } else {
+                sb.append(ChatColor.LIGHT_PURPLE).append(ChatColor.BOLD).append(Character.toUpperCase(c)).append(ChatColor.GRAY).append(ChatColor.BOLD).append(" - ");
+            }
         }
         return sb.substring(0, sb.length() - 2);
     }

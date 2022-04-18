@@ -45,10 +45,10 @@ public class StatList {
     public double getStatWithBonus(StatType type) {
         Stat stat = statList.get(type);
         StatBonus bonus = bonusList.get(type);
-        if (bonus != null && stat != null) {
-            stat.setValue(stat.value() * (bonus.bonus() + 1));
+        if (bonus == null) {
+            return stat == null ? 0 : stat.value();
         }
-        return stat == null ? 0 : stat.value();
+        return stat == null ? 0 : stat.value() * (bonus.bonus() + 1);
     }
 
     public double getBonus(StatType type) {

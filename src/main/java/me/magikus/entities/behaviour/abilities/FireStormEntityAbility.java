@@ -69,8 +69,8 @@ public class FireStormEntityAbility extends EntityAbility {
                 }
                 for (int i = 0; i < 32; i++) {
                     for (int j = 0; j < 32; j++) {
-                        entity.getWorld().spawnParticle(Particle.FALLING_LAVA, center.getX() + (i - 16), center.getY(), center.getZ() + (j - 16), 5, 0.5, 0.5, 0.5);
-                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, center.getX() + i - 16, center.getY(), center.getZ() + (j - 16), 5, 0.5, 0.5, 0.5);
+                        entity.getWorld().spawnParticle(Particle.FALLING_LAVA, center.getX() + (i - 16), center.getY(), center.getZ() + (j - 16), 2, 0.5, 0.5, 0.5);
+                        entity.getWorld().spawnParticle(Particle.DRIP_LAVA, center.getX() + i - 16, center.getY(), center.getZ() + (j - 16), 3, 0.5, 0.5, 0.5);
                     }
                 }
             }, 0, 5);
