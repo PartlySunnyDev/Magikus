@@ -6,8 +6,8 @@ import me.magikus.core.items.MagikusItem;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import me.magikus.core.util.DataUtils;
-import me.magikus.core.util.classes.Pair;
+import me.magikus.core.tools.classes.Pair;
+import me.magikus.core.tools.util.DataUtils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.magikus.core.util.NumberUtils.getIntegerStringOf;
+import static me.magikus.core.tools.util.NumberUtils.getIntegerStringOf;
 
 public class PlayerUpdater implements Listener {
 

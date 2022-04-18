@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
 
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;

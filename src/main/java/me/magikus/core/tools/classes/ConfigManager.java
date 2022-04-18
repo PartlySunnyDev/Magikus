@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.classes;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

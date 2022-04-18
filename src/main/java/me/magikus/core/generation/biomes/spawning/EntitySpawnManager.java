@@ -1,9 +1,9 @@
 package me.magikus.core.generation.biomes.spawning;
 
 import me.magikus.core.entities.EntityManager;
-import me.magikus.core.util.EntityUtils;
-import me.magikus.core.util.RandomList;
-import me.magikus.core.util.classes.Triplet;
+import me.magikus.core.tools.classes.RandomList;
+import me.magikus.core.tools.classes.Triplet;
+import me.magikus.core.tools.util.EntityUtils;
 import net.minecraft.util.random.Weight;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

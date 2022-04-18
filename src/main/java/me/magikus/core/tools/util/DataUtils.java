@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.magikus.Magikus;
@@ -16,7 +16,7 @@ import me.magikus.core.items.additions.ascensions.AscensionManager;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import me.magikus.core.util.classes.Pair;
+import me.magikus.core.tools.classes.Pair;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;

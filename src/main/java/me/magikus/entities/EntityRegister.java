@@ -2,11 +2,14 @@ package me.magikus.entities;
 
 import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
+import me.magikus.core.entities.behaviour.abilities.EntityAbilityManager;
 import me.magikus.core.entities.damage.Element;
 import me.magikus.core.entities.stats.EntityStat;
 import me.magikus.core.entities.stats.EntityStatSet;
 import me.magikus.core.entities.stats.EntityStatType;
-import me.magikus.core.util.ItemUtils;
+import me.magikus.core.tools.util.ItemUtils;
+import me.magikus.entities.behaviour.abilities.ExplosiveChargeEntityAbility;
+import me.magikus.entities.behaviour.abilities.FireStormEntityAbility;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.ChatColor;
@@ -14,9 +17,14 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import static me.magikus.core.util.RegistryUtils.unfreezeEntityRegistry;
+import static me.magikus.core.tools.util.RegistryUtils.unfreezeEntityRegistry;
 
 public class EntityRegister {
+
+    public static void registerEntityAbilities() {
+        EntityAbilityManager.registerEntityAbility(new ExplosiveChargeEntityAbility());
+        EntityAbilityManager.registerEntityAbility(new FireStormEntityAbility());
+    }
 
     public static void registerEntityInfos() throws NoSuchFieldException, IllegalAccessException {
         unfreezeEntityRegistry();

@@ -15,7 +15,7 @@ import me.magikus.core.items.additions.enchants.EnchantList;
 import me.magikus.core.items.lore.LoreBuilder;
 import me.magikus.core.items.name.NameBuilder;
 import me.magikus.core.stats.StatList;
-import me.magikus.core.util.DataUtils;
+import me.magikus.core.tools.util.DataUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -66,7 +66,7 @@ public abstract class MagikusItem implements Listener {
         this.owner = owner;
         Magikus plugin = JavaPlugin.getPlugin(Magikus.class);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        ItemManager.addItem(new ItemInfo(id, getClass(), type));
+        ItemManager.registerItem(new ItemInfo(id, getClass(), type));
         updateMagikusItem();
     }
 
@@ -78,7 +78,7 @@ public abstract class MagikusItem implements Listener {
         this.fullSet = fullSet;
         Magikus plugin = JavaPlugin.getPlugin(Magikus.class);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        ItemManager.addItem(new ItemInfo(id, getClass(), type));
+        ItemManager.registerItem(new ItemInfo(id, getClass(), type));
         updateMagikusItem();
     }
 

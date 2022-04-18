@@ -5,9 +5,9 @@ import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
 import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;
-import me.magikus.core.util.EntityUtils;
-import me.magikus.core.util.ItemUtils;
-import me.magikus.core.util.classes.Pair;
+import me.magikus.core.tools.classes.Pair;
+import me.magikus.core.tools.util.EntityUtils;
+import me.magikus.core.tools.util.ItemUtils;
 import org.bukkit.entity.Entity;
 
 import java.util.HashMap;

@@ -12,14 +12,17 @@ public class SpellManager {
     public static void registerSpell(Spell spell) {
         spells.put(spell.id(), spell);
     }
+    public static void unregisterSpell(String id) {
+        spells.remove(id);
+    }
 
-    public static Spell getSpell(String id) {
+    public static Spell getRegisteredSpell(String id) {
         return spells.get(id);
     }
 
     public static void castSpell(String id, Player p) {
-        if (getSpell(id) != null) {
-            getSpell(id).castSpell(p);
+        if (getRegisteredSpell(id) != null) {
+            getRegisteredSpell(id).castSpell(p);
         }
     }
 

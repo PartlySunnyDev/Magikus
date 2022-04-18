@@ -3,8 +3,7 @@ package me.magikus.guis;
 import me.magikus.core.ConsoleLogger;
 import me.magikus.core.gui.MagikusGui;
 import me.magikus.core.gui.components.*;
-import me.magikus.core.util.ItemBuilder;
-import me.magikus.core.util.ItemUtils;
+import me.magikus.core.tools.util.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -12,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class TestGui extends MagikusGui {
 
-    protected TestGui() {
+    public TestGui() {
         super("test", 9, "Test GUI");
     }
 

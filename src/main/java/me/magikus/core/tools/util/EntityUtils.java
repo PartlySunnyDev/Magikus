@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
 
 import com.google.common.collect.ImmutableSet;
 import me.magikus.core.entities.EntityInfo;
@@ -17,7 +17,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
 
-import static me.magikus.core.util.TextUtils.getHealthText;
+import static me.magikus.core.tools.util.TextUtils.getHealthText;
 
 public class EntityUtils {
     public static void setBoss(byte b, Entity e) {

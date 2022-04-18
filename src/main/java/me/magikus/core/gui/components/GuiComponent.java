@@ -2,7 +2,7 @@ package me.magikus.core.gui.components;
 
 import me.magikus.Magikus;
 import me.magikus.core.gui.MagikusGui;
-import me.magikus.core.util.ItemUtils;
+import me.magikus.core.tools.util.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;

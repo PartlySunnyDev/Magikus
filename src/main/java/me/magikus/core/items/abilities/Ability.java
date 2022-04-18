@@ -7,8 +7,8 @@ import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import me.magikus.core.util.AbilityUtils;
-import me.magikus.core.util.DataUtils;
+import me.magikus.core.tools.util.AbilityUtils;
+import me.magikus.core.tools.util.DataUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.magikus.core.util.AbilityUtils.hasAbility;
-import static me.magikus.core.util.NumberUtils.getIntegerStringOf;
+import static me.magikus.core.tools.util.AbilityUtils.hasAbility;
+import static me.magikus.core.tools.util.NumberUtils.getIntegerStringOf;
 
 public abstract class Ability implements Listener {
 

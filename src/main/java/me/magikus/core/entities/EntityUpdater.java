@@ -2,8 +2,8 @@ package me.magikus.core.entities;
 
 import me.magikus.Magikus;
 import me.magikus.core.entities.stats.EntityStatType;
-import me.magikus.core.util.EntityUtils;
-import me.magikus.core.util.JavaAccessor;
+import me.magikus.core.tools.reflection.JavaAccessor;
+import me.magikus.core.tools.util.EntityUtils;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Server;
 import org.bukkit.World;

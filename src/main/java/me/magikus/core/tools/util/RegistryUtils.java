@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
 
 import me.magikus.core.ConsoleLogger;
 import net.minecraft.core.Holder;
@@ -21,8 +21,8 @@ import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import static me.magikus.core.util.ObfField.FROZEN;
-import static me.magikus.core.util.ObfField.INTRUSIVE_HOLDER_CACHE;
+import static me.magikus.core.tools.reflection.ObfField.FROZEN;
+import static me.magikus.core.tools.reflection.ObfField.INTRUSIVE_HOLDER_CACHE;
 
 public class RegistryUtils {
 

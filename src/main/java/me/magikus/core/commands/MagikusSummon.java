@@ -2,7 +2,7 @@ package me.magikus.core.commands;
 
 import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
-import me.magikus.core.util.EntityUtils;
+import me.magikus.core.tools.util.EntityUtils;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

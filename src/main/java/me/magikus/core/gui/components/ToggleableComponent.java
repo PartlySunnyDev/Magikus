@@ -1,7 +1,7 @@
 package me.magikus.core.gui.components;
 
 import me.magikus.core.gui.MagikusGui;
-import me.magikus.core.util.ItemUtils;
+import me.magikus.core.tools.util.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

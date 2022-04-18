@@ -1,4 +1,4 @@
-package me.magikus.core.util.classes;
+package me.magikus.core.tools.classes;
 
 public class Pair<A, B> {
 

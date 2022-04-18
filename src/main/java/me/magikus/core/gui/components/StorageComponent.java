@@ -4,17 +4,12 @@ import de.tr7zw.nbtapi.NBTItem;
 import me.magikus.core.ConsoleLogger;
 import me.magikus.core.gui.GuiManager;
 import me.magikus.core.gui.MagikusGui;
-import me.magikus.core.util.ItemUtils;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftInventory;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Objects;
 
 public class StorageComponent extends GuiComponent {
 
@@ -158,6 +153,7 @@ public class StorageComponent extends GuiComponent {
     public boolean empty() {
         return empty;
     }
+
     public void setSlot(int slot) {
         this.slot = slot;
     }

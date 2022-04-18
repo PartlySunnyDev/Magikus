@@ -1,7 +1,7 @@
 package me.magikus.core.generation.biomes;
 
 import me.magikus.core.generation.biomes.spawning.EntitySpawnManager;
-import me.magikus.core.util.classes.Triplet;
+import me.magikus.core.tools.classes.Triplet;
 import me.magikus.entities.SuperZombie;
 import me.magikus.entities.UltraZombie;
 import net.minecraft.core.Registry;

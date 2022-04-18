@@ -11,11 +11,11 @@ public class ItemManager {
 
     public static final Map<String, ItemInfo> itemList = new HashMap<>();
 
-    public static void addItem(ItemInfo stat) {
+    public static void registerItem(ItemInfo stat) {
         itemList.put(stat.id(), stat);
     }
 
-    public static void removeItem(ItemInfo type) {
+    public static void unregisterItem(ItemInfo type) {
         itemList.remove(type.id());
     }
 

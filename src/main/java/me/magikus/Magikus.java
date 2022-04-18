@@ -10,7 +10,7 @@ import me.magikus.core.items.ItemUpdater;
 import me.magikus.core.magic.spells.SpellCastListener;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.player.PlayerUpdater;
-import me.magikus.core.util.ConfigManager;
+import me.magikus.core.tools.classes.ConfigManager;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -23,6 +23,7 @@ import static me.magikus.core.generation.biomes.BiomeRegister.registerBiomeEntit
 import static me.magikus.core.player.BaseStatManager.initializeBaseStats;
 import static me.magikus.core.player.BaseStatManager.repairDefaultStats;
 import static me.magikus.data.recipes.RecipeRegister.registerRecipes;
+import static me.magikus.entities.EntityRegister.registerEntityAbilities;
 import static me.magikus.entities.EntityRegister.registerEntityInfos;
 import static me.magikus.guis.GuiRegister.registerGuis;
 import static me.magikus.items.ItemRegister.registerItems;
@@ -36,6 +37,7 @@ public final class Magikus extends JavaPlugin {
     public void onLoad() {
         try {
             registerEntityInfos();
+            registerEntityAbilities();
             registerBiomeEntities();
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);

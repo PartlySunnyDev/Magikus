@@ -2,8 +2,8 @@ package me.magikus.core.items;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.magikus.core.ConsoleLogger;
-import me.magikus.core.util.DataUtils;
-import me.magikus.core.util.ItemUtils;
+import me.magikus.core.tools.util.DataUtils;
+import me.magikus.core.tools.util.ItemUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;

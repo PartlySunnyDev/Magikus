@@ -19,7 +19,7 @@ public class MagikusOpenGui implements CommandExecutor {
         String guiId = strings[0];
         me.magikus.core.gui.MagikusGui gui;
         try {
-            gui = GuiRegister.createGui(guiId);
+            gui = GuiManager.createGui(guiId);
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
                  IllegalAccessException e) {
             throw new RuntimeException(e);

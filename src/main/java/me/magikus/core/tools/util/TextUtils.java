@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
 
 import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;

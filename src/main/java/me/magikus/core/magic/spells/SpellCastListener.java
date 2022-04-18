@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static me.magikus.core.util.NumberUtils.getIntegerStringOf;
+import static me.magikus.core.tools.util.NumberUtils.getIntegerStringOf;
 
 public class SpellCastListener implements Listener {
 
@@ -74,7 +74,7 @@ public class SpellCastListener implements Listener {
                     PlayerUpdater.sendMessageToPlayer(p, ChatColor.RED + "Spell not discovered / existent!", 40);
                     return;
                 }
-                Spell spell = SpellManager.getSpell(SpellPreferences.getSpellInSlot(p, castSpellSlot));
+                Spell spell = SpellManager.getRegisteredSpell(SpellPreferences.getSpellInSlot(p, castSpellSlot));
                 if (spell == null) {
                     p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
                     PlayerUpdater.sendMessageToPlayer(p, ChatColor.RED + "Spell not discovered / existent!", 40);

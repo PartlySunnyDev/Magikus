@@ -1,6 +1,6 @@
 package me.magikus.core.enums;
 
-import me.magikus.core.util.NumberUtils;
+import me.magikus.core.tools.util.NumberUtils;
 import org.bukkit.ChatColor;
 
 public enum Rarity {

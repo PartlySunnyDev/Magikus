@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.classes;
 
 import java.util.*;
 import java.util.function.Predicate;

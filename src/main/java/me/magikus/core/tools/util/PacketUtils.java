@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
 
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;

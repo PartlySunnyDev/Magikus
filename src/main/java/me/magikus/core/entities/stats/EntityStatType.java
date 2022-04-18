@@ -1,6 +1,6 @@
 package me.magikus.core.entities.stats;
 
-import me.magikus.core.util.DataUtils;
+import me.magikus.core.tools.util.DataUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.persistence.PersistentDataType;
 

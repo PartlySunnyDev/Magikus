@@ -18,15 +18,15 @@ import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatBonus;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import me.magikus.core.util.DataUtils;
-import me.magikus.core.util.NumberUtils;
-import me.magikus.core.util.TextUtils;
+import me.magikus.core.tools.util.DataUtils;
+import me.magikus.core.tools.util.NumberUtils;
+import me.magikus.core.tools.util.TextUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.*;
 
-import static me.magikus.core.util.NumberUtils.getIntegerStringOf;
+import static me.magikus.core.tools.util.NumberUtils.getIntegerStringOf;
 
 public class LoreBuilder {
 

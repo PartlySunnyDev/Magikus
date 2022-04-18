@@ -1,11 +1,15 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
+
+import org.bukkit.Location;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Random;
 import java.util.TreeMap;
 
 public class NumberUtils {
 
+    public static final Random RAND = new Random();
     private static final TreeMap<Integer, String> map = new TreeMap<>();
 
     private static void initRomanConverter() {
@@ -22,6 +26,20 @@ public class NumberUtils {
         map.put(5, "V");
         map.put(4, "IV");
         map.put(1, "I");
+    }
+
+    public static Location randomizeLocation(Location l, double maxVariation) {
+        double newX = (l.getX() - maxVariation) + RAND.nextDouble() * ((l.getX() + maxVariation) - (l.getX() - maxVariation));
+        double newY = (l.getY() - maxVariation) + RAND.nextDouble() * ((l.getY() + maxVariation) - (l.getY() - maxVariation));
+        double newZ = (l.getZ() - maxVariation) + RAND.nextDouble() * ((l.getZ() + maxVariation) - (l.getZ() - maxVariation));
+        l.setX(newX);
+        l.setY(newY);
+        l.setZ(newZ);
+        return l;
+    }
+
+    public static double randomBetween(double min, double max) {
+        return min + RAND.nextDouble() * (max - min);
     }
 
     public static String toRoman(int number) {

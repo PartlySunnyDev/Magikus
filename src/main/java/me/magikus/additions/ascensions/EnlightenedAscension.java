@@ -6,8 +6,8 @@ import me.magikus.core.items.additions.ascensions.Ascension;
 import me.magikus.core.stats.Stat;
 import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
-import me.magikus.core.util.DataUtils;
-import me.magikus.core.util.classes.Pair;
+import me.magikus.core.tools.classes.Pair;
+import me.magikus.core.tools.util.DataUtils;
 
 public class EnlightenedAscension extends Ascension {
     public EnlightenedAscension() {

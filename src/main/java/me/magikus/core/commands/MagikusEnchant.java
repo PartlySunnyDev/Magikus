@@ -4,7 +4,7 @@ import de.tr7zw.nbtapi.NBTItem;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.items.additions.enchants.Enchant;
 import me.magikus.core.items.additions.enchants.EnchantManager;
-import me.magikus.core.util.DataUtils;
+import me.magikus.core.tools.util.DataUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -10,7 +10,7 @@ import me.magikus.core.items.abilities.AbilityType;
 import me.magikus.core.items.additions.AppliableTypeDefaults;
 import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.stats.StatType;
-import me.magikus.core.util.classes.Pair;
+import me.magikus.core.tools.classes.Pair;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

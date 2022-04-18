@@ -3,7 +3,7 @@ package me.magikus.core.commands;
 import me.magikus.core.items.ItemInfo;
 import me.magikus.core.items.ItemManager;
 import me.magikus.core.items.MagikusItem;
-import me.magikus.core.util.ItemUtils;
+import me.magikus.core.tools.util.ItemUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

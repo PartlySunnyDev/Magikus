@@ -1,4 +1,4 @@
-package me.magikus.core.util;
+package me.magikus.core.tools.util;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -10,6 +10,7 @@ public class ItemBuilder {
 
     private final ItemStack i;
     private final ItemMeta meta;
+
     public ItemBuilder(Material m) {
         i = new ItemStack(m);
         meta = i.getItemMeta();

@@ -6,7 +6,7 @@ import me.magikus.core.items.ModifierType;
 import me.magikus.core.items.additions.Addition;
 import me.magikus.core.items.additions.AdditionInfo;
 import me.magikus.core.items.additions.AdditionManager;
-import me.magikus.core.util.DataUtils;
+import me.magikus.core.tools.util.DataUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

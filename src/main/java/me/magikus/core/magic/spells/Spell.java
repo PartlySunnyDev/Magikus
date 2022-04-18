@@ -1,6 +1,6 @@
 package me.magikus.core.magic.spells;
 
-import me.magikus.core.util.Requirements;
+import me.magikus.core.tools.classes.Requirements;
 import org.bukkit.entity.Player;
 
 public abstract class Spell {
