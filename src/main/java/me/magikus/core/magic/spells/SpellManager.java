@@ -12,6 +12,7 @@ public class SpellManager {
     public static void registerSpell(Spell spell) {
         spells.put(spell.id(), spell);
     }
+
     public static void unregisterSpell(String id) {
         spells.remove(id);
     }

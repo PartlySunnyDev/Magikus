@@ -25,6 +25,7 @@ public abstract class EntityAbility {
     protected abstract Consumer<Entity> getAction();
 
     protected abstract Predicate<Entity> getPredicate();
+
     protected abstract int delayTime();
 
     public String id() {

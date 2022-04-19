@@ -1,7 +1,6 @@
 package me.magikus.core.player;
 
 import me.magikus.Magikus;
-import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.damage.DamageManager;
 import me.magikus.core.items.MagikusItem;
 import me.magikus.core.stats.Stat;

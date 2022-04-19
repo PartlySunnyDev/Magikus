@@ -48,8 +48,6 @@ public class SuperUltraKatana extends MagikusItem {
                 new Stat[]{
                         new Stat(StatType.CRIT_CHANCE, 20),
                         new Stat(StatType.CRIT_DAMAGE, 250),
-                        new Stat(StatType.WIND_DAMAGE, 740),
-                        new Stat(StatType.EARTH_DAMAGE, 370),
                         new Stat(StatType.FIRE_DAMAGE, 370),
                         new Stat(StatType.LOOT_BONUS, 10),
                         new Stat(StatType.MAX_MANA, 800),

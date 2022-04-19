@@ -55,7 +55,8 @@ public class UltraLeggings extends MagikusItem {
                 new Stat(StatType.MAX_MANA, 350),
                 new Stat(StatType.SPEED, 120),
                 new Stat(StatType.STRENGTH, 20),
-                new Stat(StatType.DEFENSE, 500),
+                new Stat(StatType.FIRE_DEFENSE, 10000000),
+                new Stat(StatType.ELECTRIC_DEFENSE, -10000000),
                 new Stat(StatType.MAX_HEALTH, 530)
         );
     }

@@ -1,4 +1,4 @@
-package me.magikus.core.tools.util;
+package me.magikus.core.tools.classes;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

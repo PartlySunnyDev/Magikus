@@ -1,13 +1,8 @@
 package me.magikus.core.entities.behaviour.abilities;
 
-import me.magikus.core.tools.util.NumberUtils;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
-
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 public class EntityAbilityCastGoal extends Goal {
 
@@ -67,6 +62,8 @@ public class EntityAbilityCastGoal extends Goal {
         return true;
     }
 
-
-
+    @Override
+    public boolean requiresUpdateEveryTick() {
+        return true;
+    }
 }

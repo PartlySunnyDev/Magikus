@@ -221,7 +221,11 @@ public abstract class Ability implements Listener {
     }
 
     protected boolean onCooldown(Player p) {
-        return cooldowns.get(id).get(p.getUniqueId()) != null && cooldowns.get(id).get(p.getUniqueId()) < 0;
+        boolean b = cooldowns.get(id).get(p.getUniqueId()) != null;
+        if (!b) {
+            return false;
+        }
+        return cooldowns.get(id).get(p.getUniqueId()) > 0;
     }
 
     protected void startCooldown(Player p) {

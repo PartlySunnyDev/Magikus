@@ -1,7 +1,6 @@
 package me.magikus.core.commands;
 
 import me.magikus.core.gui.GuiManager;
-import me.magikus.guis.GuiRegister;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

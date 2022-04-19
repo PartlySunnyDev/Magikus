@@ -1,6 +1,7 @@
 package me.magikus.core.tools.util;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -26,6 +27,18 @@ public class NumberUtils {
         map.put(5, "V");
         map.put(4, "IV");
         map.put(1, "I");
+    }
+
+    public static void checkNormalizeSafe(Vector v) {
+        if (v.getX() == 0) {
+            v.setX(0.01);
+        }
+        if (v.getY() == 0) {
+            v.setY(0.01);
+        }
+        if (v.getZ() == 0) {
+            v.setZ(0.01);
+        }
     }
 
     public static Location randomizeLocation(Location l, double maxVariation) {

@@ -5,6 +5,7 @@ import me.magikus.core.ConsoleLogger;
 import me.magikus.core.commands.*;
 import me.magikus.core.entities.EntityUpdater;
 import me.magikus.core.entities.damage.DamageManager;
+import me.magikus.core.entities.name.EntityNameManager;
 import me.magikus.core.generation.biomes.spawning.EntitySpawnManager;
 import me.magikus.core.items.ItemUpdater;
 import me.magikus.core.magic.spells.SpellCastListener;
@@ -81,12 +82,14 @@ public final class Magikus extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerStatManager(), this);
         this.getServer().getPluginManager().registerEvents(new PlayerUpdater(getServer()), this);
         this.getServer().getPluginManager().registerEvents(new SpellCastListener(), this);
+        this.getServer().getPluginManager().registerEvents(new EntityNameManager(), this);
         this.getServer().getPluginManager().registerEvents(new EntitySpawnManager(), this);
     }
 
     @Override
     public void onDisable() {
         ConsoleLogger.console("Shutting down Magikus plugin...");
+        EntityNameManager.resetArmorStands();
     }
 
     @Override

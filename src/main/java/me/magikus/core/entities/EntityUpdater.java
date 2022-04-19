@@ -1,6 +1,8 @@
 package me.magikus.core.entities;
 
 import me.magikus.Magikus;
+import me.magikus.core.entities.name.EntityNameLines;
+import me.magikus.core.entities.name.EntityNameManager;
 import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.tools.reflection.JavaAccessor;
 import me.magikus.core.tools.util.EntityUtils;
@@ -17,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -25,20 +28,26 @@ import java.lang.reflect.Field;
 public class EntityUpdater implements Listener {
 
     public EntityUpdater(Server s) {
-        new ConstantUpdater(s).runTaskTimer(JavaPlugin.getPlugin(Magikus.class), 0, 20);
+        new ConstantUpdater(s).runTaskTimer(JavaPlugin.getPlugin(Magikus.class), 0, 1);
         new PlayerAttackStrengthUpdater(s).runTaskTimer(JavaPlugin.getPlugin(Magikus.class), 0, 4);
     }
 
     public static void updateStats(Entity e) {
         EntityUtils.repairEntity(e);
         if (e instanceof LivingEntity) {
-            ((LivingEntity) e).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(EntityStatType.getStatWithBonus(e, EntityStatType.SPEED).floatValue() / 500f);
+            ((LivingEntity) e).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(EntityStatType.getStat(e, EntityStatType.SPEED).floatValue() / 500f);
         }
     }
 
     public static void updateName(Entity e) {
-        e.setCustomName(EntityUtils.getDisplayName(e));
-        e.setCustomNameVisible(true);
+        EntityNameLines nl = EntityNameManager.getLines(e);
+        nl.setLine(0, EntityUtils.getDisplayName(e));
+        String elementalInfo = EntityUtils.getElementalInfo(e);
+        if (elementalInfo.equals("")) {
+            nl.removeLine(1);
+        } else {
+            nl.setLine(1, elementalInfo);
+        }
     }
 
     @EventHandler
@@ -54,6 +63,17 @@ public class EntityUpdater implements Listener {
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
         for (Entity e : event.getChunk().getEntities()) {
+            if (!e.getType().isAlive() || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.PLAYER) {
+                return;
+            }
+            updateStats(e);
+            updateName(e);
+        }
+    }
+
+    @EventHandler
+    public void onWorldInit(WorldInitEvent event) {
+        for (Entity e : event.getWorld().getEntities()) {
             if (!e.getType().isAlive() || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.PLAYER) {
                 return;
             }
@@ -87,6 +107,7 @@ class PlayerAttackStrengthUpdater extends BukkitRunnable {
 class ConstantUpdater extends BukkitRunnable {
 
     private final Server s;
+    private int count = 0;
 
     public ConstantUpdater(Server s) {
         this.s = s;
@@ -97,10 +118,21 @@ class ConstantUpdater extends BukkitRunnable {
         for (World w : s.getWorlds()) {
             for (Entity e : w.getEntities()) {
                 if (!(!e.getType().isAlive() || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.PLAYER)) {
-                    EntityUpdater.updateStats(e);
                     EntityUpdater.updateName(e);
+                    EntityNameManager.tick();
                 }
             }
         }
+        if (count == 20) {
+            for (World w : s.getWorlds()) {
+                for (Entity e : w.getEntities()) {
+                    if (!(!e.getType().isAlive() || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.PLAYER)) {
+                        EntityUpdater.updateStats(e);
+                    }
+                }
+            }
+            count = 0;
+        }
+        count++;
     }
 }

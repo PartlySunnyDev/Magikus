@@ -25,7 +25,7 @@ public class SmiteAbility extends Ability {
     }
 
     public SmiteAbility(MagikusItem parent) {
-        super("smite", "Smite", "Strike down enemies around you, dealing Electric Damage", 160, 1, AbilityType.RIGHT_CLICK, parent, AppliableTypeDefaults.meleeWeapons);
+        super("smite", "Smite", "Strike down enemies around you, dealing Electric Damage", 160, 0, AbilityType.RIGHT_CLICK, parent, AppliableTypeDefaults.meleeWeapons);
     }
 
     @Override

@@ -5,11 +5,15 @@ import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
 import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;
+import me.magikus.core.entities.stats.EntityStat;
+import me.magikus.core.entities.stats.EntityStatList;
+import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.tools.classes.Pair;
 import me.magikus.core.tools.util.EntityUtils;
 import me.magikus.core.tools.util.ItemUtils;
 import org.bukkit.entity.Entity;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -154,17 +158,54 @@ public class StatList {
             regularDamage *= (5 + getStatWithBonus(StatType.MAGIC_POWER) / 100) * (critical ? critBonus : 1) * bonus;
         }
 
-        if (i == null) {
-            double combined = fireDamage + waterDamage + windDamage + electricDamage + earthDamage + iceDamage + regularDamage;
-            elementalDamages.put(Element.ELECTRIC, electricDamage);
-            elementalDamages.put(Element.FIRE, fireDamage);
-            elementalDamages.put(Element.WIND, windDamage);
-            elementalDamages.put(Element.ICE, iceDamage);
-            elementalDamages.put(Element.EARTH, earthDamage);
-            elementalDamages.put(Element.WATER, waterDamage);
-            elementalDamages.put(Element.NONE, regularDamage);
-            finalDamage = combined;
-        } else {
+        if (i != null) {
+            EntityStatList l = i.stats();
+            Collection<EntityStat> entityStats = l.getStatList();
+            for (EntityStat es : entityStats) {
+                String toString = es.type().toString();
+                if (toString.endsWith("_DEFENSE")) {
+                    Element element = Element.valueOf(toString.substring(0, toString.length() - 8));
+                    double defenseValue = EntityStatType.getStat(e, es.type());
+                    if (defenseValue > 0) {
+                        switch (element) {
+                            case ICE -> iceDamage -= ((defenseValue / (defenseValue + 100)) * iceDamage);
+                            case WATER -> waterDamage -= ((defenseValue / (defenseValue + 100)) * waterDamage);
+                            case WIND -> windDamage -= ((defenseValue / (defenseValue + 100)) * windDamage);
+                            case ELECTRIC -> electricDamage -= ((defenseValue / (defenseValue + 100)) * electricDamage);
+                            case FIRE -> fireDamage -= ((defenseValue / (defenseValue + 100)) * fireDamage);
+                            case EARTH -> earthDamage -= ((defenseValue / (defenseValue + 100)) * earthDamage);
+                        }
+                    } else {
+                        switch (element) {
+                            case ICE -> iceDamage += ((-defenseValue / 200) * iceDamage);
+                            case WATER -> waterDamage += ((-defenseValue / 200) * waterDamage);
+                            case WIND -> windDamage += ((-defenseValue / 200) * windDamage);
+                            case ELECTRIC -> electricDamage += ((-defenseValue / 200) * electricDamage);
+                            case FIRE -> fireDamage += ((-defenseValue / 200) * fireDamage);
+                            case EARTH -> earthDamage += ((-defenseValue / 200) * earthDamage);
+                        }
+                    }
+                }
+                if (toString.equals("DEFENSE")) {
+                    double defenseValue = EntityStatType.getStat(e, es.type());
+                    if (defenseValue > 0) {
+                        iceDamage -= ((defenseValue / (defenseValue + 100)) * iceDamage);
+                        waterDamage -= ((defenseValue / (defenseValue + 100)) * waterDamage);
+                        windDamage -= ((defenseValue / (defenseValue + 100)) * windDamage);
+                        electricDamage -= ((defenseValue / (defenseValue + 100)) * electricDamage);
+                        fireDamage -= ((defenseValue / (defenseValue + 100)) * fireDamage);
+                        earthDamage -= ((defenseValue / (defenseValue + 100)) * earthDamage);
+                    } else {
+                        iceDamage += ((-defenseValue / 200) * iceDamage);
+                        waterDamage += ((-defenseValue / 200) * waterDamage);
+                        windDamage += ((-defenseValue / 200) * windDamage);
+                        electricDamage += ((-defenseValue / 200) * electricDamage);
+                        fireDamage += ((-defenseValue / 200) * fireDamage);
+                        earthDamage += ((-defenseValue / 200) * earthDamage);
+                    }
+                }
+            }
+
             Element element = i.type();
             Element strength = element.elementStrength();
             Element weakness = element.elementWeakness();
@@ -184,17 +225,16 @@ public class StatList {
                 case FIRE -> fireDamage *= 2;
                 case EARTH -> earthDamage *= 2;
             }
-
-            double combined = fireDamage + waterDamage + windDamage + electricDamage + earthDamage + iceDamage + regularDamage;
-            elementalDamages.put(Element.ELECTRIC, electricDamage);
-            elementalDamages.put(Element.FIRE, fireDamage);
-            elementalDamages.put(Element.WIND, windDamage);
-            elementalDamages.put(Element.ICE, iceDamage);
-            elementalDamages.put(Element.EARTH, earthDamage);
-            elementalDamages.put(Element.WATER, waterDamage);
-            elementalDamages.put(Element.NONE, regularDamage);
-            finalDamage = combined;
         }
+        double combined = fireDamage + waterDamage + windDamage + electricDamage + earthDamage + iceDamage + regularDamage;
+        elementalDamages.put(Element.ELECTRIC, electricDamage);
+        elementalDamages.put(Element.FIRE, fireDamage);
+        elementalDamages.put(Element.WIND, windDamage);
+        elementalDamages.put(Element.ICE, iceDamage);
+        elementalDamages.put(Element.EARTH, earthDamage);
+        elementalDamages.put(Element.WATER, waterDamage);
+        elementalDamages.put(Element.NONE, regularDamage);
+        finalDamage = combined;
         if (finalDamage > 50) {
             finalDamage = finalDamage + (new Random().nextInt((int) Math.floor(finalDamage / 25)) - (int) Math.floor(finalDamage / 50));
         }

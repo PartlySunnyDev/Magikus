@@ -3,7 +3,7 @@ package me.magikus.guis;
 import me.magikus.core.ConsoleLogger;
 import me.magikus.core.gui.MagikusGui;
 import me.magikus.core.gui.components.*;
-import me.magikus.core.tools.util.ItemBuilder;
+import me.magikus.core.tools.classes.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;

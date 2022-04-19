@@ -10,5 +10,6 @@ public class ItemRegister {
         new UltraKatana();
         new UltraBoots();
         new SuperUltraKatana();
+        new Hyperion();
     }
 }

@@ -1,8 +1,5 @@
 package me.magikus.core.entities.behaviour.abilities;
 
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.GoalSelector;
-
 import java.util.HashMap;
 import java.util.Map;
 

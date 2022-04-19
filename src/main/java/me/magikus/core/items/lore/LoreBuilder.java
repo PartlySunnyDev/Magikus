@@ -141,7 +141,7 @@ public class LoreBuilder {
     public String getStatWithBonusLineLore(Stat s, Stat[] ascensionAdditions, AdditionList additions, TreeMap<StatType, HashMap<AdditionInfo, Double>> realSorted, String ascensionName, List<StatBonus> bonuses, boolean bold) {
         StatType type = s.type();
         StringBuilder stat = new StringBuilder();
-        stat.append(type.color()).append(bold ? ChatColor.BOLD : "").append(type.displayName()).append(" ").append(type.symbol()).append(": ").append(type.color()).append(bold ? ChatColor.BOLD : "").append("+").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
+        stat.append(type.color()).append(bold ? ChatColor.BOLD : "").append(type.displayName()).append(" ").append(type.symbol()).append(": ").append(type.color()).append(bold ? ChatColor.BOLD : "").append(s.value() > -1 ? "+" : "").append(getIntegerStringOf(s.value(), 1)).append(type.percent() ? "%" : "");
         if (additions != null) {
             if (realSorted.containsKey(s.type())) {
                 HashMap<AdditionInfo, Double> sortedValue = realSorted.get(s.type());
@@ -157,7 +157,7 @@ public class LoreBuilder {
         if (ascensionAdditions != null) {
             for (Stat ascensionStat : ascensionAdditions) {
                 if (ascensionStat.type() == type) {
-                    stat.append(" ").append(ChatColor.GOLD).append(bold ? ChatColor.BOLD : "").append("(").append(ascensionName).append(" +").append(getIntegerStringOf(ascensionStat.value(), 1)).append(")");
+                    stat.append(" ").append(ChatColor.GOLD).append(bold ? ChatColor.BOLD : "").append("(").append(ascensionName).append(" ").append(ascensionStat.value() > -1 ? "+" : "-").append(getIntegerStringOf(ascensionStat.value(), 1)).append(")");
                 }
             }
         }

@@ -1,10 +1,8 @@
 package me.magikus.core.entities.behaviour.abilities;
 
-import me.magikus.core.items.abilities.Ability;
 import me.magikus.core.tools.classes.Pair;
 import me.magikus.core.tools.classes.RandomList;
 import me.magikus.core.tools.util.NumberUtils;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import org.bukkit.entity.Mob;
 
@@ -60,7 +58,6 @@ public class EntityAbilityList {
     public void applyGoal(Mob m, GoalSelector gs, int priority) {
         gs.addGoal(priority, new EntityAbilityCastGoal(m, this));
     }
-
 
 
 }

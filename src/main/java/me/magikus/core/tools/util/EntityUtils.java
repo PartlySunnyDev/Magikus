@@ -3,6 +3,9 @@ package me.magikus.core.tools.util;
 import com.google.common.collect.ImmutableSet;
 import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
+import me.magikus.core.entities.damage.Element;
+import me.magikus.core.entities.stats.EntityStat;
+import me.magikus.core.entities.stats.EntityStatList;
 import me.magikus.core.entities.stats.EntityStatType;
 import me.magikus.core.enums.VanillaEntityDamageAttributes;
 import me.magikus.core.enums.VanillaEntityHealthAttributes;
@@ -10,6 +13,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -92,7 +96,7 @@ public class EntityUtils {
 
     public static void repairEntity(Entity e) {
         for (EntityStatType s : EntityStatType.values()) {
-            if (EntityStatType.getStatWithBonus(e, s) == null) {
+            if (EntityStatType.getStat(e, s) == null) {
                 switch (s) {
                     case SPEED -> EntityStatType.setStat(e, s, 100);
                     case DAMAGE -> {
@@ -116,7 +120,7 @@ public class EntityUtils {
             }
         }
         if (EntityUtils.getHealth(e) == null) {
-            EntityUtils.setHealth(EntityStatType.getStatWithBonus(e, EntityStatType.MAX_HEALTH), e);
+            EntityUtils.setHealth(EntityStatType.getStat(e, EntityStatType.MAX_HEALTH), e);
         }
         if (EntityUtils.isBoss(e) == null) {
             EntityUtils.setBoss((byte) 1, e);
@@ -132,14 +136,48 @@ public class EntityUtils {
             EntityInfo info = EntityManager.getEntity(id);
             double hp = getHealth(e);
             if (info == null) {
-                //Vanilla entity
-                return ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + "1" /*TODO make this a real lvl for each vanilla mob*/ + ChatColor.DARK_GRAY + "] " + ChatColor.RED + TextUtils.capitalizeWord(e.getType().toString().toLowerCase().replace('_', ' ')) + " " + ChatColor.GREEN + (getHealthText(hp) + "/" + VanillaEntityHealthAttributes.valueOf(e.getType().toString()).getValue() * 5) + ChatColor.RED + "❤";
+                if (e instanceof LivingEntity le) {
+                    //Vanilla entity
+                    return ChatColor.RED + TextUtils.capitalizeWord(e.getType().toString().toLowerCase().replace('_', ' ')) + " " + ChatColor.GREEN + (getHealthText(hp) + "/" + VanillaEntityHealthAttributes.valueOf(e.getType().toString()).getValue() * 5) + ChatColor.RED + "❤ " + ChatColor.GOLD + " [" + ChatColor.GOLD + "Lv" + (int) Math.ceil(le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 10) + "] ";
+                } else {
+                    return "";
+                }
             } else {
                 //Custom entity
-                return info.type().color() + info.type().icon() + " " + ChatColor.DARK_GRAY + "[" + ChatColor.GRAY + "Lv" + info.level() + ChatColor.DARK_GRAY + "] " + info.color() + info.displayName() + " " + ChatColor.GREEN + (info.isBoss() ? getHealthText(hp) : getHealthText(hp) + "/" + getHealthText(info.stats().maxHealth().value())) + ChatColor.RED + "❤";
+                return info.type().color() + info.type().icon() + " " + info.color() + info.displayName() + " " + ChatColor.GREEN + (info.isBoss() ? getHealthText(hp) : getHealthText(hp) + "/" + getHealthText(info.stats().getStat("mg_max_health"))) + ChatColor.RED + "❤" + ChatColor.GOLD + " [Lv" + info.level() + "] ";
             }
         }
         return "NULL";
+    }
+
+    public static String getElementalInfo(Entity e) {
+        String id = getId(e);
+        if (id != null) {
+            EntityInfo info = EntityManager.getEntity(id);
+            if (info == null) {
+                return "";
+            }
+            StringBuilder weak = new StringBuilder();
+            StringBuilder dam = new StringBuilder();
+            StringBuilder def = new StringBuilder();
+            EntityStatList l = info.stats();
+            for (EntityStat es : l.getStatList()) {
+                String toString = es.type().toString();
+                if (toString.endsWith("_DEFENSE")) {
+                    Element element = Element.valueOf(toString.substring(0, toString.length() - 8));
+                    if (es.value() > 0) {
+                        def.append(element.color()).append(element.icon());
+                    } else if (es.value() != 0) {
+                        weak.append(element.color()).append(element.icon());
+                    }
+                } else if (toString.endsWith("_DAMAGE")) {
+                    Element element = Element.valueOf(toString.substring(0, toString.length() - 7));
+                    dam.append(element.color()).append(element.icon());
+                }
+            }
+            return ChatColor.GRAY + "Dam" + dam + " " + ChatColor.GRAY + "Def" + def + " " + ChatColor.GRAY + "Weak" + weak;
+        }
+        return "";
     }
 
     public static String getName(Entity e) {
@@ -157,11 +195,12 @@ public class EntityUtils {
         if (info != null) {
             if (e instanceof LivingEntity) {
                 Objects.requireNonNull(((LivingEntity) e).getEquipment()).setArmorContents(info.armorSlots());
+                ((LivingEntity) e).getEquipment().setItemInMainHand(info.itemInMainHand());
             }
             setId(id, e);
             setBoss(info.isBoss() ? (byte) 0 : (byte) 1, e);
-            setHealth(info.stats().maxHealth().value(), e);
-            info.stats().apply(e);
+            setHealth(info.stats().getStat("mg_max_health"), e);
+            info.stats().applyStats(e);
         }
     }
 
