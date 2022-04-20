@@ -51,7 +51,7 @@ public class EntityNameLines {
 
     public void killAllStands() {
         for (ArmorStand a : armorStands) {
-            a.teleportTo(a.getX(), -150, a.getZ());
+            a.teleportTo(a.getX(), -50, a.getZ());
             a.kill();
         }
         armorStands.clear();
@@ -68,14 +68,13 @@ public class EntityNameLines {
         }
         boolean anyDead = false;
         for (ArmorStand a : armorStands) {
-            if (a.isDeadOrDying() || !a.valid) {
+            if (!a.valid) {
                 anyDead = true;
                 break;
             }
         }
         Level level = ((CraftWorld) parent.getWorld()).getHandle();
         Location location = ((LivingEntity) parent).getEyeLocation();
-        location.setY(location.getY());
         if (armorStands.size() != lines.size() || anyDead) {
             for (ArmorStand a : armorStands) {
                 a.teleportTo(a.getX(), -50, a.getZ());
@@ -101,9 +100,11 @@ public class EntityNameLines {
         }
         for (int i = 0; i < armorStands.size(); i++) {
             ArmorStand armorStand = armorStands.get(i);
+            armorStand.level = ((CraftWorld) parent.getWorld()).getHandle();
             armorStand.moveTo(location.getX(), location.getY() + ((lines.size() - 1 - i) * 0.2), location.getZ());
-            armorStand.setCustomName(new TextComponent(lines.get(i)));
-            armorStand.setCustomNameVisible(true);
+            if (armorStand.getCustomName() == null || !armorStand.getCustomName().getString().equals(lines.get(i))) {
+                armorStand.setCustomName(new TextComponent(lines.get(i)));
+            }
         }
     }
 
