@@ -16,17 +16,7 @@ public class MagikusOpenGui implements CommandExecutor {
             return true;
         }
         String guiId = strings[0];
-        me.magikus.core.gui.MagikusGui gui;
-        try {
-            gui = GuiManager.createGui(guiId);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        if (gui == null) {
-            return true;
-        }
-        GuiManager.setInventory(p, gui);
+        GuiManager.setInventory(p, guiId);
         return true;
     }
 }

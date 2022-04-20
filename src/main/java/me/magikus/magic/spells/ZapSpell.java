@@ -9,6 +9,7 @@ import me.magikus.core.player.PlayerStatManager;
 import me.magikus.core.stats.StatType;
 import me.magikus.core.tools.classes.Pair;
 import me.magikus.core.tools.classes.Requirements;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -17,7 +18,7 @@ import java.util.HashMap;
 
 public class ZapSpell extends Spell {
     public ZapSpell() {
-        super("zap", "Zap", new Requirements(), 10);
+        super("zap", "Bring the power of Thor down on your enemies!", ChatColor.YELLOW + "Zap", new Requirements(), 10);
     }
 
     @Override

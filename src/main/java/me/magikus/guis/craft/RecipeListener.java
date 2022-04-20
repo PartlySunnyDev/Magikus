@@ -1,4 +1,4 @@
-package me.magikus.core.gui.craft;
+package me.magikus.guis.craft;
 
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;

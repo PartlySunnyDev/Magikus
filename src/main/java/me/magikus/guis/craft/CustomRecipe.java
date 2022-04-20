@@ -1,4 +1,4 @@
-package me.magikus.core.gui.craft;
+package me.magikus.guis.craft;
 
 import me.magikus.Magikus;
 import org.bukkit.NamespacedKey;

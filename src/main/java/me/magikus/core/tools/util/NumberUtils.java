@@ -41,6 +41,14 @@ public class NumberUtils {
         }
     }
 
+    public static double[] linspace(double min, double max, int points) {
+        double[] d = new double[points];
+        for (int i = 0; i < points; i++) {
+            d[i] = min + i * (max - min) / (points - 1);
+        }
+        return d;
+    }
+
     public static Location randomizeLocation(Location l, double maxVariation) {
         double newX = (l.getX() - maxVariation) + RAND.nextDouble() * ((l.getX() + maxVariation) - (l.getX() - maxVariation));
         double newY = (l.getY() - maxVariation) + RAND.nextDouble() * ((l.getY() + maxVariation) - (l.getY() - maxVariation));

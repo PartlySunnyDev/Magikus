@@ -10,28 +10,17 @@ import java.util.UUID;
 
 public class GuiManager {
 
-    private static final Map<UUID, MagikusGui> activeGuis = new HashMap<>();
-    private static final Map<String, Class<? extends MagikusGui>> guis = new HashMap<>();
+    private static final Map<String, GuiInstance> guis = new HashMap<>();
 
-    public static void setInventory(Player p, MagikusGui inventory) {
-        activeGuis.put(p.getUniqueId(), inventory);
-        inventory.openFor(p);
-    }
-
-    public static MagikusGui getActiveInventory(UUID id) {
-        return activeGuis.get(id);
-    }
-
-    @Nullable
-    public static MagikusGui createGui(String id) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        Class<? extends MagikusGui> aClass = guis.get(id);
-        if (aClass == null) {
-            return null;
+    public static void setInventory(Player p, String id) {
+        GuiInstance guiInstance = guis.get(id);
+        if (guiInstance == null) {
+            return;
         }
-        return aClass.getDeclaredConstructor().newInstance();
+        guiInstance.openFor(p);
     }
 
-    public static void registerGui(String id, Class<? extends MagikusGui> gui) {
+    public static void registerGui(String id, GuiInstance gui) {
         guis.put(id, gui);
     }
 

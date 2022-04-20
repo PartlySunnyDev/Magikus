@@ -36,7 +36,6 @@ public class SpellPreferences {
             return "";
         }
         return s.get(slot);
-
     }
 
     public static List<String> getDiscoveredSpells(Player p) {
@@ -47,16 +46,30 @@ public class SpellPreferences {
 
     public static void setComboForSlot(Player p, int slot, String newCombo) {
         createPlayerInstance(p.getUniqueId());
+        createPlayerInstance(p.getUniqueId());
+        ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
+        List<String> s = sc.getStringList("spellCombos");
+        s.set(slot, newCombo);
+        sc.set("spellSlots", s);
+        Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
         Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
     }
 
     public static void setSpellInSlot(Player p, int slot, String newSpell) {
         createPlayerInstance(p.getUniqueId());
+        ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
+        List<String> s = sc.getStringList("spellSlots");
+        s.set(slot, newSpell);
+        sc.set("spellSlots", s);
         Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
     }
 
     public static void discoverSpell(Player p, String spell) {
         createPlayerInstance(p.getUniqueId());
+        ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
+        List<String> s = sc.getStringList("unlockedSpells");
+        s.add(spell);
+        sc.set("spellSlots", s);
         Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
     }
 

@@ -127,6 +127,10 @@ public class StatList {
     }
 
     public Pair<Map<Element, Double>, Pair<Double, Boolean>> getFinalDamage(Entity e, boolean ignoreHand, DamageType type) {
+        return getFinalDamage(e, ignoreHand, type, 1);
+    }
+
+    public Pair<Map<Element, Double>, Pair<Double, Boolean>> getFinalDamage(Entity e, boolean ignoreHand, DamageType type, double externalModifier) {
         EntityInfo i = EntityManager.getEntity(EntityUtils.getId(e));
         Map<Element, Double> elementalDamages = new HashMap<>();
         double bonus = 1 + getBonus(StatType.DAMAGE);
@@ -227,17 +231,17 @@ public class StatList {
             }
         }
         double combined = fireDamage + waterDamage + windDamage + electricDamage + earthDamage + iceDamage + regularDamage;
-        elementalDamages.put(Element.ELECTRIC, electricDamage);
-        elementalDamages.put(Element.FIRE, fireDamage);
-        elementalDamages.put(Element.WIND, windDamage);
-        elementalDamages.put(Element.ICE, iceDamage);
-        elementalDamages.put(Element.EARTH, earthDamage);
-        elementalDamages.put(Element.WATER, waterDamage);
-        elementalDamages.put(Element.NONE, regularDamage);
+        elementalDamages.put(Element.ELECTRIC, electricDamage * externalModifier);
+        elementalDamages.put(Element.FIRE, fireDamage * externalModifier);
+        elementalDamages.put(Element.WIND, windDamage * externalModifier);
+        elementalDamages.put(Element.ICE, iceDamage * externalModifier);
+        elementalDamages.put(Element.EARTH, earthDamage * externalModifier);
+        elementalDamages.put(Element.WATER, waterDamage * externalModifier);
+        elementalDamages.put(Element.NONE, regularDamage * externalModifier);
         finalDamage = combined;
         if (finalDamage > 50) {
             finalDamage = finalDamage + (new Random().nextInt((int) Math.floor(finalDamage / 25)) - (int) Math.floor(finalDamage / 50));
         }
-        return new Pair<>(elementalDamages, new Pair<>(finalDamage, critical));
+        return new Pair<>(elementalDamages, new Pair<>(finalDamage * externalModifier, critical));
     }
 }

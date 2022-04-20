@@ -47,7 +47,12 @@ public class WitherImpactAbility extends Ability {
         Vector d = player.getLocation().getDirection();
         NumberUtils.checkNormalizeSafe(d);
         d.normalize();
-        Block toBlock = player.getTargetBlock(null, 10);
+        Block toBlock;
+        try {
+            toBlock = player.getTargetBlock(null, 10);
+        } catch (Exception e) {
+            return;
+        }
         Location location;
         if (toBlock.isEmpty()) {
             location = toBlock.getLocation();

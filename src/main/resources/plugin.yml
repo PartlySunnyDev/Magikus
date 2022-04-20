@@ -4,7 +4,6 @@ main: me.magikus.Magikus
 load: STARTUP
 api-version: 1.18
 authors: [ PartlySunny, 65_7a ]
-depend: [ NBTAPI ]
 description: Magical fantasy plugin for 1.18.2
 commands:
   mgive:
