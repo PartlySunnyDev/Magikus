@@ -1,6 +1,5 @@
 package me.magikus.core.entities.stats;
 
-import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.EntityInfo;
 import me.magikus.core.entities.EntityManager;
 import me.magikus.core.entities.damage.Element;

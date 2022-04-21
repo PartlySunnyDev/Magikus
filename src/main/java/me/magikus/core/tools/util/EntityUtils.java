@@ -50,6 +50,18 @@ public class EntityUtils {
         return (String) DataUtils.getData("mg_id", PersistentDataType.STRING, e);
     }
 
+    public static void setIgnore(boolean s, Entity e) {
+        DataUtils.setData("mg_ignore", s ? (byte) 1 : (byte) 0, PersistentDataType.BYTE, e);
+    }
+
+    public static boolean getIgnore(Entity e) {
+        Object mg_ignore = DataUtils.getData("mg_ignore", PersistentDataType.BYTE, e);
+        if (mg_ignore == null) {
+            return false;
+        }
+        return ((byte) mg_ignore) == 1;
+    }
+
     public static void setHealth(double s, Entity e) {
         DataUtils.setData("mg_health", s, PersistentDataType.DOUBLE, e);
     }

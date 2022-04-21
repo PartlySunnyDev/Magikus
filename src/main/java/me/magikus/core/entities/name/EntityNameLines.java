@@ -1,22 +1,22 @@
 package me.magikus.core.entities.name;
 
+import me.magikus.core.tools.util.DataUtils;
 import me.magikus.core.tools.util.EntityUtils;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraft.world.level.Level;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntityNameLines {
 
+    public final Entity parent;
     private final List<String> lines = new ArrayList<>();
     private final List<ArmorStand> armorStands = new ArrayList<>();
-    public final Entity parent;
 
     public EntityNameLines(Entity parent, String... lines) {
         this.lines.addAll(List.of(lines));
@@ -51,8 +51,8 @@ public class EntityNameLines {
 
     public void killAllStands() {
         for (ArmorStand a : armorStands) {
-            a.teleportTo(a.getX(), -50, a.getZ());
-            a.kill();
+            a.setSilent(true);
+            a.remove();
         }
         armorStands.clear();
     }
@@ -60,51 +60,45 @@ public class EntityNameLines {
     public void update() {
         if (parent.isDead() || !parent.isValid()) {
             killAllStands();
+            EntityNameManager.entityNames.remove(parent.getUniqueId());
             return;
         }
         if (!(parent instanceof LivingEntity)) {
             killAllStands();
+            EntityNameManager.entityNames.remove(parent.getUniqueId());
             return;
         }
         boolean anyDead = false;
         for (ArmorStand a : armorStands) {
-            if (!a.valid) {
+            if (a.isDead()) {
                 anyDead = true;
                 break;
             }
         }
-        Level level = ((CraftWorld) parent.getWorld()).getHandle();
         Location location = ((LivingEntity) parent).getEyeLocation();
         if (armorStands.size() != lines.size() || anyDead) {
-            for (ArmorStand a : armorStands) {
-                a.teleportTo(a.getX(), -50, a.getZ());
-                a.kill();
-            }
-            armorStands.clear();
+            killAllStands();
             int count = 0;
             for (String l : lines) {
-                ArmorStand as = new ArmorStand(level, location.getX(), location.getY() + 0.25 + ((lines.size() - 1 - count) * 0.3), location.getZ());
-                as.setInvulnerable(true);
-                as.setInvisible(true);
-                as.noCulling = true;
-                as.noPhysics = true;
-                as.setNoGravity(true);
-                as.setCustomNameVisible(true);
-                as.setMarker(true);
-                as.setCustomName(new TextComponent(l));
-                armorStands.add(as);
-                EntityUtils.spawnEntity(as);
+                net.minecraft.world.entity.decoration.ArmorStand nmsStand = new net.minecraft.world.entity.decoration.ArmorStand(net.minecraft.world.entity.EntityType.ARMOR_STAND, ((CraftWorld) parent.getWorld()).getHandle());
+                ArmorStand a = (ArmorStand) nmsStand.getBukkitEntity();
+                DataUtils.setData("nametagId", parent.getUniqueId().toString(), PersistentDataType.STRING, parent);
+                a.setGravity(false);
+                a.setMarker(true);
+                a.setInvisible(true);
+                a.setCustomName(l);
+                a.setCustomNameVisible(true);
+                a.teleport(new Location(parent.getWorld(), location.getX(), location.getY() + 0.25 + ((lines.size() - 1 - count) * 0.3), location.getZ()));
+                armorStands.add(a);
+                EntityUtils.spawnEntity(nmsStand);
                 count++;
             }
             return;
         }
         for (int i = 0; i < armorStands.size(); i++) {
             ArmorStand armorStand = armorStands.get(i);
-            armorStand.level = ((CraftWorld) parent.getWorld()).getHandle();
-            armorStand.moveTo(location.getX(), location.getY() + ((lines.size() - 1 - i) * 0.2), location.getZ());
-            if (armorStand.getCustomName() == null || !armorStand.getCustomName().getString().equals(lines.get(i))) {
-                armorStand.setCustomName(new TextComponent(lines.get(i)));
-            }
+            armorStand.teleport(new Location(parent.getWorld(), location.getX(), location.getY() + 0.25 + ((lines.size() - 1 - i) * 0.3), location.getZ()));
+            armorStand.setCustomName(lines.get(i));
         }
     }
 

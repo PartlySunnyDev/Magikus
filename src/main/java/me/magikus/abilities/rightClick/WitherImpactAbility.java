@@ -1,6 +1,5 @@
 package me.magikus.abilities.rightClick;
 
-import me.magikus.core.ConsoleLogger;
 import me.magikus.core.entities.damage.DamageManager;
 import me.magikus.core.entities.damage.DamageType;
 import me.magikus.core.entities.damage.Element;
@@ -20,15 +19,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class WitherImpactAbility extends Ability {
 
@@ -71,7 +65,9 @@ public class WitherImpactAbility extends Ability {
             Collection<Entity> closeBy = world.getNearbyEntities(backupV.toLocation(world), 2, 2, 2);
             for (Entity e : closeBy) {
                 if (e instanceof LivingEntity le) {
-                    DamageManager.dealDamage(le, new HashMap<>() {{put(Element.NONE, 10000D);}}, new Pair<>(10000D, false), new DamageModifier[]{}, true, DamageType.MAGICAL);
+                    DamageManager.dealDamage(le, new HashMap<>() {{
+                        put(Element.NONE, 10000D);
+                    }}, new Pair<>(10000D, false), new DamageModifier[]{}, true, DamageType.MAGICAL);
                 }
             }
             backupV.add(d);

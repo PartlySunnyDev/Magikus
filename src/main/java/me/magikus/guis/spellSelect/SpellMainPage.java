@@ -22,16 +22,17 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SpellMainPage implements GuiInstance {
 
     @Override
     public Gui getGui(HumanEntity e) {
-        if (!(e instanceof Player player)) return new ChestGui(4, "");
-        ChestGui gui = new ChestGui(4, StringHolder.of(ChatColor.BLUE + "Your Spells"));
-        StaticPane p = new StaticPane(0, 0, 9, 4);
+        if (!(e instanceof Player player)) return new ChestGui(5, "");
+        ChestGui gui = new ChestGui(5, StringHolder.of(ChatColor.BLUE + "Your Spells"));
+        StaticPane p = new StaticPane(0, 0, 9, 9);
         gui.setOnGlobalClick(event -> {
-            if (event.getWhoClicked() instanceof Player a){
+            if (event.getWhoClicked() instanceof Player a) {
                 a.playSound(a.getLocation(), Sound.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF, 1, 1);
             }
             event.setCancelled(true);
@@ -43,19 +44,28 @@ public class SpellMainPage implements GuiInstance {
         for (double d : linSpace) {
             int index = (int) Math.round(d);
             Spell targetSpell = SpellManager.getRegisteredSpell(SpellPreferences.getSpellInSlot(player, count));
+            String currentComboInSlot = SpellPreferences.getComboForSlot(player, count);
+            if (currentComboInSlot == null || Objects.equals(currentComboInSlot, "")) {
+                currentComboInSlot = "None";
+            }
             if (targetSpell == null) {
-                p.addItem(new GuiItem(ItemBuilder.builder(Material.BARRIER).setName(ChatColor.RED + "No spell selected!").setLore(ChatColor.GRAY + "Select a spell with the button below!").build()), index, 1);
+                p.addItem(new GuiItem(ItemBuilder.builder(Material.BARRIER).setName(ChatColor.RED + "No spell selected!").setLore(ChatColor.GRAY + "Select a spell with the button below!").build()), index, 2);
             } else {
                 List<String> lore = new ArrayList<>(TextUtils.wrap(targetSpell.description(), 30, org.bukkit.ChatColor.GRAY));
-                lore.add(ChatColor.DARK_GRAY + "Mana cost: " + targetSpell.manaCost() + "" + StatType.MANA.symbol());
-                p.addItem(new GuiItem(ItemBuilder.builder(Material.HEART_OF_THE_SEA).setName(targetSpell.displayName() + ChatColor.BLUE + " Spell").setLore(lore.toArray(new String[0])).build()), index, 1);
+                lore.add(ChatColor.DARK_GRAY + "Mana cost: " + StatType.MANA.color() + targetSpell.manaCost() + "" + StatType.MANA.symbol());
+                p.addItem(new GuiItem(ItemBuilder.builder(Material.HEART_OF_THE_SEA).setName(targetSpell.displayName() + ChatColor.BLUE + " Spell").setLore(lore.toArray(new String[0])).build()), index, 2);
             }
             int finalCount = count;
-            p.addItem(new GuiItem(ItemBuilder.builder(Material.GREEN_CONCRETE).setName(ChatColor.BLUE + "Change Spell").build(), event -> {
+            p.addItem(new GuiItem(ItemBuilder.builder(Material.SUGAR).setName(ChatColor.GREEN + "Change Spell").build(), event -> {
                 player.closeInventory();
                 SpellSelectionPage.setCurrentlyChanging(player, finalCount);
                 GuiManager.setInventory(player, "spellselect");
-            }), index, 2);
+            }), index, 3);
+            p.addItem(new GuiItem(ItemBuilder.builder(Material.STICK).setName(ChatColor.GREEN + "Change Combo").setLore(ChatColor.GRAY + "Current combo: " + currentComboInSlot).build(), event -> {
+                player.closeInventory();
+                SpellComboSelectionPage.setCurrentlyChanging(player, finalCount);
+                GuiManager.setInventory(player, "spellcomboselect");
+            }), index, 1);
             count++;
         }
         gui.addPane(p);

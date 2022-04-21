@@ -95,7 +95,7 @@ public class SpellCastListener implements Listener {
                     return;
                 }
                 PlayerStatManager.setStat(p.getUniqueId(), StatType.MANA, mana - spell.manaCost());
-                PlayerUpdater.sendMessageToPlayer(p, ChatColor.AQUA + "Cast spell " + spell.displayName() + "! (-" + spell.manaCost() + " mana)", 40);
+                PlayerUpdater.sendMessageToPlayer(p, ChatColor.AQUA + "Cast spell " + spell.displayName() + "! " + ChatColor.GRAY + "(-" + spell.manaCost() + StatType.MANA.symbol() + ")", 40);
                 SpellManager.castSpell(SpellPreferences.getSpellInSlot(p, castSpellSlot), p);
                 p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                 final String finalPlayerCombo = playerCombo;

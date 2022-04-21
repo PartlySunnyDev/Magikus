@@ -124,7 +124,7 @@ public class PlayerUpdater implements Listener {
     }
 
     public static String getPlayerDisplay(StatList stats) {
-        return ChatColor.RED + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_MANA), 0) + StatType.MANA.symbol() + " Mana";
+        return ChatColor.RED + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.HEALTH), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_HEALTH), 0) + "❤   " + ChatColor.AQUA + "" + getIntegerStringOf(stats.getStatWithBonus(StatType.MANA), 0) + "/" + getIntegerStringOf(stats.getStatWithBonus(StatType.MAX_MANA), 0) + StatType.MANA.symbol();
     }
 
     public static void sendMessageToPlayer(Player p, String message, int timeInTicks) {

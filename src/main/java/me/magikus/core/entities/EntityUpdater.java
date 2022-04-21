@@ -40,13 +40,19 @@ public class EntityUpdater implements Listener {
     }
 
     public static void updateName(Entity e) {
-        EntityNameLines nl = EntityNameManager.getLines(e);
-        nl.setLine(0, EntityUtils.getDisplayName(e));
-        String elementalInfo = EntityUtils.getElementalInfo(e);
-        if (elementalInfo.equals("")) {
-            nl.removeLine(1);
-        } else {
-            nl.setLine(1, elementalInfo);
+        boolean ignore = EntityUtils.getIgnore(e);
+        if (e.getPassengers().size() < 1 && !ignore) {
+            EntityNameLines nl = EntityNameManager.getLines(e);
+            String displayName = EntityUtils.getDisplayName(e);
+            if (!nl.getLine(0).equals(displayName)) {
+                nl.setLine(0, displayName);
+                String elementalInfo = EntityUtils.getElementalInfo(e);
+                if (elementalInfo.equals("")) {
+                    nl.removeLine(1);
+                } else {
+                    nl.setLine(1, elementalInfo);
+                }
+            }
         }
     }
 
@@ -69,6 +75,7 @@ public class EntityUpdater implements Listener {
             updateStats(e);
             updateName(e);
         }
+        EntityNameManager.wipeOld(event.getChunk());
     }
 
     @EventHandler
@@ -81,7 +88,6 @@ public class EntityUpdater implements Listener {
             updateName(e);
         }
     }
-
 }
 
 class PlayerAttackStrengthUpdater extends BukkitRunnable {
@@ -119,9 +125,11 @@ class ConstantUpdater extends BukkitRunnable {
             for (Entity e : w.getEntities()) {
                 if (!(!e.getType().isAlive() || e.getType() == EntityType.ARMOR_STAND || e.getType() == EntityType.PLAYER)) {
                     EntityUpdater.updateName(e);
-                    EntityNameManager.tick();
                 }
             }
+        }
+        if (count % 5 == 0) {
+            EntityNameManager.tick();
         }
         if (count == 20) {
             for (World w : s.getWorlds()) {

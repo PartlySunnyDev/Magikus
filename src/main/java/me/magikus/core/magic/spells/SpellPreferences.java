@@ -15,7 +15,13 @@ public class SpellPreferences {
     public static int spellSlotsUnlocked(Player p) {
         createPlayerInstance(p.getUniqueId());
         ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
-        return sc.getStringList("spellSlots").size();
+        return sc.getInt("spellSlotsCount");
+    }
+
+    public static void setSpellSlotsUnlocked(Player p, int newCount) {
+        createPlayerInstance(p.getUniqueId());
+        ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
+        sc.set("spellSlotsCount", newCount);
     }
 
     public static String getComboForSlot(Player p, int slot) {
@@ -26,6 +32,12 @@ public class SpellPreferences {
             return "";
         }
         return s.get(slot);
+    }
+
+    public static List<String> getCombos(Player p) {
+        createPlayerInstance(p.getUniqueId());
+        ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
+        return sc.getStringList("spellCombos");
     }
 
     public static String getSpellInSlot(Player p, int slot) {
@@ -49,9 +61,13 @@ public class SpellPreferences {
         createPlayerInstance(p.getUniqueId());
         ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
         List<String> s = sc.getStringList("spellCombos");
+        if (slot >= s.size()) {
+            for (int i = 0; i < (slot + 1) - s.size(); i++) {
+                s.add("");
+            }
+        }
         s.set(slot, newCombo);
-        sc.set("spellSlots", s);
-        Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
+        sc.set("spellCombos", s);
         Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
     }
 
@@ -59,6 +75,11 @@ public class SpellPreferences {
         createPlayerInstance(p.getUniqueId());
         ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
         List<String> s = sc.getStringList("spellSlots");
+        if (slot >= s.size()) {
+            for (int i = 0; i < (slot + 1) - s.size(); i++) {
+                s.add("");
+            }
+        }
         s.set(slot, newSpell);
         sc.set("spellSlots", s);
         Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
@@ -69,7 +90,7 @@ public class SpellPreferences {
         ConfigurationSection sc = playerSpellPreferences.getConfigurationSection(p.getUniqueId().toString());
         List<String> s = sc.getStringList("unlockedSpells");
         s.add(spell);
-        sc.set("spellSlots", s);
+        sc.set("unlockedSpells", s);
         Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
     }
 
@@ -79,6 +100,7 @@ public class SpellPreferences {
             playerInfo.set("spellCombos", List.of(new String[]{"RRR", "RLR", "RRL"}));
             playerInfo.set("unlockedSpells", List.of(new String[]{}));
             playerInfo.set("spellSlots", List.of(new String[]{"", "", ""}));
+            playerInfo.set("spellSlotsCount", 3);
             Magikus.configManager.saveConfig("spellPreferences", playerSpellPreferences);
         }
     }

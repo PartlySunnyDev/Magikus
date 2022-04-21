@@ -10,7 +10,6 @@ import me.magikus.core.stats.StatList;
 import me.magikus.core.stats.StatType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 public class Hyperion extends MagikusItem {
     public Hyperion(Player p) {

@@ -15,9 +15,7 @@ import me.magikus.core.stats.StatType;
 import me.magikus.core.tools.classes.ItemBuilder;
 import me.magikus.core.tools.util.TextUtils;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Instrument;
 import org.bukkit.Material;
-import org.bukkit.Note;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -49,6 +47,19 @@ public class SpellSelectionPage implements GuiInstance {
         ChestGui gui = new ChestGui(5, StringHolder.of(ChatColor.BLUE + "Change Spell"));
         PaginatedPane pagPane = new PaginatedPane(0, 0, 9, 5);
         int numPages = (int) Math.ceil(spells.size() / 27f);
+        if (numPages == 0) {
+            StaticPane border = new StaticPane(0, 0, 9, 5);
+            border.fillWith(ItemBuilder.builder(Material.BLACK_STAINED_GLASS_PANE).setName("").build(), event -> event.setCancelled(true));
+            gui.setOnGlobalClick(event -> event.setCancelled(true));
+            border.addItem(new GuiItem(ItemBuilder.builder(Material.ARROW).setName(ChatColor.RED + "Go Back").build(), event -> {
+                player.closeInventory();
+                removeCurrentlyChanging(player);
+                GuiManager.setInventory(player, "spells");
+            }), 0, 4);
+            border.addItem(new GuiItem(ItemBuilder.builder(Material.BARRIER).setName(ChatColor.RED + "You have no spells!").setLore(TextUtils.wrap("Get spells by consuming spell orbs which you can craft or find around the world!", 30, org.bukkit.ChatColor.GRAY).toArray(new String[0])).build()), 4, 2);
+            gui.addPane(border);
+            return gui;
+        }
         int count = 0;
         for (int i = 0; i < numPages; i++) {
             StaticPane border = new StaticPane(0, 0, 9, 5);
@@ -60,7 +71,13 @@ public class SpellSelectionPage implements GuiInstance {
             if (i != numPages - 1) {
                 border.addItem(new GuiItem(ItemBuilder.builder(Material.ARROW).setName(ChatColor.GREEN + "Go Forward").setLore(ChatColor.GRAY + "To page " + (i + 2)).build(), event -> pagPane.setPage(pagPane.getPage() - 1)), 8, 2);
             }
+            border.addItem(new GuiItem(ItemBuilder.builder(Material.BARRIER).setName(ChatColor.RED + "Cancel").build(), event -> {
+                player.closeInventory();
+                removeCurrentlyChanging(player);
+                GuiManager.setInventory(player, "spells");
+            }), 0, 4);
             StaticPane spellList = new StaticPane(1, 1, 7, 3);
+            spellList.fillWith(ItemBuilder.builder(Material.GRAY_STAINED_GLASS_PANE).setName("").build());
             for (int j = count; j < count + 27; j++) {
                 if (j > spells.size() - 1) {
                     break;
@@ -76,6 +93,7 @@ public class SpellSelectionPage implements GuiInstance {
                             }
                             SpellPreferences.setSpellInSlot(player, changing, spell.id());
                             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 0.9f);
+                            player.sendMessage(ChatColor.GREEN + "Successfully changed slot " + (changing + 1) + " to the spell " + spell.displayName());
                             player.closeInventory();
                             removeCurrentlyChanging(player);
                             GuiManager.setInventory(player, "spells");

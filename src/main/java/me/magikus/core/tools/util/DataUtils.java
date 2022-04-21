@@ -22,6 +22,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -251,7 +252,12 @@ public class DataUtils {
 
     @SuppressWarnings("all")
     public static Object getData(String key, PersistentDataType type, Entity e) {
-        return e.getPersistentDataContainer().get(new NamespacedKey(JavaPlugin.getPlugin(Magikus.class), key), type);
+        PersistentDataContainer persistentDataContainer = e.getPersistentDataContainer();
+        if (persistentDataContainer.has(new NamespacedKey(JavaPlugin.getPlugin(Magikus.class), key), type)) {
+            return persistentDataContainer.get(new NamespacedKey(JavaPlugin.getPlugin(Magikus.class), key), type);
+        } else {
+            return null;
+        }
     }
 
     @SuppressWarnings("all")

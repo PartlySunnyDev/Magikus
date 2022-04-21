@@ -41,7 +41,7 @@ public class PulseSpell extends Spell {
         for (int i = 0; i < 7; i++) {
             int size = i * 2;
             int points = i * 5 + 6;
-            for (int j = 0; j < 360; j += 360/points) {
+            for (int j = 0; j < 360; j += 360 / points) {
                 double angle = (j * Math.PI / 180);
                 double x = size * Math.cos(angle);
                 double z = size * Math.sin(angle);

@@ -113,7 +113,7 @@ public class DamageManager implements Listener {
             @Override
             public void run() {
                 //To prevent stupid noise
-                temp.teleportTo(temp.getX(), -50, temp.getY());
+                temp.setSilent(true);
                 temp.kill();
             }
         }.runTaskLater(JavaPlugin.getPlugin(Magikus.class), 35 + new Random().nextInt(10));
